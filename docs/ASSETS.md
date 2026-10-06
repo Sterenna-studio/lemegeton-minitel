@@ -46,7 +46,7 @@ reproduction du Terminatel.
 | Fichier | `public/models/television-1950.glb` (1,6 Mo, 5 meshes, textures 1k) |
 | Modifications | échelle (2,4 unités de haut), origine au sol, noms de meshes, écran `Minitel_Screen` avec UV planes (`tools/prepare_television.py`) |
 
-### Table d'appoint : Wood Drawer & Tables Set
+### Mobilier : Wood Drawer & Tables Set
 
 | Champ | Valeur |
 | --- | --- |
@@ -54,11 +54,12 @@ reproduction du Terminatel.
 | Auteur | brandon_grey (https://sketchfab.com/brandondmc10) |
 | Source | https://sketchfab.com/3d-models/wood-drawer-tables-set-958db224ef514b2eabd69ac0a4e59ca0 |
 | Licence | CC BY 4.0 (dans `asset.extras` du GLB d'origine) |
-| Fichier | `public/models/table.glb` (335 Ko, contre 10,4 Mo pour le lot) |
-| Modifications | seule la table à tiroir est conservée (59 × 60 × 74 cm), centrée, mise à 8 unités par mètre, textures en JPEG (`tools/prepare_table.py`) |
+| Fichiers | `public/models/mobilier/*.glb` : quatre pièces de 286 à 367 Ko chacune, contre 10,4 Mo pour le lot |
+| Modifications | pièces exportées séparément, centrées, mises à 8 unités par mètre, textures en JPEG (`tools/prepare_table.py`, mesures dans `docs/asset-audit/mobilier.json`) |
 
-Le Minitel et le Terminatel sont posés dessus ; le téléviseur, meuble sur pieds,
-reste au sol. Le lot d'origine est gardé en local dans `lemegeton/06_MODEL/`.
+Le Minitel et le Terminatel sont posés sur la pièce choisie (Réglages CRT > Mobilier,
+ou `?table=`) : table à tiroir (par défaut), chevet haut, meuble à niche, table basse,
+ou sans table. Le téléviseur, meuble sur pieds, reste au sol. Le lot d'origine est gardé en local dans `lemegeton/06_MODEL/`.
 
 ## Direction artistique Terminatel 255
 

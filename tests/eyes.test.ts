@@ -48,8 +48,25 @@ describe("yeux Zyra", () => {
   it("dessine des capsules continues avec pupille", () => {
     const rows = buildZyraEyes(initialEyeState, "CYAN");
     expect(rows).toHaveLength(6);
-    expect(rows[0]).toEqual([9, 10, "CYAN", [0x70, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x2f]]);
+    expect(rows[0]).toEqual([9, 10, "CYAN", [0x70, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x70]]);
+    expect(rows[2]).toEqual([11, 10, "CYAN", [0x23, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x23]]);
     expect(rows[1][3][3]).toBe(0x20);
+  });
+  it("dessine des capsules symetriques (gauche/droite et haut/bas)", () => {
+    // Grille de sextants d'un oeil : chaque ligne doit etre son propre miroir,
+    // et la capsule doit etre symetrique de haut en bas.
+    for (const state of [initialEyeState, { ...initialEyeState, mood: "happy" as const }]) {
+      const rows = buildZyraEyes(state, "CYAN").filter(([, col]) => col === 10);
+      const grid: string[] = [];
+      for (const [, , , bytes] of rows)
+        for (let sub = 0; sub < 3; sub++)
+          grid.push(bytes.map((b) => {
+            const bits = g1ToMosaic(b);
+            return (bits & (1 << (sub * 2)) ? "#" : ".") + (bits & (1 << (sub * 2 + 1)) ? "#" : ".");
+          }).join(""));
+      for (const line of grid) expect(line).toBe([...line].reverse().join(""));
+      if (state.mood === "default") expect(grid).toEqual([...grid].reverse());
+    }
   });
   it("prend les couleurs d'humeur en mode auto", () => {
     expect(buildZyraEyes({ ...initialEyeState, mood: "angry" }, "AUTO")[0][2]).toBe("ROUGE");

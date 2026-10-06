@@ -440,3 +440,36 @@ test("yeux classiques lisses, ecran bombe et effets CRT", async ({ page }) => {
   await expect(page.getByLabel("Forme des yeux")).toHaveValue("zyra");
   expect(errors).toEqual([]);
 });
+test("choix du mobilier sous le terminal", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const drawer = await scenePixels(page);
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  const select = page.getByLabel("Mobilier");
+  await expect(select).toHaveValue("table-tiroir");
+  await select.selectOption("table-basse");
+  await expect(page).toHaveURL(/table=table-basse/);
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const coffee = await scenePixels(page);
+  expect(coffee.hash).not.toBe(drawer.hash);
+  expectScreenCentered(coffee);
+  await select.selectOption("sol");
+  await expect(page.locator(".credits")).not.toContainText("brandon_grey");
+  await select.selectOption("table-tiroir");
+  await expect(page).not.toHaveURL(/table=/);
+  await expect(page.locator(".credits")).toContainText("brandon_grey");
+  // On mobile the panel covers the inventory : close it before choosing a model.
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  await page.getByRole("radio", { name: "Televiseur 1950" }).click();
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  await expect(page.getByLabel("Mobilier")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
