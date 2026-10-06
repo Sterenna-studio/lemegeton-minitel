@@ -3,9 +3,9 @@ import { createReadStream } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-// Usage: node tools/inventory.mjs <dossier de travail contenant 06_MODEL/>
-const root = path.resolve(process.argv[2] ?? "assets-src");
+// Usage: node tools/inventory.mjs [dossier contenant 06_MODEL/, lemegeton/ par defaut]
 const app = fileURLToPath(new URL("../", import.meta.url));
+const root = path.resolve(process.argv[2] ?? path.join(app, "lemegeton"));
 async function walk(folder) {
   const results = [];
   for (const entry of await readdir(folder, { withFileTypes: true })) {

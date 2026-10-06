@@ -1,13 +1,13 @@
 # Lemegeton - projet 3D
 
-> **Dans ce depot, seuls les scripts et la documentation du dossier de travail
-> `lemegeton_3d` sont versionnes.** Les binaires (references PNG, GLB, `.blend`,
-> rendus, video, sauvegardes ZIP) restent dans le dossier de travail local ;
-> `TRI_MANIFEST.csv` et `08_AUDIT/SOURCE_VERIFICATION.json` donnent leurs
-> empreintes SHA-256. Les journaux de validation (`*.log`) et l'export de la
-> conversation ChatGPT ne sont pas publies. L'application `07_WEB_MINITEL`
-> citee ci-dessous occupe la racine du depot. Les scripts Blender et
-> PowerShell s'executent dans le dossier de travail complet, pas dans ce depot.
+> **Dossier de travail unique depuis le 6 octobre 2026.** L'ancien dossier
+> `Downloads\lemegeton_3d` a ete migre ici en entier, avec controle SHA-256 :
+> voir [le rapport de migration](08_AUDIT/migration-2026-10-06/MIGRATION.md).
+> Tous les fichiers sont presents localement, mais **seuls les formats texte
+> sont versionnes** (scripts, docs, rapports) : GLB, `.blend`, OBJ, images,
+> video et sauvegardes ZIP restent hors de Git (liste blanche dans `.gitignore`).
+> L'export de la conversation ChatGPT et les journaux `*.log` restent locaux.
+> L'application `07_WEB_MINITEL` citee ci-dessous occupe la racine du depot.
 
 ## Reprise par un agent
 

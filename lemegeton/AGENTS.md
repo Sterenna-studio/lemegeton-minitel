@@ -1,5 +1,11 @@
 # Instructions pour les prochains agents
 
+> **Migration du 6 octobre 2026.** Ce dossier est maintenant `lemegeton/` dans le
+> depot Git `Sterenna-studio/lemegeton-minitel` (public), et `07_WEB_MINITEL` en
+> est la racine. Seuls les formats texte sont versionnes ; les binaires restent
+> locaux. Publier passe par une PR ; le push sur `main` deploie
+> https://sterenna.fr/minitel/. Voir `08_AUDIT/migration-2026-10-06/MIGRATION.md`.
+
 Commencer par `PASSATION_AGENTS.md`, `08_AUDIT/AUDIT_GLOBAL.md`, puis le README
 du sous-projet concerne. Ce dossier n'est pas un depot Git actuellement.
 Ne pas supposer un historique Git, une publication ou une sauvegarde distante.

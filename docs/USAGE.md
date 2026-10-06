@@ -210,4 +210,4 @@ licence **CC BY 4.0** indiquee dans les metadonnees du GLB fourni.
 Modifications : orientation, centrage, echelle de presentation, separation des
 deux faces CRT et nouvelles UV ; pas de modification de l'original.
 Voir [ATTRIBUTION.md](../public/models/ATTRIBUTION.md) et [ASSETS.md](ASSETS.md). Les autres
-modeles du dossier de travail (`06_MODEL`) ne sont pas distribues : leurs licences restent a verifier.
+modeles de `lemegeton/06_MODEL` ne sont ni versionnes ni distribues : leurs licences restent a verifier.

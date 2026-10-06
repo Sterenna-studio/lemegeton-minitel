@@ -1,0 +1,14 @@
+{
+  "copied": 450,
+  "identical": 62,
+  "conflict": 1,
+  "web_same": 53,
+  "web_adapted": 11,
+  "web_log": 2,
+  "web_missing": 0,
+  "bytes_copied": 5540196317,
+  "files": 579,
+  "bytes": 5548427653,
+  "seconds": 12.8,
+  "dry_run": false
+}

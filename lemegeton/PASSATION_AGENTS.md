@@ -1,5 +1,11 @@
 # Passation du projet Lemegeton / Minitel Web
 
+> **Migration du 6 octobre 2026.** Ce dossier est maintenant `lemegeton/` dans le
+> depot Git `Sterenna-studio/lemegeton-minitel` (public), et `07_WEB_MINITEL` en
+> est la racine. Seuls les formats texte sont versionnes ; les binaires restent
+> locaux. Publier passe par une PR ; le push sur `main` deploie
+> https://sterenna.fr/minitel/. Voir `08_AUDIT/migration-2026-10-06/MIGRATION.md`.
+
 Etat de reference : 6 octobre 2026. Lire aussi `AGENTS.md` et
 [l'audit global](08_AUDIT/AUDIT_GLOBAL.md). Les preuves techniques les plus
 recentes sont referencees dans `08_AUDIT/LATEST_VALIDATION.json`.

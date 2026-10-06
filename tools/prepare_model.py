@@ -7,9 +7,9 @@ import bpy
 import bmesh
 from mathutils import Matrix, Vector
 
-# Usage: blender --background --python tools/<script>.py -- <minitel_1982-france.glb>
+# Usage: blender --background --python tools/<script>.py [-- <minitel_1982-france.glb>]
 WEB = Path(__file__).resolve().parents[1]
-SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'assets-src' / 'minitel_1982-france.glb'
+SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'lemegeton' / '06_MODEL' / 'minitel_1982-france.glb'
 OUT = WEB / 'public' / 'models'
 OUT.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)

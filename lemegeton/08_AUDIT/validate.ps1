@@ -1,7 +1,8 @@
 #requires -Version 7.0
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$web = Join-Path $root '07_WEB_MINITEL'
+# Depuis la migration du 6 octobre, l'application occupe la racine du depot, parent de lemegeton/.
+$web = (Resolve-Path (Join-Path $root '..')).Path
 $out = Join-Path $PSScriptRoot ('validation-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $out -ErrorAction Stop | Out-Null
 $blender = 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe'

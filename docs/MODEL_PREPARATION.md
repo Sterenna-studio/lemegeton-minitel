@@ -3,14 +3,14 @@
 ## Source et convention de presentation
 
 Conserver le fichier original et travailler par Save As dans une copie Blender.
-Le modele source est `minitel_1982-france.glb` (dossier de travail `06_MODEL/`,
-hors depot). La preparation est reproductible depuis la racine du depot :
+Le modele source est `lemegeton/06_MODEL/minitel_1982-france.glb`, present
+localement mais non versionne. La preparation est reproductible depuis la racine du depot :
 
 ```powershell
-& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python-exit-code 1 --python .\tools\prepare_model.py -- chemin\vers\minitel_1982-france.glb
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python-exit-code 1 --python .\tools\prepare_model.py
 ```
 
-Sans argument, le script cherche `assets-src/minitel_1982-france.glb` (ignore par Git).
+Un autre GLB source peut etre passe apres `--`.
 `tools/audit_model.py` s'utilise de la meme facon et regenere les rendus de `docs/asset-audit/`.
 Avec Blender 5.2, la sortie est identique a l'octet pres a `public/models/minitel.glb`.
 

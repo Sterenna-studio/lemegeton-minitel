@@ -23,7 +23,8 @@ Licence et auteur vérifiés via l'API Sketchfab ; ils figurent aussi dans
 dans le README.
 
 Les polices IBM Plex Sans et Mono (paquets `@fontsource`) sont sous licence
-SIL OFL 1.1 ; leurs licences sont copiées dans `public/licenses/`. Le GLB d'origine et ses textures ne sont pas versionnés.
+SIL OFL 1.1 ; leurs licences sont copiées dans `public/licenses/`. Le GLB d'origine (`lemegeton/06_MODEL/`) et ses textures sont présents
+localement mais pas versionnés.
 
 Autres pistes repérées, non retenues :
 

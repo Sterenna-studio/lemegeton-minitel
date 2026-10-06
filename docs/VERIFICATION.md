@@ -45,7 +45,7 @@ la separation des deux triangles CRT ajoute un objet, pas de triangles.
 SHA-256 du GLB source :
 `16B0FDBDD2092299910F0FD407149E2F63099A3C36DC4AE6C53F1A8224397E9D`.
 L'inventaire complet et les metadonnees sont dans `asset-audit/inventory.json`.
-`node tools/inventory.mjs <dossier lemegeton_3d>` renouvelle ce rapport sans modifier les assets.
+`node tools/inventory.mjs` renouvelle ce rapport sans modifier les assets.
 
 L'attribution du Minitel provient des metadonnees du GLB ; elle est visible et
 conservee dans `public/models/ATTRIBUTION.md`. Les licences des polices sont

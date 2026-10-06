@@ -102,10 +102,11 @@ Blender V4, rapports d'audit, feuille de route et passation entre agents.
 Point d'entrée : [lemegeton/PASSATION_AGENTS.md](lemegeton/PASSATION_AGENTS.md),
 puis [la pipeline](lemegeton/PIPELINE_TRAVAIL.md).
 
-Les binaires (GLB, `.blend`, rendus, références, sauvegardes) ne sont pas
-versionnés : ils restent dans le dossier de travail local `lemegeton_3d`, où
-les scripts s'exécutent. Leurs empreintes SHA-256 sont dans
-[TRI_MANIFEST.csv](lemegeton/TRI_MANIFEST.csv). Le personnage reste au stade
+C'est le dossier de travail complet, migré depuis `Downloads\lemegeton_3d`
+le 6 octobre 2026 avec contrôle SHA-256 ([rapport](lemegeton/08_AUDIT/migration-2026-10-06/MIGRATION.md)).
+Tous les fichiers sont présents en local, mais seuls les formats texte sont
+versionnés : GLB, `.blend`, OBJ, images, vidéo et sauvegardes ZIP sont exclus
+par une liste blanche dans `.gitignore`. Un clone neuf n'a donc pas les binaires. Le personnage reste au stade
 expérimental : géométrie, doigts et pivots sont à reprendre avant l'animation.
 
 ## État du MVP
