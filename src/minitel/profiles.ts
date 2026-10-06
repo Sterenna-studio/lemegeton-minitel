@@ -65,3 +65,16 @@ export const suppliedProfile: ModelProfile = {
     Object_25: " ",
   },
 };
+// Web copy of "1950's Retro Television" (tools/prepare_television.py):
+// 2.4 units high, about 3.55 wide, screen already named Minitel_Screen.
+export const televisionProfile: ModelProfile = {
+  ...genericProfile,
+  normalize: false,
+  screenFallback: { position: [0, 1.73, 0.5], size: [1.34, 1.12] },
+  anchors: {
+    top: { position: [0, 2.4, 0] },
+    left: { position: [-1.78, 1.2, 0] },
+    right: { position: [1.78, 1.2, 0] },
+    rear: { position: [0, 1.2, -0.5] },
+  },
+};

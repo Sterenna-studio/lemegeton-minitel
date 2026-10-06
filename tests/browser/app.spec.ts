@@ -41,7 +41,9 @@ async function scenePixels(page: Page) {
       gl.UNSIGNED_BYTE,
       pixels,
     );
-    let dark = 0,
+    // The canvas is transparent over a dark CSS background : opaque pixels are
+    // the model, while the shadow catcher stays translucent.
+    let object = 0,
       colored = 0,
       hash = 0,
       minX = Infinity,
@@ -49,8 +51,8 @@ async function scenePixels(page: Page) {
       minY = Infinity,
       maxY = 0;
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i] < 90 && pixels[i + 1] < 100 && pixels[i + 2] < 95) {
-        dark++;
+      if (pixels[i + 3] >= 250) {
+        object++;
         const x = (i / 4) % gl.drawingBufferWidth;
         const y = Math.floor(i / 4 / gl.drawingBufferWidth);
         minX = Math.min(minX, x);
@@ -68,7 +70,7 @@ async function scenePixels(page: Page) {
         1000000007;
     }
     return {
-      dark,
+      object,
       colored,
       hash,
       width: gl.drawingBufferWidth,
@@ -89,13 +91,13 @@ test("asset, ecran dynamique, navigation, camera et responsive", async ({
     if (message.type() === "error") errors.push(message.text());
   });
   await page.goto("/");
-  await expect(page.getByText("Chargement du Minitel...")).toHaveCount(0, {
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
     timeout: 30000,
   });
   await expect(page.locator('[data-testid="scene"] canvas')).toBeVisible();
   await page.waitForTimeout(1500);
   const initial = await scenePixels(page);
-  expect(initial.dark).toBeGreaterThan(1500);
+  expect(initial.object).toBeGreaterThan(1500);
   expect(initial.colored).toBeGreaterThan(100);
   expect(initial.minX).toBeGreaterThan(2);
   expect(initial.maxX).toBeLessThan(initial.width - 2);
@@ -259,7 +261,7 @@ test("petit ecran et tablette sans debordement", async ({ page }, testInfo) => {
   await page.goto("/");
   await page.waitForTimeout(1700);
   const pixels = await scenePixels(page);
-  expect(pixels.dark).toBeGreaterThan(1000);
+  expect(pixels.object).toBeGreaterThan(1000);
   expect(pixels.minX).toBeGreaterThan(2);
   expect(pixels.maxX).toBeLessThan(pixels.width - 2);
   expect(pixels.minY).toBeGreaterThan(2);
@@ -280,4 +282,76 @@ test("petit ecran et tablette sans debordement", async ({ page }, testInfo) => {
       document.querySelector(".console")!.getBoundingClientRect().top,
   );
   expect(overlap).toBe(false);
+});
+test("bascule entre les modeles du catalogue", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
+    timeout: 30000,
+  });
+  const switcher = page.getByRole("radiogroup", { name: "Modele 3D" });
+  await expect(switcher.getByRole("radio", { checked: true })).toHaveText(
+    "Terminatel 255",
+  );
+  await page.waitForTimeout(800);
+  const terminatel = await scenePixels(page);
+  await switcher.getByRole("radio", { name: "Televiseur 1950" }).click();
+  await expect(page).toHaveURL(/modele=televiseur-1950/);
+  await expect(page.locator(".scene-caption strong")).toHaveText(
+    "Televiseur 1950",
+  );
+  await expect(page.locator(".credits")).toContainText("Huuxloc");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
+    timeout: 30000,
+  });
+  await page.waitForTimeout(800);
+  const television = await scenePixels(page);
+  expect(television.object).toBeGreaterThan(1000);
+  expect(television.colored).toBeGreaterThan(100);
+  expect(television.hash).not.toBe(terminatel.hash);
+  await switcher.getByRole("radio", { name: "Televiseur 1950" }).focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(switcher.getByRole("radio", { checked: true })).toHaveText(
+    "Minitel 1",
+  );
+  await expect(page.locator(".credits")).toContainText("okotaru");
+  await page.goto("/?modele=televiseur-1950");
+  await expect(switcher.getByRole("radio", { checked: true })).toHaveText(
+    "Televiseur 1950",
+  );
+  expect(errors).toEqual([]);
+});
+test("page documentation : fiches, vues et liens", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Documentation" }).click();
+  await expect(page).toHaveURL(/\/documentation\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Documentation des terminaux",
+  );
+  for (const title of ["Terminatel 255", "Minitel 1", "Televiseur 1950"])
+    await expect(page.getByRole("heading", { level: 2, name: title })).toBeVisible();
+  const section = page.locator("#televiseur-1950");
+  await section.getByRole("button", { name: "Dos" }).click();
+  await expect(section.locator(".viewer > img")).toHaveAttribute(
+    "src",
+    /televiseur-1950-dos\.jpg$/,
+  );
+  await expect(section.getByRole("link", { name: /Ouvrir dans le terminal 3D/ })).toHaveAttribute(
+    "href",
+    /\?modele=televiseur-1950$/,
+  );
+  await expect(page.locator(".reference-list li")).toHaveCount(18);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+  ).toBe(true);
+  expect(errors).toEqual([]);
 });

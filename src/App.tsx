@@ -11,6 +11,7 @@ import {
   Box,
   Cable,
   Crosshair,
+  FileText,
   Keyboard,
   Monitor,
   RotateCcw,
@@ -24,7 +25,9 @@ import { createLemegetonTerminal } from "./demo/LemegetonTerminal";
 import { useMinitel } from "./hooks/useMinitel";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { defaultEffects, type CrtEffects } from "./videotex/renderer";
-import { suppliedProfile, genericProfile } from "./minitel/profiles";
+import { genericProfile } from "./minitel/profiles";
+import { catalog, findEntry } from "./demo/catalog";
+import { marbleDataUrl } from "./demo/marble";
 import { MinitelAttachment } from "./minitel/MinitelAttachment";
 import type { ModelInfo, ScreenSource, Vec3 } from "./minitel/types";
 import type { CameraCommand } from "./scene/Camera";
@@ -35,7 +38,7 @@ function Loading() {
   const { active, progress } = useProgress();
   return active ? (
     <div className="model-loading" role="status">
-      Chargement du Minitel... <progress max={100} value={progress} />
+      Chargement du modele... <progress max={100} value={progress} />
     </div>
   ) : null;
 }
@@ -96,9 +99,12 @@ export default function App() {
   const [effects, setEffects] = useState<CrtEffects>(defaultEffects);
   const reducedMotion = useReducedMotion();
   const [antenna, setAntenna] = useState(false);
-  const [command, setCommand] = useState<CameraCommand>({
-    id: 0,
-    kind: "reset",
+  // ?vue=face|profil|dos opens on a given view ; ?capture=1 hides the interface
+  // (used by tools/capture_views.mjs to illustrate the documentation page).
+  const [command, setCommand] = useState<CameraCommand>(() => {
+    const view = new URLSearchParams(window.location.search).get("vue");
+    const kinds: Record<string, CameraCommand["kind"]> = { face: "front", profil: "side", dos: "back" };
+    return { id: 0, kind: (view && kinds[view]) || "reset" };
   });
   const [input, setInput] = useState("");
   const [debug, setDebug] = useState(false);
@@ -112,10 +118,34 @@ export default function App() {
   const [camera, setCamera] = useState<Vec3>();
   const [metrics, setMetrics] = useState({ fps: 0, calls: 0 });
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  // BASE_URL keeps the bundled model reachable when the app is served from a sub-path (/minitel/).
-  const suppliedModel = `${import.meta.env.BASE_URL}models/minitel.glb`;
-  const model = params.get("model") ?? suppliedModel;
-  const profile = model === suppliedModel ? suppliedProfile : genericProfile;
+  // ?modele=<id> picks a catalog entry; ?model=<url> still loads any GLB with the generic profile.
+  const [entry, setEntry] = useState(() => findEntry(params.get("modele")));
+  const custom = params.get("model");
+  const model = custom ?? entry.file;
+  const profile = custom ? genericProfile : entry.profile;
+  const finish = custom ? undefined : entry.finish;
+  function chooseModel(id: string) {
+    const next = findEntry(id);
+    setEntry(next);
+    setError("");
+    const url = new URL(window.location.href);
+    url.searchParams.set("modele", next.id);
+    url.searchParams.delete("model");
+    window.history.replaceState(null, "", url);
+  }
+  function switcherKey(event: React.KeyboardEvent) {
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+    if (!step) return;
+    event.preventDefault();
+    const index = catalog.findIndex((item) => item.id === entry.id);
+    const next = catalog[(index + step + catalog.length) % catalog.length];
+    chooseModel(next.id);
+    document.getElementById(`model-${next.id}`)?.focus();
+  }
+  useEffect(() => {
+    // Procedural marble behind the transparent 3D canvas (no photograph).
+    document.documentElement.style.setProperty("--marble", `url(${marbleDataUrl()})`);
+  }, []);
   const source: ScreenSource = useMemo(
     () => ({ kind: "videotex", frame: snapshot.frame }),
     [snapshot.frame],
@@ -159,15 +189,40 @@ export default function App() {
   }
   const fallback = !webgl || !!error;
   return (
-    <main className="experience">
+    <main className={params.get("capture") ? "experience capture" : "experience"}>
       <header className="masthead">
         <a href={import.meta.env.BASE_URL} className="brand" aria-label="Minitel, accueil">
           <Monitor size={26} />
           <h1>
-            MINITEL<span>FRANCE / 1982</span>
+            MINITEL<span>{custom ? "MODELE EXTERNE" : entry.tagline}</span>
           </h1>
         </a>
+        <div
+          className="model-switcher"
+          role="radiogroup"
+          aria-label="Modele 3D"
+          onKeyDown={switcherKey}
+        >
+          {catalog.map((item) => {
+            const checked = !custom && item.id === entry.id;
+            return (
+              <button
+                key={item.id}
+                id={`model-${item.id}`}
+                role="radio"
+                aria-checked={checked}
+                tabIndex={checked || (custom && item === catalog[0]) ? 0 : -1}
+                onClick={() => chooseModel(item.id)}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
         <div className="service">
+          <a className="doc-link" href={`${import.meta.env.BASE_URL}documentation/`}>
+            <FileText size={14} /> Documentation
+          </a>
           <span className="status-dot" />
           <span>3615 LEMEGETON</span>
           <span className="service-state">LIAISON ETABLIE</span>
@@ -178,6 +233,7 @@ export default function App() {
           <Scene
             model={model}
             profile={profile}
+            finish={finish}
             screenSource={source}
             effects={effects}
             command={command}
@@ -207,9 +263,9 @@ export default function App() {
           </p>
         )}
         <div className="scene-caption">
-          <span>01 / TERMINAL VIDEOTEX</span>
-          <strong>Minitel 1</strong>
-          <span>Alcatel · collection numerique</span>
+          <span>{custom ? "00 / MODELE EXTERNE" : entry.series}</span>
+          <strong>{custom ? "Modele externe" : entry.title}</strong>
+          <span>{custom ? custom : entry.subtitle}</span>
         </div>
         <div className="camera-tools">
           <Tool label="Vue de face" onClick={() => cameraCommand("front")}>
@@ -457,13 +513,19 @@ export default function App() {
       </footer>
       <div className="credits">
         <span>1200 BAUDS / TELETEL</span>
-        <a
-          href="https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Modele : okotaru / CC BY 4.0 · copie adaptee
-        </a>
+        {!custom && (
+          <span>
+            Modele :{" "}
+            <a href={entry.credit.source} target="_blank" rel="noreferrer">
+              {entry.credit.title}
+            </a>{" "}
+            par {entry.credit.author} /{" "}
+            <a href={entry.credit.licenseUrl} target="_blank" rel="noreferrer">
+              {entry.credit.license}
+            </a>{" "}
+            · {entry.credit.changes}
+          </span>
+        )}
       </div>
     </main>
   );

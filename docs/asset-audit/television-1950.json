@@ -1,0 +1,17 @@
+{
+  "source": "1950s_retro_television (1).glb",
+  "scale": 2.4466064740301117,
+  "screen": {
+    "width": 1.33768892288208,
+    "height": 1.1225078105926514,
+    "center_x": 0.01408463716506958,
+    "center_z": 1.7321885824203491
+  },
+  "meshes": [
+    "Minitel_Screen",
+    "Television_Cabinet",
+    "Television_Emblem",
+    "Television_Feet",
+    "Television_Front"
+  ]
+}

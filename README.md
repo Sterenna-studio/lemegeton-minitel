@@ -45,7 +45,7 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 npm run typecheck
 npm run lint
 npm test               # 6 tests unitaires Vitest
-npm run test:browser   # 12 tests Playwright (Edge headless, serveur dev sur 5174)
+npm run test:browser   # 16 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne
@@ -68,6 +68,25 @@ Pour vérifier localement le build de production :
 npm run build:ovh
 npx vite preview --base=/minitel/   # http://127.0.0.1:4173/minitel/
 ```
+
+## Documentation en ligne
+
+`/documentation/` (https://sterenna.fr/minitel/documentation/) présente chaque
+modèle : quatre vues, caractéristiques, provenance, licence, et un lien vers le
+terminal 3D. La page liste aussi les photos de référence du Terminatel 255 et
+renvoie à la documentation du projet. Son contenu est dans
+`src/documentation/content.ts`.
+
+Les vues sont des captures du terminal 3D lui-même (`?vue=face|profil|dos` et
+`?capture=1`). Pour les régénérer, lancer `npm run dev` puis :
+
+```bash
+node tools/capture_views.mjs http://127.0.0.1:5174
+```
+
+Les photos de référence (annonce eBay) ne s'affichent qu'en local, avec
+`npm run dev`. Le build n'en contient aucune, et le workflow de déploiement
+le vérifie.
 
 ## Architecture
 
@@ -111,10 +130,20 @@ expérimental : géométrie, doigts et pivots sont à reprendre avant l'animatio
 
 ## État du MVP
 
-Les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont atteints : Minitel 3D
-visible et manipulable, écran dynamique indépendant, UI Vidéotex, démo
-3615 Lemegéton, responsive, modèle remplaçable via un profil, touches 3D
-cliquables et accessoires par anchors.
+Les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont atteints :
+- Minitel 3D visible et manipulable, avec un écran dynamique indépendant ;
+- UI Vidéotex et démo 3615 Lemegéton ;
+- page responsive ;
+- modèle remplaçable via un profil ;
+- touches 3D cliquables et accessoires par anchors.
+
+Un sélecteur propose trois modèles :
+- le Terminatel 255, en finition marbre noir ;
+- le Minitel 1 d'origine ;
+- un téléviseur des années 1950.
+
+La page suit la direction artistique du Terminatel 255 (voir
+[assets et licences](docs/ASSETS.md)).
 
 Restent ouverts : la validation artistique (textures grises d'origine conservées),
 les essais sur téléphones physiques, l'optimisation du chargement (bundle

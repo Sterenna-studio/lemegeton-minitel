@@ -1,16 +1,37 @@
+/* Direction artistique : Telic Alcatel Terminatel 255, serie limitee marbre noir.
+   Marbre noir veine or sable et gris, touches anthracite a legendes creme,
+   touche Envoi vert sauge, verre cathodique gris-vert. Le marbre de fond est
+   procedural (src/demo/marble.ts), injecte dans --marble au demarrage. */
 :root {
+  --page: #0c0b0a;
+  --surface: #151311;
+  --raised: #1d1a17;
+  --raised-2: #27231f;
+  --line: #3a332b;
+  --line-soft: #2a2520;
+  --cream: #ece4d2;
+  --muted: #a69d8d;
+  --faint: #81796b;
+  --gold: #c9a56b;
+  --sage: #93ad7c;
+  --sage-key: #6f8a5c;
+  --sage-key-edge: #4b6140;
+  --key: #2b2724;
+  --key-edge: #0e0d0c;
+  --marble: none;
   font-family: "IBM Plex Sans", Arial, sans-serif;
-  color: #26352f;
-  background: #e4e8e7;
+  color: var(--cream);
+  background: var(--page);
   font-synthesis: none;
   letter-spacing: 0;
-  color-scheme: light;
+  color-scheme: dark;
 }
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
+  background: var(--page);
 }
 button,
 input,
@@ -30,13 +51,14 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #ad563e;
+  outline: 2px solid var(--gold);
   outline-offset: 4px;
 }
 button {
   transition:
     background 0.15s,
-    color 0.15s;
+    color 0.15s,
+    border-color 0.15s;
 }
 button:disabled {
   cursor: not-allowed;
@@ -52,6 +74,20 @@ svg {
   height: 100svh;
   min-height: 640px;
   overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 46% 42% at 50% 42%,
+      rgba(201, 165, 107, 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 85% 75% at 50% 42%,
+      rgba(12, 11, 10, 0.55) 0%,
+      rgba(8, 7, 6, 0.84) 70%,
+      rgba(5, 5, 4, 0.95) 100%
+    ),
+    var(--marble) center / 1100px repeat,
+    var(--page);
 }
 .masthead {
   position: absolute;
@@ -69,21 +105,57 @@ svg {
   text-decoration: none;
 }
 .brand svg {
-  color: #a95842;
+  color: var(--gold);
 }
+/* Lettrage incline et detoure, comme le marquage TERMINATEL 255. */
 .brand h1 {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 26px;
-  font-weight: 600;
+  font:
+    italic 600 27px "IBM Plex Sans",
+    sans-serif;
+  letter-spacing: 0.16em;
+  color: transparent;
+  -webkit-text-stroke: 1.1px var(--cream);
   margin: 0;
   line-height: 1.1;
 }
 .brand h1 span {
   display: block;
-  font-size: 10px;
-  font-weight: 400;
+  font:
+    400 10px "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.12em;
+  -webkit-text-stroke: 0;
   margin-top: 7px;
-  color: #66746e;
+  color: var(--gold);
+}
+.model-switcher {
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  background: rgba(15, 14, 13, 0.82);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.model-switcher button {
+  border: 1px solid #3d362e;
+  border-bottom: 3px solid var(--key-edge);
+  border-radius: 4px;
+  background: var(--key);
+  color: var(--cream);
+  padding: 6px 13px 5px;
+  font:
+    500 11px "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.model-switcher button:hover {
+  background: var(--raised-2);
+}
+.model-switcher button[aria-checked="true"] {
+  background: var(--sage-key);
+  border-color: var(--sage-key-edge);
+  color: #f4f6ec;
 }
 .service {
   font-family: "IBM Plex Mono", monospace;
@@ -91,17 +163,19 @@ svg {
   gap: 12px;
   align-items: center;
   font-size: 11px;
+  color: var(--cream);
 }
 .service-state {
-  color: #7c8882;
-  border-left: 1px solid #bac4be;
+  color: var(--faint);
+  border-left: 1px solid var(--line);
   padding-left: 16px;
 }
 .status-dot {
   width: 6px;
   height: 6px;
-  background: #4e8d60;
+  background: var(--sage);
   border-radius: 50%;
+  box-shadow: 0 0 6px var(--sage);
 }
 .scene {
   position: absolute;
@@ -122,7 +196,8 @@ svg {
 .scene-caption > span:first-child {
   font-family: "IBM Plex Mono", monospace;
   font-size: 10px;
-  color: #75817c;
+  letter-spacing: 0.08em;
+  color: var(--gold);
 }
 .scene-caption strong {
   font-size: 22px;
@@ -130,7 +205,7 @@ svg {
 }
 .scene-caption > span:last-child {
   font-size: 12px;
-  color: #75817c;
+  color: var(--muted);
 }
 .camera-tools {
   position: absolute;
@@ -139,15 +214,15 @@ svg {
   display: flex;
   gap: 3px;
   align-items: center;
-  background: #f6f8f4db;
-  border: 1px solid #c8d0cb;
+  background: rgba(21, 19, 17, 0.85);
+  border: 1px solid var(--line);
   padding: 4px;
   border-radius: 4px;
 }
 .camera-tools > span {
   width: 1px;
   height: 24px;
-  background: #c8d0cb;
+  background: var(--line);
   margin: 0 3px;
 }
 .icon-button {
@@ -165,7 +240,10 @@ svg {
 }
 .icon-button:hover,
 .icon-button.active {
-  background: #bec9c047;
+  background: rgba(236, 228, 210, 0.1);
+}
+.icon-button.active {
+  color: var(--gold);
 }
 .tooltip {
   display: none;
@@ -175,8 +253,8 @@ svg {
   white-space: nowrap;
   font-size: 11px;
   padding: 5px 8px;
-  background: #17251e;
-  color: #f5f7ec;
+  background: var(--cream);
+  color: var(--surface);
   border-radius: 3px;
   pointer-events: none;
   z-index: 9;
@@ -191,17 +269,21 @@ svg {
   bottom: 36px;
   left: 36px;
   right: 36px;
-  background: #202d27;
-  color: #e8ece5;
-  border-radius: 5px;
-  box-shadow: 0 12px 28px #17241c17;
+  background:
+    linear-gradient(rgba(19, 17, 15, 0.93), rgba(19, 17, 15, 0.93)),
+    var(--marble) center / 640px repeat,
+    var(--surface);
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 .console-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 13px 20px;
-  border-bottom: 1px solid #435147;
+  border-bottom: 1px solid var(--line);
   gap: 12px;
 }
 .terminal-title {
@@ -210,7 +292,7 @@ svg {
   gap: 13px;
 }
 .terminal-title > svg {
-  color: #dfbd70;
+  color: var(--gold);
 }
 .terminal-title > div {
   display: flex;
@@ -226,15 +308,15 @@ svg {
   font:
     10px "IBM Plex Mono",
     monospace;
-  color: #9dada1;
-  border-left: 1px solid #4e5d51;
+  color: var(--muted);
+  border-left: 1px solid var(--line);
   padding-left: 20px;
 }
 .online {
   font:
     9px "IBM Plex Mono",
     monospace;
-  color: #a3c990;
+  color: var(--sage);
   margin-left: 12px;
 }
 .console-tools {
@@ -256,21 +338,21 @@ svg {
 .console-bottom nav button {
   border: 0;
   background: transparent;
-  color: #e4e9e0;
+  color: var(--cream);
   font-size: 12px;
   padding: 8px 12px;
   border-radius: 3px;
   white-space: nowrap;
 }
 .console-bottom nav button:hover {
-  background: #425047;
+  background: rgba(236, 228, 210, 0.09);
 }
 .console-bottom nav .home-key {
-  border: 1px solid #586359;
+  border: 1px solid #5e4f39;
   margin-right: 10px;
 }
 .console-bottom nav button > span {
-  color: #dfbd70;
+  color: var(--gold);
   font:
     12px "IBM Plex Mono",
     monospace;
@@ -280,16 +362,16 @@ svg {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid #647364;
+  border-bottom: 1px solid #4a4136;
   max-width: 300px;
   width: 35%;
   height: 34px;
-  color: #dfbd70;
+  color: var(--gold);
 }
 .console input {
   background: transparent;
   border: 0;
-  color: #f2f2e8;
+  color: var(--cream);
   min-width: 0;
   width: 100%;
   outline-offset: 2px;
@@ -298,14 +380,14 @@ svg {
     monospace;
 }
 .console input::placeholder {
-  color: #9daaa0;
+  color: var(--faint);
 }
 .console form button {
   border: 0;
   display: flex;
   padding: 4px;
   background: transparent;
-  color: #dfbd70;
+  color: var(--gold);
 }
 .credits {
   position: absolute;
@@ -318,9 +400,10 @@ svg {
   font:
     9px "IBM Plex Mono",
     monospace;
-  color: #77837c;
+  color: var(--faint);
 }
 .credits a {
+  color: var(--muted);
   text-decoration: none;
 }
 .credits a:hover {
@@ -333,13 +416,13 @@ svg {
   z-index: 5;
   right: 36px;
   bottom: 183px;
-  background: #f7f9f5;
-  color: #26352f;
-  border: 1px solid #c4cec5;
-  border-radius: 5px;
+  background: rgba(23, 21, 19, 0.97);
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   padding: 14px 18px;
   width: 290px;
-  box-shadow: 0 15px 36px #17241c18;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
   max-height: calc(100% - 280px);
   overflow: auto;
 }
@@ -355,13 +438,14 @@ svg {
   font:
     500 13px "IBM Plex Mono",
     monospace;
+  color: var(--gold);
 }
 .setting {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid #dbe1d9;
+  border-bottom: 1px solid var(--line-soft);
   font-size: 12px;
   gap: 12px;
 }
@@ -371,7 +455,7 @@ svg {
 .setting input {
   width: 16px;
   height: 16px;
-  accent-color: #46644c;
+  accent-color: var(--sage-key);
 }
 .reader-panel {
   width: 410px;
@@ -385,6 +469,7 @@ svg {
   height: auto;
   aspect-ratio: 4/3;
   background: #030b08;
+  border-radius: 3px;
 }
 .terminal-reader nav {
   display: flex;
@@ -393,8 +478,8 @@ svg {
   margin-top: 8px;
 }
 .terminal-reader button {
-  border: 1px solid #bfcbc0;
-  color: #334d3b;
+  border: 1px solid var(--line);
+  color: var(--cream);
   background: transparent;
   padding: 6px 9px;
   font:
@@ -403,38 +488,39 @@ svg {
   border-radius: 3px;
 }
 .terminal-reader button:hover {
-  background: #dce6da;
+  background: var(--raised-2);
 }
 .virtual-keyboard {
   position: absolute;
   z-index: 5;
   right: 36px;
   bottom: 183px;
-  background: #f7f9f5;
+  background: rgba(23, 21, 19, 0.97);
   padding: 14px;
-  border: 1px solid #c4cec5;
-  border-radius: 5px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
   width: 340px;
-  box-shadow: 0 15px 36px #17241c18;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 .number-keys {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
 }
+/* Touches anthracite a legende creme, comme le clavier Terminatel. */
 .virtual-keyboard button {
   height: 36px;
-  border: 1px solid #c4cec5;
-  border-bottom-width: 3px;
-  border-radius: 3px;
-  background: #e9eee7;
-  color: #26352f;
+  border: 1px solid #3d362e;
+  border-bottom: 3px solid var(--key-edge);
+  border-radius: 4px;
+  background: var(--key);
+  color: var(--cream);
   font:
     12px "IBM Plex Mono",
     monospace;
 }
 .virtual-keyboard button:hover {
-  background: #d1dfd0;
+  background: var(--raised-2);
 }
 .function-keys {
   margin-top: 9px;
@@ -443,9 +529,9 @@ svg {
   gap: 5px;
 }
 .function-keys button:last-child {
-  background: #638457;
-  color: white;
-  border-color: #4f6e47;
+  background: var(--sage-key);
+  color: #f4f6ec;
+  border-color: var(--sage-key-edge);
 }
 .debug-panel {
   right: 345px;
@@ -460,12 +546,15 @@ svg {
   max-width: 100%;
   margin-top: 8px;
   font-size: 11px;
+  background: var(--raised);
+  color: var(--cream);
+  border: 1px solid var(--line);
 }
 .debug-panel p {
   overflow-wrap: anywhere;
 }
 .mesh-label {
-  background: #202d27dd;
+  background: #151311dd;
   color: white;
   font-size: 9px;
   white-space: nowrap;
@@ -476,7 +565,7 @@ svg {
   font:
     12px "IBM Plex Mono",
     monospace;
-  color: #26352f;
+  color: var(--cream);
 }
 .fallback-status {
   position: absolute;
@@ -502,12 +591,24 @@ svg {
   left: 36px;
   bottom: 185px;
   z-index: 8;
-  background: #f7f9f5;
+  background: var(--surface);
   padding: 12px;
-  border: 1px solid #bcc9bc;
+  border: 1px solid var(--line);
   white-space: normal;
 }
+@media (max-width: 1100px) {
+  .service-state {
+    display: none;
+  }
+}
 @media (max-width: 900px) {
+  .masthead {
+    flex-wrap: wrap;
+    row-gap: 14px;
+  }
+  .model-switcher {
+    order: 3;
+  }
   .terminal-title > div > span {
     display: none;
   }
@@ -541,6 +642,16 @@ svg {
   .masthead {
     inset: 22px 20px auto;
     align-items: flex-start;
+    row-gap: 12px;
+  }
+  .model-switcher {
+    width: 100%;
+  }
+  .model-switcher button {
+    flex: 1;
+    padding: 6px 2px 5px;
+    font-size: 10px;
+    letter-spacing: 0;
   }
   .brand {
     gap: 9px;
@@ -558,9 +669,6 @@ svg {
     font-size: 9px;
     gap: 7px;
     padding-top: 5px;
-  }
-  .service-state {
-    display: none;
   }
   .scene {
     bottom: 213px;
@@ -642,6 +750,7 @@ svg {
     align-items: center;
     gap: 3px;
     font-size: 8px;
+    text-align: center;
   }
   .settings-panel,
   .reader-panel,
@@ -654,7 +763,7 @@ svg {
     max-height: calc(100% - 320px);
   }
   .fallback-status {
-    top: 110px;
+    top: 150px;
     left: 20px;
   }
   .sr-only:focus-within {
@@ -683,13 +792,14 @@ svg {
   font:
     12px "IBM Plex Mono",
     monospace;
+  color: var(--cream);
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: center;
 }
 .model-loading progress {
-  accent-color: #527b54;
+  accent-color: var(--gold);
   width: 180px;
   height: 3px;
 }
@@ -712,4 +822,31 @@ svg {
   .debug-panel {
     bottom: 245px;
   }
+}
+/* ?capture=1 : scene seule, pour les vues de la documentation. */
+.experience.capture .masthead,
+.experience.capture .scene-caption,
+.experience.capture .camera-tools,
+.experience.capture .console,
+.experience.capture .credits,
+.experience.capture .model-loading {
+  display: none;
+}
+.experience.capture .scene {
+  inset: 0;
+}
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--cream);
+  text-decoration: none;
+}
+.doc-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
 }
