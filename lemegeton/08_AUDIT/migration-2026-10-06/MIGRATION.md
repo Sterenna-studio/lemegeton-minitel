@@ -93,9 +93,35 @@ images, vidéo, NPZ, ZIP et journaux. Il faut aussi noter deux points.
   explicitement.
 - Un clone neuf du dépôt n'a pas les binaires : seul ce dossier local est complet.
 
+## Suppression de la sauvegarde ZIP
+
+La sauvegarde locale `09_SAUVEGARDES/LEMEGETON-20261006-004526.zip` a été
+supprimée à la demande de l'utilisateur, après vérification que tout son
+contenu existe dans ce dossier. Elle pesait 2 539 576 627 octets, pour 573
+fichiers, avec le SHA-256
+`499FAD86EFAF91432F86CF9D9C17A884196F80795EF52EBD6612AED469967CA8`.
+
+- Les 573 entrées ont été relues dans le ZIP. Toutes correspondaient au
+  manifeste interne, sans aucune entrée corrompue.
+- 557 entrées étaient identiques à un fichier du dossier de travail.
+- 16 entrées étaient des versions antérieures à la migration : les fichiers
+  adaptés au dépôt, et quelques rapports et docs mis à jour depuis.
+  - Elles ont été extraites dans
+    [versions-avant-migration/](versions-avant-migration/), avec leurs
+    chemins d'origine et une empreinte vérifiée.
+  - Les fichiers `.md`, `.json`, `.py` et `.ps1` sont versionnés. Les fichiers
+    `.gitignore`, `.mjs` et `.tsx` restent locaux.
+- Un second contrôle a donné 573 sur 573 : chaque fichier du ZIP existe à
+  l'identique dans le dossier.
+
+Le manifeste, le rapport et `LATEST.json` de cette sauvegarde ont été supprimés
+avec elle. `09_SAUVEGARDES/` est vide : selon `08_AUDIT/AUDIT_GLOBAL.md`, en
+l'absence de `LATEST.json`, aucune sauvegarde achevée n'est à annoncer.
+`08_AUDIT/backup.ps1` permet d'en refaire une, de préférence vers un autre
+support que C:.
+
 ## Ancien emplacement
 
-`Downloads\lemegeton_3d` est conservé intact. Sa suppression est laissée à
-l'utilisateur, une fois ce rapport relu. Les sauvegardes ZIP de
-`09_SAUVEGARDES` sont désormais copiées dans `lemegeton/09_SAUVEGARDES`, sur le
-même disque C:. Le ZIP ne remplace donc pas une copie sur un autre support.
+`Downloads\lemegeton_3d` est conservé intact ; sa suppression est laissée à
+l'utilisateur après relecture de ce rapport. Il contient encore sa propre copie
+de la sauvegarde ZIP.
