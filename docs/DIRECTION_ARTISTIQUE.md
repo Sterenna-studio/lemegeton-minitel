@@ -142,8 +142,8 @@ Règles :
 
 ## Son
 
-Le son est coupé par défaut, avec un bouton, sous réserve de la question 2 de
-[MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md#13-questions-ouvertes).
+Le son est **coupé par défaut**, avec un bouton pour l'activer (décision du
+7 octobre 2026, [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md#1-décisions)).
 
 | Lieu ou action | Sons |
 | --- | --- |

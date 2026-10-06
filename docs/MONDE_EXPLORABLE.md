@@ -13,7 +13,7 @@ direction artistique est décrite à part, dans
 
 ## 1. Décisions
 
-Toutes ont été prises par l'utilisateur le 6 octobre 2026.
+Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
 
 | Sujet | Décision |
 | --- | --- |
@@ -22,12 +22,15 @@ Toutes ont été prises par l'utilisateur le 6 octobre 2026.
 | Portes | **Temporelles** : un seul modèle, paramétré par l'année, la teinte de l'époque et la plaque, avec une séquence d'ouverture. |
 | Salles | **Une par terminal du catalogue**. Il y en a trois pour commencer : Téléviseur 1950, Minitel 1, Terminatel 255. |
 | Ambiances | Salon des années 50 ; bureau des années 80 ; pour le Terminatel, la DA actuelle (marbre noir, laiton, lumière ambrée). |
+| Page d'arrivée | Sans paramètre, on arrive à l'**entrée du couloir** (7 octobre). |
+| Son | **Coupé par défaut**, avec un bouton pour l'activer (7 octobre). |
+| Panneau 3615, yeux, réglages | Affichés **seulement au poste `terminal`**, devant le terminal (7 octobre). |
 | Date du Terminatel | Le compteur de sa porte affiche **« 198? »**, faute de source publique. |
 | Ambiance générale | Rétro mystérieux, années 1920 à 1960 : bois sombre, laiton, cuir, verre, vieux papier, mécanique, lumière chaude. |
 
 ## 2. Parcours visé
 
-1. Le visiteur arrive à l'entrée du couloir (voir les questions ouvertes, §13).
+1. Le visiteur arrive à l'entrée du couloir.
 2. Il avance de poste en poste. Les portes sont rangées dans l'ordre chronologique : 1950, 1982, puis 198?.
 3. Devant une porte, il voit le compteur, la plaque et la lumière de l'époque, puis il active la porte.
 4. La séquence temporelle se joue (§5), suivie d'un travelling à travers la porte.
@@ -147,7 +150,7 @@ poste      --PRECEDENT------>    trajet vers le poste précédent de l'historiqu
 
 ### URL et historique
 
-- `?salle=<id>&poste=<id>` décrit l'endroit. Sans paramètre, on arrive à l'entrée du couloir, sous réserve de la question 1 du §13.
+- `?salle=<id>&poste=<id>` décrit l'endroit. Sans paramètre, on arrive à l'entrée du couloir.
 - Chaque **arrivée** à un poste fait un `history.pushState`. `popstate` rejoue un trajet si la cible est voisine, sinon il fait un fondu.
 - Les réglages (`ecran`, `couleur`, `yeux`, `rendu`, `taille`, `table`, `vue`) restent en `replaceState` : ils ne créent pas d'entrée d'historique.
 - Compatibilité : `?modele=<id>` est réécrit en `?salle=<id>&poste=terminal` (`replaceState`). Le mode `?capture=1&transparent=1` de `tools/capture_views.mjs` reste un terminal seul, hors du monde.
@@ -185,7 +188,7 @@ fondu de 0,4 s mène à la salle.
 | `terminatel-255` | Terminatel 255 (finition marbre procédurale) | 198? | DA actuelle : marbre noir, laiton, lumière ambrée | tables actuelles |
 
 - La salle `terminatel-255` reprend la scène actuelle **sans régression** : même terminal, mêmes réglages et même mobilier. Elle gagne des murs de marbre (`src/demo/marble.ts`) et une porte de sortie.
-- Le panneau 3615, les yeux et les réglages ne s'affichent qu'au poste `terminal`. Voir la question 4 du §13.
+- Le panneau 3615, les yeux et les réglages ne s'affichent qu'au poste `terminal` (décision du 7 octobre). Ailleurs, l'interface se réduit à la navigation et au bouton du son.
 
 ## 7. Points d'intégration dans le code actuel
 
@@ -209,7 +212,7 @@ faudra changer pour accueillir le monde.
 | [Table.tsx:30](../src/scene/Table.tsx#L30) | Le mobilier est préchargé au chargement du module. Le cache de `useGLTF` ne se vide jamais. | Il faut charger à la demande la salle courante et ses voisines, puis appeler `useGLTF.clear` et libérer les textures à plus d'un saut. |
 | [catalog.ts:29](../src/demo/catalog.ts#L29) | `onTable` place le terminal sur une table ou au sol. | La disposition de la salle part de là (§6). |
 | [deploy-ovh.yml:46-52](../.github/workflows/deploy-ovh.yml) | Le déploiement vérifie certains fichiers précis et **refuse tout `.webp`** dans `dist/`. | Il faudra ajouter les GLB du monde à la liste vérifiée. Les textures doivent rester **dans** les GLB (KTX2 ou JPEG/PNG). Si on publie un jour un `.webp` autonome, il faudra cibler la règle sur les photos de référence uniquement. |
-| [tests/browser/app.spec.ts](../tests/browser/app.spec.ts) | Les 22 tests supposent qu'on arrive directement devant le terminal (`expectScreenCentered`). | Ils devront ouvrir `?salle=…&poste=terminal`, ou garder ce point d'entrée si la question 1 est tranchée en ce sens. |
+| [tests/browser/app.spec.ts](../tests/browser/app.spec.ts) | Les 22 tests supposent qu'on arrive directement devant le terminal (`expectScreenCentered`). | On arrivera désormais dans le couloir, donc ils devront ouvrir `?salle=…&poste=terminal`. |
 | [AccessibleTerminal.tsx](../src/components/AccessibleTerminal.tsx) | Une alternative texte du 3615 existe. | La navigation a besoin de la même chose : liste des points d'intérêt en DOM et annonce de l'arrivée (`aria-live`). |
 
 ## 8. Budgets
@@ -264,7 +267,7 @@ principal si les salles deviennent lourdes.
 
 Comportement attendu :
 - 60 images/s sur ordinateur pendant les trajets ;
-- 30 images/s ou plus sur un mobile de milieu de gamme, à confirmer (question 5 du §13) ;
+- 30 images/s ou plus sur le mobile de référence (§13, question 5 ; hypothèse de travail : milieu de gamme d'environ 2022) ;
 - rendu à la demande à l'arrêt.
 
 Leviers, par ordre de rentabilité :
@@ -301,8 +304,8 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
 
 | Élément | Lot | Origine recommandée |
 | --- | --- | --- |
-| Porte et poignée | B | **Blender, fait maison** (pivots, compteur et horloge intégrés) |
-| Horloge de porte | B | Blender, fait maison (aiguilles animables) |
+| Porte et poignée | B | à décider plus tard (§13, question 3) ; Blender fait maison recommandé |
+| Horloge de porte | B | à décider plus tard (§13, question 3) ; Blender fait maison recommandé |
 | Mur, sol, moulure, applique | C | kit Blender + matériaux ambientCG / Poly Haven (CC0) |
 | Bureau, chaise, lampe, machine à écrire | E | Poly Haven (CC0), sinon Sketchfab CC BY |
 
@@ -334,7 +337,7 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 | Lot | Contenu | Critères d'acceptation |
 | --- | --- | --- |
 | **A. Préparation** (aucun changement visible) | hook d'URL extrait d'App.tsx ; Lighting en presets (`terminatel` = actuel) ; `far` paramétrable ; lampe et écran suspendus hors scène ; `src/world/` (types, rails, navigation, sequence, url, rooms) avec tests ; entrée Vite `atelier/` vide ; chaîne KTX2/meshopt dans `tools/` | 22/22 tests navigateur inchangés ; nouveaux tests unitaires verts ; build et déploiement OK |
-| **B. Porte temporelle** | modèle Blender (pivot, poignée, horloge), compteur canvas, lumière, sons, séquence ; atelier `?brique=porte` | séquence conforme au §5, aller et retour ; mouvement réduit ; captures ; budget de la porte respecté |
+| **B. Porte temporelle** | modèle (origine à décider, question 3 : pivot, poignée, horloge), compteur canvas, lumière, sons, séquence ; atelier `?brique=porte` | séquence conforme au §5, aller et retour ; mouvement réduit ; captures ; budget de la porte respecté |
 | **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté |
 | **D. Rails et navigation** | `RailCamera`, points d'intérêt DOM, parallaxe, clavier, toucher, URL et historique, fondus ; salles provisoires (boîtes) | parcours complet au clavier ; Retour du navigateur ; `?salle=` et `?poste=` |
 | **E. Salles** | `terminatel-255` (scène actuelle dans une pièce), puis `minitel-1` (bureau 80s), puis `televiseur-1950` (salon 50s) ; poste `inspect` = caméra actuelle | non-régression au poste `terminal` ; budget « salle » respecté ; ambiances conformes à la DA |
@@ -343,13 +346,15 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 
 ## 13. Questions ouvertes
 
-Chaque question a une recommandation. À trancher avant le lot indiqué.
+Trois questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
+1. **Page d'arrivée** : le couloir.
+2. **Son** : coupé par défaut.
+4. **Panneau 3615, yeux et réglages** : seulement devant le terminal.
 
-1. **Page d'arrivée sans paramètre** (avant F) : l'entrée du couloir (recommandé), ou directement la salle Terminatel avec la porte de sortie visible ?
-2. **Son** (avant B) : coupé par défaut, avec un bouton (recommandé : les navigateurs bloquent de toute façon la lecture automatique), ou activé au premier clic ?
-3. **Porte et horloge** (avant B) : faites maison dans Blender (recommandé, pour maîtriser pivots, compteur et licences), ou adaptées d'un modèle CC0 ?
-4. **Panneau 3615, yeux et réglages** (avant E) : seulement au poste `terminal` (recommandé), ou dans toute la salle ?
-5. **Mobile de référence** pour les budgets (avant C) : quel appareil, ou quelle classe d'appareil ?
+Il en reste deux, à trancher avant le lot indiqué.
+
+3. **Origine des modèles 3D de la porte et de l'horloge** (avant B) : reportée par l'utilisateur, « on verra plus tard ». Deux options : les faire nous-mêmes dans Blender, ce qui est recommandé pour maîtriser les pivots, le compteur et les licences ; ou adapter un modèle gratuit CC0. Les lots A, C et D n'en dépendent pas : la porte peut y être une boîte provisoire.
+5. **Téléphone de référence** (avant C) : c'est le téléphone le moins puissant sur lequel le site doit rester fluide. Il sert à fixer les limites de poids et de détail des salles. Plus ce téléphone est ancien, plus les salles doivent être légères. Hypothèse de travail en attendant : un smartphone de milieu de gamme d'environ 2022 (par exemple un Galaxy A53 ou un iPhone 11). Le plus simple est d'utiliser un téléphone qu'on possède, pour tester en vrai.
 
 ## 14. Risques
 
