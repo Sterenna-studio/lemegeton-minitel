@@ -170,6 +170,45 @@ Pour ajouter un modele :
   respire, a cote d'un halo CSS accorde. Pour rester econome, elle demande des
   images a 20 Hz et s'arrete en mouvement reduit.
 
+## Yeux de Lemegeton (ecran Videotex)
+
+Reglages CRT, groupe **Ecran** : *3615 Lemegeton*, ou *Yeux de Lemegeton*. Les yeux
+sont ceux de l'overlay OBS de nitro-clicker (`obs-lemegeton.html`), ramenes en
+mosaique Videotex 40 x 25 a partir du travail deja fait dans **minitel-face** :
+
+- `src/eyes/libZyraEyes.ts`, style par defaut : portage des yeux de `LibZyra`/`LibZyraEyes`.
+  Ce sont des capsules continues de 7 x 3 cellules, aux coins arrondis, avec une pupille creusee.
+- `src/eyes/libEyes.ts`, style *Classique* : portage de `LibEyes`, qui transpose deja
+  Web-Eye-Animation (CyberAgentAILab, MIT), la librairie des yeux de l'overlay.
+  On y trouve les formes par humeur et les sequences (`blink`, `joy`, `look_around`, `fall_asleep`...).
+- `src/eyes/EyesController.ts` : le moteur de `FaceRenderer`, avec les sequences et le
+  mode autonome (clignements de 1 a 6 s dont 40 % doubles, regard de 2,2 a 5,2 s,
+  reactions de 9 a 16 s). Le mode autonome est coupe en mouvement reduit.
+- Palettes reprises des `COLOR_PRESETS` de l'overlay et ramenees aux 8 couleurs
+  Videotex (cyan, phosphore, ambre, rouge, nitro, blanc). *Auto* reprend les couleurs
+  d'humeur de Zyra.
+
+URL : `?ecran=yeux&couleur=phosphore&yeux=classique`, a la maniere des parametres de
+l'overlay. Les touches suivent le README de minitel-face :
+
+| Touche | Effet |
+| --- | --- |
+| Envoi | joie |
+| Retour | neutre, ou reveil apres endormissement |
+| Repetition | regard circulaire |
+| Guide | surprise |
+| Annulation | colere |
+| Sommaire | endormissement |
+| Correction | fatigue |
+| Suite | clin d'oeil |
+| Connexion/Fin | retour au 3615 |
+
+Pont avec minitel-face : `src/videotex/mosaic.ts` peint directement les rangees
+`[ligne, colonne, couleur, octets G1]` de ses librairies, avec `g1ToMosaic`, qui suit
+le meme ordre de bits que le terminal. Une rangee calculee ici est donc aussi valide
+pour le Minitel physique. Les mosaiques sont dessinees *continues*, comme sur le
+Minitel ; une cellule peut demander le mode *separe* (`separated`).
+
 ## Remplacer le modele
 
 Lire [MODEL_PREPARATION.md](MODEL_PREPARATION.md).

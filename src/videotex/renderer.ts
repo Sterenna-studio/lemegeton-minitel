@@ -43,7 +43,7 @@ export function renderTerminal(
     ctx.fillStyle = palette[cell.fg];
     ctx.shadowColor = palette[cell.fg];
     ctx.shadowBlur = effects.glow ? 2 : 0;
-    if (cell.mosaic !== undefined) drawMosaic(ctx, cell.mosaic, x, y, cw, ch);
+    if (cell.mosaic !== undefined) drawMosaic(ctx, cell.mosaic, x, y, cw, ch, cell.separated);
     else ctx.fillText(cell.char, x + cw / 2, y + ch / 2);
   });
   ctx.shadowBlur = 0;

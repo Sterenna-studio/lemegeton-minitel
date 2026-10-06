@@ -44,8 +44,8 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 ```bash
 npm run typecheck
 npm run lint
-npm test               # 6 tests unitaires Vitest
-npm run test:browser   # 16 tests Playwright (Edge headless, serveur dev sur 5174)
+npm test               # 16 tests unitaires Vitest
+npm run test:browser   # 18 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne
@@ -144,6 +144,12 @@ Un sélecteur propose trois modèles :
 
 La page suit la direction artistique du Terminatel 255 (voir
 [assets et licences](docs/ASSETS.md)).
+
+L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
+(Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
+nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face.
+Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
+humeur. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
 
 Restent ouverts : la validation artistique (textures grises d'origine conservées),
 les essais sur téléphones physiques, l'optimisation du chargement (bundle

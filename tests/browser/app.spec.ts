@@ -373,3 +373,39 @@ test("page documentation : fiches, vues et liens", async ({ page }) => {
   ).toBe(true);
   expect(errors).toEqual([]);
 });
+test("yeux de Lemegeton en mosaique Videotex", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/?ecran=yeux&couleur=ambre");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
+    timeout: 30000,
+  });
+  const reader = page.locator("pre").filter({ hasText: "HUMEUR" });
+  await expect(reader).toContainText("HUMEUR : NEUTRE");
+  await expect(page.locator(".terminal-title")).toContainText("YEUX DE LEMEGETON");
+  await page.waitForTimeout(800);
+  const neutral = await scenePixels(page);
+  await page.locator('[data-testid="scene"] canvas').click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press("Enter"); // Envoi : joie
+  await expect(reader).toContainText("HUMEUR : JOIE");
+  await page.waitForTimeout(300);
+  expect((await scenePixels(page)).hash).not.toBe(neutral.hash);
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  await expect(page.getByLabel("Forme des yeux")).toHaveValue("zyra");
+  await expect(page.getByLabel("Couleur des yeux")).toHaveValue("ambre");
+  await page.getByLabel("Couleur des yeux").selectOption("auto");
+  await expect(page).toHaveURL(/couleur=auto/);
+  await page.getByLabel("3615 Lemegeton").check();
+  await expect(page).not.toHaveURL(/ecran=yeux/);
+  await expect(page.locator(".terminal-title")).toContainText("SOMMAIRE");
+  await page.getByLabel("Yeux de Lemegeton").check();
+  await page
+    .locator(".console-bottom nav")
+    .getByRole("button", { name: /Archives/ })
+    .click();
+  await expect(page.locator(".terminal-title")).toContainText("ARCHIVES");
+  expect(errors).toEqual([]);
+});
