@@ -25,6 +25,8 @@ Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
 | Page d'arrivée | Sans paramètre, on arrive à l'**entrée du couloir** (7 octobre). |
 | Son | **Coupé par défaut**, avec un bouton pour l'activer (7 octobre). |
 | Panneau 3615, yeux, réglages | Affichés **seulement au poste `terminal`**, devant le terminal (7 octobre). |
+| Téléphone de référence | **iPhone 11** : le site doit y rester fluide (7 octobre). |
+| Version simple (éco) | La version actuelle est **conservée telle quelle** comme version simple : terminal seul, cartes d'inventaire, 3615, yeux, réglages, mobilier (7 octobre). Voir §3. |
 | Date du Terminatel | Le compteur de sa porte affiche **« 198? »**, faute de source publique. |
 | Ambiance générale | Rétro mystérieux, années 1920 à 1960 : bois sombre, laiton, cuir, verre, vieux papier, mécanique, lumière chaude. |
 
@@ -39,6 +41,9 @@ Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
 
 Les cartes d'inventaire servent de raccourci : elles mènent directement à une salle,
 avec un fondu.
+
+Une **version simple** reste disponible pour qui veut le terminal sans le couloir,
+ou pour un appareil modeste (§3).
 
 ## 3. Architecture
 
@@ -64,7 +69,8 @@ src/world/three/
   Room.tsx         salle : décor, éclairage, terminal (<Minitel>), mobilier
   Hotspots.tsx     points d'intérêt (boutons DOM accessibles, ancrés en 3D)
   TemporalEffect.tsx  grain, aberration et flou pendant le passage
-atelier/index.html + src/atelier/   3e entrée Vite : une brique seule (§9)
+atelier/index.html + src/atelier/   entrée Vite : une brique seule (§9)
+simple/index.html                  entrée Vite : version simple = App actuelle (§3)
 ```
 
 ### Modèle de données
@@ -115,6 +121,31 @@ interface DoorSlot { segment: number; side: "gauche" | "droite" | "fond"; door: 
 interface Corridor { id: string; segments: string[]; stations: Station[]; hotspots: Record<string, Hotspot[]>; doors: DoorSlot[] }
 ```
 
+### Deux versions du site
+
+Décision du 7 octobre 2026 : l'expérience actuelle est conservée **telle quelle**
+comme version simple, ou éco. Elle comprend le terminal seul, les cartes
+d'inventaire, le 3615, les yeux, les réglages et le mobilier.
+
+| Adresse | Contenu | À partir de |
+| --- | --- | --- |
+| `/minitel/` | monde explorable : arrivée dans le couloir | lot F ; d'ici là, la version actuelle |
+| `/minitel/simple/` | version simple : l'`App` actuelle, inchangée | lot A |
+| `/minitel/documentation/` | documentation | inchangé |
+| `/minitel/atelier/` | atelier des briques (§9) | lot A |
+
+- **Mise en œuvre** : `simple/index.html` est une entrée Vite de plus, qui monte l'`App` actuelle. Jusqu'au lot F, `index.html` monte aussi `App`. Au lot F, `index.html` passe à `WorldApp`. La version simple n'importe rien de `src/world/` : son poids reste celui d'aujourd'hui.
+- **Partage** : le poste `terminal` du monde réutilise les composants de la version simple (terminal, panneau 3615, yeux, réglages, mobilier). Le lot A extrait ces panneaux d'`App.tsx` en composants, sans changer le rendu de la version simple.
+- **Passerelles** : le monde affiche un lien « Version simple » dans l'en-tête. La version simple affiche « Entrer dans le couloir ». Le choix tient dans l'adresse, qu'on peut mettre en favori : rien n'est stocké.
+- **Suggestion automatique**, sans bascule forcée. En arrivant sur `/minitel/`, un bandeau propose la version simple dans quatre cas :
+  - le mode économie de données est actif (`navigator.connection.saveData`) ;
+  - l'appareil a peu de mémoire (`navigator.deviceMemory` < 4, sous Chrome seulement) ;
+  - le couloir n'a pas pu se charger ;
+  - le rendu reste sous 20 images/s pendant 5 s.
+
+  Un iPhone 11 ne doit déclencher aucun de ces cas.
+- **Captures** : `tools/capture_views.mjs` et les miniatures d'inventaire (`?capture=1`) visent la version simple.
+
 `rooms.ts` **dérive** les salles du catalogue : ajouter une `ModelEntry` ajoute
 une salle et une porte. Les champs propres au monde (`era`, `ambiance`) vivent
 dans `rooms.ts`, indexés par l'id du catalogue. Le catalogue reste ainsi centré sur
@@ -153,7 +184,7 @@ poste      --PRECEDENT------>    trajet vers le poste précédent de l'historiqu
 - `?salle=<id>&poste=<id>` décrit l'endroit. Sans paramètre, on arrive à l'entrée du couloir.
 - Chaque **arrivée** à un poste fait un `history.pushState`. `popstate` rejoue un trajet si la cible est voisine, sinon il fait un fondu.
 - Les réglages (`ecran`, `couleur`, `yeux`, `rendu`, `taille`, `table`, `vue`) restent en `replaceState` : ils ne créent pas d'entrée d'historique.
-- Compatibilité : `?modele=<id>` est réécrit en `?salle=<id>&poste=terminal` (`replaceState`). Le mode `?capture=1&transparent=1` de `tools/capture_views.mjs` reste un terminal seul, hors du monde.
+- Compatibilité : `?modele=<id>` est réécrit en `?salle=<id>&poste=terminal` (`replaceState`). La version simple garde son `?modele=` tel quel (`/minitel/simple/?modele=…`), comme le mode `?capture=1&transparent=1` de `tools/capture_views.mjs`.
 
 ## 5. Porte temporelle
 
@@ -206,13 +237,13 @@ faudra changer pour accueillir le monde.
 | [MinitelScreen.tsx:129](../src/minitel/MinitelScreen.tsx#L129), [:151](../src/minitel/MinitelScreen.tsx#L151) | L'écran se met à jour à 8 Hz (Vidéotex), ou toutes les 33 ms (yeux). | Ces minuteries sont à suspendre quand le terminal n'est pas dans la scène courante. |
 | [Camera.tsx:56](../src/scene/Camera.tsx#L56) | `OrbitControls` est toujours actif (`makeDefault`), avec les commandes vues et zoom. | `RailCamera` prend la main. `Camera` n'est monté qu'aux postes `inspect`, et la barre vues/zoom n'apparaît que là. |
 | [framing.ts:17](../src/scene/framing.ts#L17) | Les cadrages `desk` et `floor` sont exprimés par rapport au centre de l'écran. | Ils deviennent les postes `terminal` des salles, sans changer de valeurs. |
-| [App.tsx](../src/App.tsx) (742 lignes) | L'URL est lue à plusieurs endroits et écrite en `replaceState` ([:152](../src/App.tsx#L152), [:229](../src/App.tsx#L229), [:238](../src/App.tsx#L238)). | **Avant le monde**, il faut extraire l'état d'URL dans un hook (`replace` pour les réglages, `push` pour les postes), et placer l'état du monde dans `useWorld`. App.tsx ne doit pas grossir. |
+| [App.tsx](../src/App.tsx) (742 lignes) | L'URL est lue à plusieurs endroits et écrite en `replaceState` ([:152](../src/App.tsx#L152), [:229](../src/App.tsx#L229), [:238](../src/App.tsx#L238)). | App.tsx **devient la version simple** et ne grossit plus. Au lot A, il faut extraire l'état d'URL dans un hook (`replace` pour les réglages, `push` pour les postes), ainsi que les panneaux (3615, yeux, réglages, mobilier) en composants. Le poste `terminal` du monde les réutilisera. L'état du monde vit dans `WorldApp` et `useWorld`. |
 | [App.tsx:212](../src/App.tsx#L212) | `?modele=` choisit le terminal. | Il faut le réécrire en `?salle=` (§4). |
 | [ModelInventory.tsx:30](../src/components/ModelInventory.tsx#L30) | L'inventaire est un `radiogroup` qui choisit un modèle. | Il devient une navigation : des boutons « Aller à la salle … » avec `aria-current`. Le style CSS 3D est conservé. |
 | [Table.tsx:30](../src/scene/Table.tsx#L30) | Le mobilier est préchargé au chargement du module. Le cache de `useGLTF` ne se vide jamais. | Il faut charger à la demande la salle courante et ses voisines, puis appeler `useGLTF.clear` et libérer les textures à plus d'un saut. |
 | [catalog.ts:29](../src/demo/catalog.ts#L29) | `onTable` place le terminal sur une table ou au sol. | La disposition de la salle part de là (§6). |
 | [deploy-ovh.yml:46-52](../.github/workflows/deploy-ovh.yml) | Le déploiement vérifie certains fichiers précis et **refuse tout `.webp`** dans `dist/`. | Il faudra ajouter les GLB du monde à la liste vérifiée. Les textures doivent rester **dans** les GLB (KTX2 ou JPEG/PNG). Si on publie un jour un `.webp` autonome, il faudra cibler la règle sur les photos de référence uniquement. |
-| [tests/browser/app.spec.ts](../tests/browser/app.spec.ts) | Les 22 tests supposent qu'on arrive directement devant le terminal (`expectScreenCentered`). | On arrivera désormais dans le couloir, donc ils devront ouvrir `?salle=…&poste=terminal`. |
+| [tests/browser/app.spec.ts](../tests/browser/app.spec.ts) | Les 22 tests supposent qu'on arrive directement devant le terminal (`expectScreenCentered`). | Ils visent la **version simple**, qui ne change pas : seule l'adresse passe à `/simple/` au lot F. Le monde a ses propres tests (§11). |
 | [AccessibleTerminal.tsx](../src/components/AccessibleTerminal.tsx) | Une alternative texte du 3615 existe. | La navigation a besoin de la même chose : liste des points d'intérêt en DOM et annonce de l'arrivée (`aria-live`). |
 
 ## 8. Budgets
@@ -267,8 +298,16 @@ principal si les salles deviennent lourdes.
 
 Comportement attendu :
 - 60 images/s sur ordinateur pendant les trajets ;
-- 30 images/s ou plus sur le mobile de référence (§13, question 5 ; hypothèse de travail : milieu de gamme d'environ 2022) ;
+- 30 images/s ou plus sur le téléphone de référence, l'**iPhone 11** (choisi le 7 octobre) ;
 - rendu à la demande à l'arrêt.
+
+Notes pour l'iPhone 11 :
+- Puce A13, 4 Go de mémoire, Safari (WebKit). L'écran fait 828 × 1 792 px à DPR 2 ; avec la limite actuelle `dpr={[1, 1.5]}`, le rendu se fait en 621 × 1 344.
+- WebGL 2 est disponible depuis iOS 15. Les textures KTX2 (Basis) y sont transcodées en ASTC, ce qui divise la mémoire GPU par 4 environ par rapport au RGBA (8 bits par pixel au lieu de 32).
+- Safari ferme l'onglet quand la mémoire déborde, sans prévenir. Le plafond de 192 Mo de textures simultanées est une marge de sécurité à respecter.
+
+La version simple garde ses coûts actuels (≈ 4,4 Mo, 73 appels de rendu) : le monde
+ne l'alourdit pas.
 
 Leviers, par ordre de rentabilité :
 1. **Une seule porte** pour toutes les portes : un seul GLB, avec géométrie et matériaux partagés. Seule la texture du compteur change.
@@ -325,8 +364,10 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
   - l'arrivée directe par `?salle=` ;
   - la compatibilité `?modele=` ;
   - le mouvement réduit (fondus, pas de trajet) ;
-  - le repli sans WebGL.
-- **Non-régression** : les 22 tests actuels restent verts au poste `terminal` de chaque salle.
+  - le repli sans WebGL ;
+  - les passerelles entre les deux versions, et la suggestion de la version simple (`saveData` simulé).
+- **WebKit et iPhone 11** : un projet Playwright `webkit` avec le profil d'appareil `iPhone 11` (émulation : taille, DPR, tactile). Il faut installer WebKit via `npx playwright install webkit`, un téléchargement à approuver. Ce n'est qu'une approximation : à partir du lot C, chaque lot se vérifie aussi **sur un vrai iPhone 11**.
+- **Non-régression** : les 22 tests actuels restent verts sur la version simple. Le poste `terminal` de chaque salle reprend leurs vérifications principales : écran centré, 3615, yeux.
 - **Captures** dans `docs/verification/`, une par poste.
 - **Budgets** : `tools/budget_glb.py`, plus le panneau d'inspection (appels de rendu, triangles) à chaque poste.
 
@@ -336,25 +377,25 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 
 | Lot | Contenu | Critères d'acceptation |
 | --- | --- | --- |
-| **A. Préparation** (aucun changement visible) | hook d'URL extrait d'App.tsx ; Lighting en presets (`terminatel` = actuel) ; `far` paramétrable ; lampe et écran suspendus hors scène ; `src/world/` (types, rails, navigation, sequence, url, rooms) avec tests ; entrée Vite `atelier/` vide ; chaîne KTX2/meshopt dans `tools/` | 22/22 tests navigateur inchangés ; nouveaux tests unitaires verts ; build et déploiement OK |
+| **A. Préparation** (aucun changement visible) | entrée `simple/` (= App actuelle) ; panneaux et hook d'URL extraits d'App.tsx ; Lighting en presets (`terminatel` = actuel) ; `far` paramétrable ; lampe et écran suspendus hors scène ; `src/world/` (types, rails, navigation, sequence, url, rooms) avec tests ; entrée Vite `atelier/` vide ; chaîne KTX2/meshopt dans `tools/` | 22/22 tests navigateur inchangés ; nouveaux tests unitaires verts ; build et déploiement OK |
 | **B. Porte temporelle** | modèle (origine à décider, question 3 : pivot, poignée, horloge), compteur canvas, lumière, sons, séquence ; atelier `?brique=porte` | séquence conforme au §5, aller et retour ; mouvement réduit ; captures ; budget de la porte respecté |
-| **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté |
+| **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté, vérifié sur iPhone 11 |
 | **D. Rails et navigation** | `RailCamera`, points d'intérêt DOM, parallaxe, clavier, toucher, URL et historique, fondus ; salles provisoires (boîtes) | parcours complet au clavier ; Retour du navigateur ; `?salle=` et `?poste=` |
 | **E. Salles** | `terminatel-255` (scène actuelle dans une pièce), puis `minitel-1` (bureau 80s), puis `televiseur-1950` (salon 50s) ; poste `inspect` = caméra actuelle | non-régression au poste `terminal` ; budget « salle » respecté ; ambiances conformes à la DA |
-| **F. Intégration** | page d'arrivée, inventaire en raccourci, compatibilité `?modele=`, docs (USAGE, ASSETS, ATTRIBUTION), contrôle du déploiement, page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
+| **F. Intégration** | `/minitel/` passe au monde ; passerelles et suggestion de la version simple ; tests actuels sur `/simple/` ; inventaire en raccourci, compatibilité `?modele=`, docs (USAGE, ASSETS, ATTRIBUTION), contrôle du déploiement, page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
 | **G. Objets interactifs** (plus tard) | horloge de jeu, machine à écrire, téléphone, radio, objets mystérieux | à cadrer au moment venu |
 
 ## 13. Questions ouvertes
 
-Trois questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
+Quatre questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
 1. **Page d'arrivée** : le couloir.
 2. **Son** : coupé par défaut.
 4. **Panneau 3615, yeux et réglages** : seulement devant le terminal.
+5. **Téléphone de référence** : iPhone 11. La version actuelle est conservée en version simple.
 
-Il en reste deux, à trancher avant le lot indiqué.
+Il en reste une, à trancher avant le lot B.
 
 3. **Origine des modèles 3D de la porte et de l'horloge** (avant B) : reportée par l'utilisateur, « on verra plus tard ». Deux options : les faire nous-mêmes dans Blender, ce qui est recommandé pour maîtriser les pivots, le compteur et les licences ; ou adapter un modèle gratuit CC0. Les lots A, C et D n'en dépendent pas : la porte peut y être une boîte provisoire.
-5. **Téléphone de référence** (avant C) : c'est le téléphone le moins puissant sur lequel le site doit rester fluide. Il sert à fixer les limites de poids et de détail des salles. Plus ce téléphone est ancien, plus les salles doivent être légères. Hypothèse de travail en attendant : un smartphone de milieu de gamme d'environ 2022 (par exemple un Galaxy A53 ou un iPhone 11). Le plus simple est d'utiliser un téléphone qu'on possède, pour tester en vrai.
 
 ## 14. Risques
 
@@ -362,7 +403,9 @@ Il en reste deux, à trancher avant le lot indiqué.
 | --- | --- |
 | Poids cumulé des salles | Chargement à la demande, voisines seulement ; KTX2 et meshopt ; budgets vérifiés à chaque lot |
 | Régression de l'expérience actuelle | Lot A sans changement visible ; poste `terminal` identique ; 22 tests conservés |
-| App.tsx devient ingérable | État d'URL et du monde extraits avant d'ajouter quoi que ce soit (lot A) |
+| App.tsx devient ingérable | App.tsx reste la version simple ; le monde a son propre `WorldApp` ; état d'URL et panneaux extraits au lot A |
+| Deux versions à maintenir | La version simple, c'est le code actuel ; le monde réutilise ses composants ; les 22 tests la protègent |
+| Écart entre l'émulation et le vrai iPhone | Vérification sur un vrai iPhone 11 à chaque lot à partir du C ; plafond mémoire prudent |
 | Licence d'un asset mal vérifiée | Règles de [ASSETS.md](ASSETS.md#monde-explorable--sources-et-règles) ; provenance obligatoire ; NC, ND et « Royalty Free » refusés |
 | Mal des transports pendant les trajets | Durées courtes, accélération douce, parallaxe faible, fondus en mouvement réduit |
 | Accessibilité d'une navigation 3D | Points d'intérêt en DOM, clavier complet, annonces `aria-live`, repli sans WebGL |
