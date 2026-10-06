@@ -44,8 +44,8 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 ```bash
 npm run typecheck
 npm run lint
-npm test               # 22 tests unitaires Vitest
-npm run test:browser   # 20 tests Playwright (Edge headless, serveur dev sur 5174)
+npm test               # 23 tests unitaires Vitest
+npm run test:browser   # 22 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne

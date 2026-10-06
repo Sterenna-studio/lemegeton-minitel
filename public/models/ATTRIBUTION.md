@@ -30,7 +30,7 @@ Source: https://sketchfab.com/3d-models/wood-drawer-tables-set-958db224ef514b2ea
 License: Creative Commons Attribution 4.0 International.
 License URL: https://creativecommons.org/licenses/by/4.0/
 
-Derived web asset: table.glb, made by tools/prepare_table.py. Changes: only the
-side table with a drawer is kept, centred, scaled to 8 units per metre, and
-its textures re-encoded as JPEG. Keep this attribution and the visible credit
+Derived web assets: mobilier/table-tiroir.glb, chevet-haut.glb, meuble-niche.glb
+and table-basse.glb, made by tools/prepare_table.py. Changes: each piece exported
+alone, centred, scaled to 8 units per metre, and its textures re-encoded as JPEG. Keep this attribution and the visible credit
 when distributing the derived model.

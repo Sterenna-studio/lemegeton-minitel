@@ -28,6 +28,7 @@ import { useReducedMotion } from "./hooks/useReducedMotion";
 import { defaultEffects, type CrtEffects } from "./videotex/renderer";
 import { genericProfile } from "./minitel/profiles";
 import { catalog, findEntry, tableCredit } from "./demo/catalog";
+import { findFurniture, furniture } from "./scene/furniture";
 import { ModelInventory } from "./components/ModelInventory";
 import {
   EYE_PALETTES,
@@ -217,6 +218,16 @@ export default function App() {
   // inventory miniatures ; &transparent=1 also drops the page background.
   const capture = params.has("capture");
   const onTable = !custom && !capture && entry.onTable;
+  // ?table=<id> : piece of furniture under desk terminals (or "sol").
+  const [piece, setPiece] = useState(() => findFurniture(params.get("table")));
+  function choosePiece(id: string) {
+    const next = findFurniture(id);
+    setPiece(next);
+    const url = new URL(window.location.href);
+    if (next.id === furniture[0].id) url.searchParams.delete("table");
+    else url.searchParams.set("table", next.id);
+    window.history.replaceState(null, "", url);
+  }
   function chooseModel(id: string) {
     const next = findEntry(id);
     setEntry(next);
@@ -313,7 +324,7 @@ export default function App() {
             model={model}
             profile={profile}
             finish={finish}
-            table={onTable}
+            table={onTable ? piece : undefined}
             screenSource={source}
             effects={effects}
             command={command}
@@ -518,6 +529,18 @@ export default function App() {
               </label>
             )}
           </fieldset>
+          {onTable && (
+            <label className="setting">
+              <span>Mobilier</span>
+              <select value={piece.id} onChange={(e) => choosePiece(e.target.value)}>
+                {furniture.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label className="setting">
             <span>Antenne experimentale</span>
             <input
@@ -702,7 +725,7 @@ export default function App() {
               {entry.credit.license}
             </a>{" "}
             · {entry.credit.changes}
-            {onTable && (
+            {onTable && piece.file && (
               <>
                 {" "}· Table :{" "}
                 <a href={tableCredit.source} target="_blank" rel="noreferrer">

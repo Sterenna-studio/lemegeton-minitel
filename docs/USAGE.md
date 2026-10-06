@@ -153,9 +153,11 @@ Pour ajouter un modele :
 
 ## Table, inventaire et eclairage
 
-- **Table** : une entree du catalogue avec `onTable: true` pose le terminal sur la table
-  d'appoint (`src/scene/Table.tsx`). Le terminal reste a l'origine : la table est
-  descendue de sa hauteur, 5,95 unites. La camera passe alors au cadrage `desk` de
+- **Mobilier** : une entree du catalogue avec `onTable: true` pose le terminal sur une
+  piece au choix (Reglages CRT > Mobilier, ou `?table=`). Les choix sont `table-tiroir`
+  (par defaut), `chevet-haut`, `meuble-niche`, `table-basse` et `sol`, decrits dans
+  `src/scene/furniture.ts`. Le terminal reste a l'origine : la piece est descendue de
+  la hauteur de son plateau et avancee pour porter le clavier. La camera passe alors au cadrage `desk` de
   `src/scene/framing.ts`, et le televiseur garde le cadrage `floor`.
 - **Camera** : elle vise toujours le centre de l'ecran du modele (`screenCenter` du
   `ModelProfile`, ou a defaut `screenFallback.position`). Les vues trois quarts, face,

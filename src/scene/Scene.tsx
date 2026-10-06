@@ -3,7 +3,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Minitel, type MinitelProps } from "../minitel/Minitel";
 import { Lighting } from "./Lighting";
 import { Camera, type CameraCommand } from "./Camera";
-import { Table, TABLE_TOP } from "./Table";
+import { Table } from "./Table";
+import type { Furniture } from "./furniture";
 import { cameraTarget, framings } from "./framing";
 import { genericProfile } from "../minitel/profiles";
 import type { Vec3 } from "../minitel/types";
@@ -73,11 +74,11 @@ export function Scene({
   onError,
   onCamera,
   onMetrics,
-  table = false,
+  table,
   ...props
 }: MinitelProps & {
-  /** Put the terminal on the side table (its top is at y = 0). */
-  table?: boolean;
+  /** Furniture under the terminal (its top is at y = 0) ; none : on the floor. */
+  table?: Furniture;
   command: CameraCommand;
   onError: (message: string) => void;
   onCamera?: (position: Vec3) => void;
@@ -102,20 +103,20 @@ export function Scene({
         <Lighting />
         <Camera
           command={command}
-          framing={framings[table ? "desk" : "floor"]}
+          framing={framings[table?.file ? "desk" : "floor"]}
           target={cameraTarget(props.profile ?? genericProfile)}
           onCamera={onCamera}
         />
         <ContextMonitor onError={onError} />
         <Minitel {...props} />
-        {table && (
+        {table?.file && (
           <Suspense fallback={null}>
-            <Table />
+            <Table piece={{ ...table, file: table.file }} />
           </Suspense>
         )}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, table ? -TABLE_TOP - 0.02 : -0.02, 0]}
+          position={[0, -(table?.top ?? 0) - 0.02, 0]}
           receiveShadow
         >
           <planeGeometry args={[100, 100]} />

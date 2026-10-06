@@ -1,16 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Mesh, MeshStandardMaterial } from "three";
+import { furniture, type Furniture } from "./furniture";
 
-const url = `${import.meta.env.BASE_URL}models/table.glb`;
-// tools/prepare_table.py : 1 m = 8 units, top at 5.9513. The terminal stays at
-// the origin, so the table is lowered under it and pushed back a little to
-// carry the keyboard as well as the case.
-export const TABLE_TOP = 5.9513;
-const OFFSET_Z = 0.75;
+const url = (file: string) => `${import.meta.env.BASE_URL}models/mobilier/${file}`;
 
-export function Table() {
-  const { scene } = useGLTF(url);
+/** Piece de mobilier sous le terminal ; son plateau est a y = 0. */
+export function Table({ piece }: { piece: Furniture & { file: string } }) {
+  const { scene } = useGLTF(url(piece.file));
   const table = useMemo(() => scene.clone(true), [scene]);
   useEffect(() => {
     const materials: MeshStandardMaterial[] = [];
@@ -26,7 +23,8 @@ export function Table() {
     });
     return () => materials.forEach((material) => material.dispose());
   }, [table]);
-  return <primitive object={table} position={[0, -TABLE_TOP, OFFSET_Z]} />;
+  return <primitive object={table} position={[0, -piece.top, piece.offsetZ]} />;
 }
 
-useGLTF.preload(url);
+// The default piece is preloaded ; the others load when chosen.
+useGLTF.preload(url(furniture[0].file!));

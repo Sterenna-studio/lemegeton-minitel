@@ -1,0 +1,54 @@
+{
+  "source": "wood_drawer__tables_set.glb",
+  "units_per_metre": 8.0,
+  "pieces": {
+    "table-tiroir": {
+      "mesh": "SM_WoodenDrawer_1_LOD0_Drawer_1_INST_0",
+      "size_metres": [
+        0.586,
+        0.599,
+        0.744
+      ],
+      "top_height_units": 5.9513,
+      "width_units": 4.6847,
+      "depth_units": 4.7938,
+      "bytes": 334908
+    },
+    "chevet-haut": {
+      "mesh": "SM_WoodenDrawer_2_LOD0_Drawer_2_INST_0",
+      "size_metres": [
+        0.486,
+        0.499,
+        0.858
+      ],
+      "top_height_units": 6.8675,
+      "width_units": 3.8847,
+      "depth_units": 3.9938,
+      "bytes": 367440
+    },
+    "meuble-niche": {
+      "mesh": "SM_WoodenDrawer_3_LOD0_Drawer_3_INST_0",
+      "size_metres": [
+        0.735,
+        0.494,
+        0.736
+      ],
+      "top_height_units": 5.8908,
+      "width_units": 5.8835,
+      "depth_units": 3.9502,
+      "bytes": 285640
+    },
+    "table-basse": {
+      "mesh": "SM_WoodenTable_LOD0_Table_INST_0",
+      "size_metres": [
+        1.503,
+        0.703,
+        0.656
+      ],
+      "top_height_units": 5.2465,
+      "width_units": 12.0217,
+      "depth_units": 5.6217,
+      "bytes": 329812
+    }
+  }
+}
