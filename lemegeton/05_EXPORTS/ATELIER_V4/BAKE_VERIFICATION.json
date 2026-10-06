@@ -1,0 +1,11 @@
+{
+  "max_pose_matrix_difference_after_bake": 4.172325134277344e-07,
+  "frames": [
+    1,
+    121
+  ],
+  "fps": 24,
+  "clip_duration_seconds": 5,
+  "constraints_after_bake": 0,
+  "status": "ETUDE - not production; joint cuts and fingers require further work"
+}

@@ -1,0 +1,80 @@
+{
+  "version": "V3",
+  "goal": "production mechanical rig",
+  "base_asset": "LEMEGETON_RIGGED_V3_BASE.glb",
+  "deform_skeleton": {
+    "root": "ROOT",
+    "body": "BODY",
+    "head": [
+      "HEAD",
+      "ANTENNA"
+    ],
+    "arms": {
+      "left": [
+        "SHOULDER_L",
+        "ELBOW_L",
+        "WRIST_L",
+        "HAND_L",
+        "FINGER1_L",
+        "FINGER2_L",
+        "FINGER3_L",
+        "THUMB_L"
+      ],
+      "right": [
+        "SHOULDER_R",
+        "ELBOW_R",
+        "WRIST_R",
+        "HAND_R",
+        "FINGER1_R",
+        "FINGER2_R",
+        "FINGER3_R",
+        "THUMB_R"
+      ]
+    },
+    "legs": {
+      "left": [
+        "LEG_L",
+        "FOOT_L"
+      ],
+      "right": [
+        "LEG_R",
+        "FOOT_R"
+      ]
+    }
+  },
+  "mechanical_pivots": {
+    "shoulder": "ball / 3-axis",
+    "elbow": "hinge",
+    "wrist": "ring / 360°",
+    "head": "neck yaw/pitch",
+    "legs": "hinge chain",
+    "feet": "ankle pivot"
+  },
+  "controls": {
+    "arm_ik": "CTRL_ARM_L_IK / CTRL_ARM_R_IK",
+    "arm_pole": "CTRL_ELBOW_L_POLE / CTRL_ELBOW_R_POLE",
+    "leg_ik": "CTRL_LEG_L_IK / CTRL_LEG_R_IK",
+    "head": "CTRL_HEAD",
+    "digits": "one control per digit"
+  },
+  "exploded_groups": [
+    "HEAD_CRT",
+    "ANTENNA",
+    "BODY_KEYBOARD",
+    "UPPER_ARM_L",
+    "FOREARM_L",
+    "HAND_L",
+    "UPPER_ARM_R",
+    "FOREARM_R",
+    "HAND_R",
+    "LEG_L",
+    "FOOT_L",
+    "LEG_R",
+    "FOOT_R"
+  ],
+  "exploded_parameter": "exploded_amount",
+  "hard_constraint": "4 digits per hand: 3 fingers + 1 thumb",
+  "screen": "OFF",
+  "head_cables": false,
+  "status": "V3 architecture package prepared; semantic mesh separation still requires Blender geometry inspection."
+}

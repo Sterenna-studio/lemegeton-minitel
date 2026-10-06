@@ -1,0 +1,106 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LEMEGETON Rig V2</title>
+<style>body{margin:0;background:#0d1012;color:#eee;font:12px system-ui;overflow:hidden}#ui{position:fixed;z-index:2;left:16px;top:16px;width:360px;padding:15px;background:#15191ddd;border:1px solid #343b40;border-radius:14px;backdrop-filter:blur(10px)}h1{font-size:17px;margin:0 0 3px;letter-spacing:.08em}.sub{font-size:10px;color:#99a4aa;margin-bottom:12px}button{background:#22282c;color:#eee;border:1px solid #41494e;border-radius:8px;padding:7px 9px;margin:2px;cursor:pointer}button:hover{border-color:#62ddff}label{display:block;margin-top:9px;color:#b8c0c5;font-size:10px}input{width:100%}.tag{display:inline-block;padding:3px 5px;border:1px solid #3c454b;border-radius:5px;margin:2px;font-size:9px}#st{position:fixed;right:15px;top:15px;background:#15191ddd;border:1px solid #343b40;padding:9px;border-radius:9px;font-size:10px}</style></head><body>
+<div id="ui"><h1>LEMEGETON — RIG V2</h1><div class="sub">IK · PIVOTS · DOIGTS · TÊTE · VUE ÉCLATÉE</div>
+<button id="a">ASSEMBLÉ</button><button id="e">ÉCLATÉ</button><button id="reset">CAMÉRA</button>
+<label>Éclatement <b id="ev">0.00</b></label><input id="ex" type="range" min="0" max="1.8" step=".01" value="0">
+<div style="margin-top:8px"><button data-b="HEAD">TÊTE</button><button data-b="SHOULDER_L">ÉPAULE L</button><button data-b="SHOULDER_R">ÉPAULE R</button><button data-b="WRIST_L">POIGNET L</button><button data-b="WRIST_R">POIGNET R</button></div>
+<div><button data-b="FINGER1_L">L doigt 1</button><button data-b="FINGER2_L">L doigt 2</button><button data-b="FINGER3_L">L doigt 3</button><button data-b="THUMB_L">L pouce</button></div>
+<div><button data-b="FINGER1_R">R doigt 1</button><button data-b="FINGER2_R">R doigt 2</button><button data-b="FINGER3_R">R doigt 3</button><button data-b="THUMB_R">R pouce</button></div>
+<div><button id="wire">WIREFRAME</button><button id="spin">ROTATION</button></div>
+<div style="margin-top:7px"><span class="tag">mechanical</span><span class="tag">IK architecture</span><span class="tag">3+1 fingers</span><span class="tag">exploded sync</span></div></div><div id="st">Chargement…</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as T from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const scene=new T.Scene();
+scene.background=new T.Color(0x0d1012);
+const cam=new T.PerspectiveCamera(42,innerWidth/innerHeight,.01,100);
+cam.position.set(3,1.7,3.4);
+const renderer=new T.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace=T.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+const orbit=new OrbitControls(cam,renderer.domElement);
+orbit.enableDamping=true; orbit.target.set(0,1,0);
+scene.add(new T.HemisphereLight(0xeaf6ff,0x202020,2.2));
+const key=new T.DirectionalLight(0xffffff,3); key.position.set(4,6,5); scene.add(key);
+const grid=new T.GridHelper(8,32,0x475057,0x24292d); scene.add(grid);
+
+const btnA=document.getElementById('a'), btnE=document.getElementById('e');
+const btnReset=document.getElementById('reset'), btnWire=document.getElementById('wire');
+const btnSpin=document.getElementById('spin'), slider=document.getElementById('ex');
+const val=document.getElementById('ev'), status=document.getElementById('st');
+
+let model=null, bones=[], meshes=[], autoRotate=false, wire=false, exploded=0;
+
+function normalizeModel(root){
+  const box=new T.Box3().setFromObject(root);
+  const center=box.getCenter(new T.Vector3());
+  const size=box.getSize(new T.Vector3());
+  const dim=Math.max(size.x,size.y,size.z)||1;
+  root.position.sub(center);
+  root.position.y += dim*.5;
+  root.scale.setScalar(2.25/dim);
+}
+
+new GLTFLoader().load(
+  './LEMEGETON_RIGGED_V2.glb',
+  gltf=>{
+    model=gltf.scene;
+    normalizeModel(model);
+    scene.add(model);
+    model.traverse(o=>{
+      if(o.isBone) bones.push(o);
+      if(o.isMesh) meshes.push(o);
+    });
+    status.innerHTML='✓ GLB V2 chargé<br>Skin + armature détectés<br>'+bones.length+' bones visibles';
+  },
+  undefined,
+  err=>{ status.textContent='ERREUR GLB : '+err.message; console.error(err); }
+);
+
+function setExploded(amount){
+  exploded=Number(amount);
+  val.textContent=exploded.toFixed(2);
+  if(!model) return;
+  // Non-destructive inspection offset for root mesh objects only.
+  meshes.forEach((m,i)=>{
+    if(m.parent!==model) return;
+    const dir=new T.Vector3(m.position.x||0.01,m.position.y||0.01,m.position.z||0.01).normalize();
+    m.position.copy(dir.multiplyScalar(exploded*.12));
+  });
+}
+slider.addEventListener('input',()=>setExploded(slider.value));
+btnA.addEventListener('click',()=>{slider.value=0;setExploded(0);btnA.classList.add('on');btnE.classList.remove('on')});
+btnE.addEventListener('click',()=>{slider.value=.8;setExploded(.8);btnE.classList.add('on');btnA.classList.remove('on')});
+btnReset.addEventListener('click',()=>{cam.position.set(3,1.7,3.4);orbit.target.set(0,1,0);orbit.update()});
+btnWire.addEventListener('click',()=>{wire=!wire;btnWire.classList.toggle('on',wire);meshes.forEach(m=>(Array.isArray(m.material)?m.material:[m.material]).forEach(mat=>mat.wireframe=wire))});
+btnSpin.addEventListener('click',()=>{autoRotate=!autoRotate;btnSpin.classList.toggle('on',autoRotate)});
+
+document.querySelectorAll('[data-b]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    if(!model)return;
+    const bone=bones.find(x=>x.name===button.dataset.b);
+    if(bone) bone.rotation.z += button.dataset.b.endsWith('_L') ? .18 : -.18;
+  });
+});
+
+addEventListener('resize',()=>{
+  cam.aspect=innerWidth/innerHeight;
+  cam.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+const clock=new T.Clock();
+function frame(){
+  requestAnimationFrame(frame);
+  const dt=clock.getDelta();
+  if(autoRotate && model) model.rotation.y += dt*.3;
+  orbit.update();
+  renderer.render(scene,cam);
+}
+frame();
+</script></body></html>

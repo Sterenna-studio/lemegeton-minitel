@@ -1,0 +1,22 @@
+{
+  "source": "LEMEGETON_RIGGED_V3_BASE.glb",
+  "output": "LEMEGETON_RIGGED_V3_BASE_IMPORT_FIXED.glb",
+  "source_sha256": "1171525a713097a5f88222dd34a489d36cc4ee511a2aa7e0700223c70251158c",
+  "output_sha256": "cfba04d852c5eb92aa8ef0787237035455db1bc410e074dc8f40b3240da6afbf",
+  "binary_payload_sha256": "a059da93409dd16c1bfc0f270925cafc77b3edb01301f7d9ade3e8aab1e995be",
+  "binary_payload_unchanged": true,
+  "repairs": [
+    {
+      "accessor": 3,
+      "bufferView": 3,
+      "old_byteLength": 1261536,
+      "new_byteLength": 5046144
+    },
+    {
+      "accessor": 4,
+      "bufferView": 4,
+      "old_byteLength": 1261536,
+      "new_byteLength": 5046144
+    }
+  ]
+}

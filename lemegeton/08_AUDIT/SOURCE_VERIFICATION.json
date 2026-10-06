@@ -1,0 +1,313 @@
+{
+  "verifiedUtc": "2026-10-06T01:15:09.6379347Z",
+  "checked": 51,
+  "changed": 0,
+  "files": [
+    {
+      "path": "01_REFERENCES/Fiche technique du robot Minitel chibi (1).png",
+      "bytes": 2416594,
+      "sha256": "C57838BA0353829DF379105B1400886FCCBB2BE4E14A43BFA5FDC7EDD633613B",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Fiche technique du robot Minitel chibi.png",
+      "bytes": 2702690,
+      "sha256": "A73A5A1C2EE93275D5391EE9956EC778F25A9093E8494ADC09D0FE769E550E5A",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Fiche technique du robot Minitel modulaire.png",
+      "bytes": 2517156,
+      "sha256": "0352CF11DCDE53BE5322E7C1A2B9F6D6574E9E56B676130674E86F6930D760B9",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/LEMEGETON_MASTER_SOURCE.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/meshy_1791091843390.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/meshy_1791124252050.glb",
+      "bytes": 29768136,
+      "sha256": "DBC728ECDD99AF82678BEE0A1CCD96814D08A93498BF186FDFEF87FB3A68FAAC",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Planche conceptuelle du robot Minitel rétro.png",
+      "bytes": 2658585,
+      "sha256": "6A40517646EAC2FA0AF463ECAC88ED7D7B147919EC92397123EA710BF4C42C46",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/RIG_PREPARATION_REPORT.json",
+      "bytes": 679,
+      "sha256": "3BFBF4F56D9A4859F8148F8E6FD80C73CDC7BFAE5974E734B2AD870D3616522C",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Robot CRT rétro en bois usé.png",
+      "bytes": 2291380,
+      "sha256": "79ACC0572EDD413EF406B23ABEE95BDFB6B0488725891D4E27B667958D04671B",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Robot Minitel rétro en bois, saluant avec antenne néon.png",
+      "bytes": 1830212,
+      "sha256": "D7263D8464048F3D659423D2A9A38B3B494B29FCB465BEACBF767AA62DFC0CB3",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Robot rétro en bois et métal.png",
+      "bytes": 1538157,
+      "sha256": "C0E7660AD5BCA45143FE95BD6A6EC35B99C9CB1C84B7F80FC82B9841342BD626",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Robot rétro orange aux mains articulées.png",
+      "bytes": 1534333,
+      "sha256": "3345439A5BE62D93463D7BCA7508FBEB2A1790D0CBBF081183B63AC54CEDCDE5",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/Rusty Retrobot.glb",
+      "bytes": 29768136,
+      "sha256": "DBC728ECDD99AF82678BEE0A1CCD96814D08A93498BF186FDFEF87FB3A68FAAC",
+      "unchanged": true
+    },
+    {
+      "path": "02_SOURCES_3D/sample_2026-10-04T011302.925.glb",
+      "bytes": 13190176,
+      "sha256": "3860B8FF366AC3ACDFC85968FF0286C51FE1948973E469ABD187FFDD7F514C37",
+      "unchanged": true
+    },
+    {
+      "path": "01_REFERENCES/Storyboard cinématographique d’un robot rétro.png",
+      "bytes": 2144833,
+      "sha256": "AB080A416B545962D0563B6D6EEC9B72D25704306025F6ECA8034D2940C700E1",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/BLENDER_IMPORT_INSPECT.py",
+      "bytes": 843,
+      "sha256": "40F7B90D636F76CB4DF3470DF1717640DB5E32D68E1067DCB5030E9F02213D60",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/BLENDER_RIG_BOOTSTRAP.py",
+      "bytes": 3895,
+      "sha256": "AF7436281338C46EDEFEA0B69FFDA12EBE8A302D95AA93DBA1F69CC492FDA78E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/LEMEGETON_RIGGED_v1.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/LEMEGETON_SOURCE.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/README_RIG_V1.txt",
+      "bytes": 1162,
+      "sha256": "4A85E64DA1B5EDB8A250ECBB4B333A2E9DA371FAE07EF59FB7B31A1BC41C77B6",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/README_RIG.txt",
+      "bytes": 1784,
+      "sha256": "31D33848CA099F2B1A3DEF7F9EF8AA22FF410E647106588371BA90DA86DE2CDB",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/RIG_PREPARATION_REPORT_SOURCE.json",
+      "bytes": 679,
+      "sha256": "3BFBF4F56D9A4859F8148F8E6FD80C73CDC7BFAE5974E734B2AD870D3616522C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/RIG_SPEC.json",
+      "bytes": 2036,
+      "sha256": "D91CABE73D34EC891D1CF0212E4822C5EF43C17B95EAB8D619C1984573E6E43C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/RIG_STATUS.json",
+      "bytes": 434,
+      "sha256": "597D088973EE66C86EBA4F502D95CCF35050C6BE77DE1FA97E6B042CEB4EB2EA",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/WEB_VIEWER/index.html",
+      "bytes": 3431,
+      "sha256": "EE093D3CDE38342A471B65CE693D974C2E22AB5AE54D0FEC12971E5D3032DD1A",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_PACKAGE/WEB_VIEWER/LEMEGETON.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/BLENDER_BUILD_RIG_V2.py",
+      "bytes": 1513,
+      "sha256": "E1D6CE6B9BB587D0CCF051611434F6798B2ECD21604617EFF8320F13FC7436B9",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/LEMEGETON_RIGGED_V2_BASE.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/LEMEGETON_SOURCE.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/README_RIG_V2.txt",
+      "bytes": 458,
+      "sha256": "6F2C67C808741F2CE8AAE1194696693EC58FBAD4E3B50D5A07620CC5DE8C7213",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/RIG_V2_SPEC.json",
+      "bytes": 955,
+      "sha256": "D44D5C87E04961C5A50B9709BAE9B8AC0AA7736AB67E0C12BDAD5B13CB1DCDBC",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/WEB_VIEWER/index.html",
+      "bytes": 4716,
+      "sha256": "10029C69087504665DC861B1E0266DC34D234910556A4AFDD22BE9247F9FCFE8",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/WEB_VIEWER/LEMEGETON_RIGGED_V2_BASE.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2/WEB_VIEWER/START_VIEWER.bat",
+      "bytes": 79,
+      "sha256": "70AF6748128CD5EE1AA7A26011E764B661BF0D5B446E3CDA3FF43FBCE47D19D1",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/BLENDER_BUILD_RIG_V2.py",
+      "bytes": 1513,
+      "sha256": "E1D6CE6B9BB587D0CCF051611434F6798B2ECD21604617EFF8320F13FC7436B9",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/LEMEGETON_RIGGED_V2_BASE.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/LEMEGETON_SOURCE.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/README_FIX.txt",
+      "bytes": 352,
+      "sha256": "113BE433FC096FB035B5957A9005367A163C528E6E7AB631D1E0A6ABF3A246AB",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/README_RIG_V2.txt",
+      "bytes": 458,
+      "sha256": "6F2C67C808741F2CE8AAE1194696693EC58FBAD4E3B50D5A07620CC5DE8C7213",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/RIG_V2_SPEC.json",
+      "bytes": 955,
+      "sha256": "D44D5C87E04961C5A50B9709BAE9B8AC0AA7736AB67E0C12BDAD5B13CB1DCDBC",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/WEB_VIEWER/index.html",
+      "bytes": 6329,
+      "sha256": "5765FC4082F465289048EF431FA7672B324FF24DFE489A87F4A675577D43C8EA",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/WEB_VIEWER/LEMEGETON_RIGGED_V2.glb",
+      "bytes": 37707688,
+      "sha256": "843DA6B39165250DF5E3AA424646E4CD4B478170DC86B77C0BC7D74E77A1627D",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V2_FIXED/WEB_VIEWER/START_VIEWER.bat",
+      "bytes": 79,
+      "sha256": "70AF6748128CD5EE1AA7A26011E764B661BF0D5B446E3CDA3FF43FBCE47D19D1",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/BLENDER_BUILD_RIG_V3.py",
+      "bytes": 3000,
+      "sha256": "4C0251C02F289E9E6FAABCAF64EB488DEF03F3E3291CC0B1EFB684CD093F8E62",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/LEMEGETON_RIGGED_V3_BASE.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/LEMEGETON_SOURCE.glb",
+      "bytes": 31396252,
+      "sha256": "FA27A5D911CCAA0BE8B9B565B65F4B69B14753B6E993BB8180691749C72FD58E",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/README_RIG_V3.txt",
+      "bytes": 585,
+      "sha256": "0557C90539F956712D34BD0FDF02919490D4BE9BC6629C335CB136A71DBC0722",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/RIG_V3_SPEC.json",
+      "bytes": 1686,
+      "sha256": "F1D5B620146CFD476FB4E36C03AED5C74855E44E968D71BCC95C22E44EE77A30",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/WEB_VIEWER/index.html",
+      "bytes": 6561,
+      "sha256": "E9D45DF7E09329B1533BFA72E459E5B2EB4B1321E704FFC6F2A3F4CEC7ADA48B",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/WEB_VIEWER/LEMEGETON_RIGGED_V3_BASE.glb",
+      "bytes": 41492508,
+      "sha256": "1171525A713097A5F88222DD34A489D36CC4EE511A2AA7E0700223C70251158C",
+      "unchanged": true
+    },
+    {
+      "path": "03_RIGS/LEMEGETON_RIG_V3/WEB_VIEWER/START_VIEWER.bat",
+      "bytes": 79,
+      "sha256": "70AF6748128CD5EE1AA7A26011E764B661BF0D5B446E3CDA3FF43FBCE47D19D1",
+      "unchanged": true
+    }
+  ]
+}

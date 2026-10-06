@@ -1,0 +1,1285 @@
+{
+  "date": "2026-10-06",
+  "files": [
+    {
+      "path": "06_MODEL/1950s-retro-television/source/Sketchfab_2022_04_18_23_00_40.blend",
+      "bytes": 2037959,
+      "sha256": "012da9e3c023d80c9f181eeae1e9823dea18d7c70fd882b3a9a4e99f986b4c1f"
+    },
+    {
+      "path": "06_MODEL/1950s-retro-television/textures/embelm.png",
+      "bytes": 33391,
+      "sha256": "71e239ef21e3374f1ef5f386a0821f43130b063af03a3f1c575d962b30fc4a79"
+    },
+    {
+      "path": "06_MODEL/1950s-retro-television/textures/TV_2.png",
+      "bytes": 350512,
+      "sha256": "bbf9d6a39db60c61d2e3711ccd76335aa1bcebf89c61c78a09bb54a49396bc41"
+    },
+    {
+      "path": "06_MODEL/1950s-retro-television/textures/WoodQuarteredChiffon001_NRM_3K.jpg",
+      "bytes": 7520998,
+      "sha256": "686d049d63589457fa8554fed5e6f8ad8c8592f38e2ed4a03d9617340a7958d3"
+    },
+    {
+      "path": "06_MODEL/1950s-retro-television/textures/wood_table_001_diff_2k.jpeg",
+      "bytes": 923854,
+      "sha256": "51bf56c1f19361d9f9388a0c9f95008d092cdcae26d0371098e8fa4a761e833c"
+    },
+    {
+      "path": "06_MODEL/1950s_retro_television (1).glb",
+      "bytes": 1618888,
+      "sha256": "4b33b83d123720253fc6b65f091955fe6699876d0aba84a257382bda93b17d1a",
+      "gltf": {
+        "asset": {
+          "extras": {
+            "author": "Huuxloc (https://sketchfab.com/rjh41)",
+            "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+            "source": "https://sketchfab.com/3d-models/1950s-retro-television-640b18f7fcbb489eb47bda1927e5b653",
+            "title": "1950's Retro Television"
+          },
+          "generator": "Sketchfab-16.30.0",
+          "version": "2.0"
+        },
+        "meshes": 5,
+        "images": 4,
+        "triangles": 5718
+      }
+    },
+    {
+      "path": "06_MODEL/1950s_retro_television.glb",
+      "bytes": 5394416,
+      "sha256": "b2b1b9145a43d2017000fd14d4d13cc86cb3fd479ba30aaeac13da080f5365cb",
+      "gltf": {
+        "asset": {
+          "extras": {
+            "author": "Huuxloc (https://sketchfab.com/rjh41)",
+            "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+            "source": "https://sketchfab.com/3d-models/1950s-retro-television-640b18f7fcbb489eb47bda1927e5b653",
+            "title": "1950's Retro Television"
+          },
+          "generator": "Sketchfab-16.30.0",
+          "version": "2.0"
+        },
+        "meshes": 5,
+        "images": 4,
+        "triangles": 5718
+      }
+    },
+    {
+      "path": "06_MODEL/cyber_djinn.glb",
+      "bytes": 103887348,
+      "sha256": "d437de2d384092d17eedbecdfda840c8280db9c9228b42c4e0567f94916a6728",
+      "gltf": {
+        "asset": {
+          "extras": {
+            "author": "dark_igorek (https://sketchfab.com/dark_igorek)",
+            "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+            "source": "https://sketchfab.com/3d-models/cyber-djinn-7f56fd6b07cb44dba9b1d7f0e79bd8b8",
+            "title": "Cyber Djinn"
+          },
+          "generator": "Sketchfab-15.95.0",
+          "version": "2.0"
+        },
+        "meshes": 215,
+        "images": 19,
+        "triangles": 202411
+      }
+    },
+    {
+      "path": "06_MODEL/Cyber_Djinn.usdz",
+      "bytes": 8854663,
+      "sha256": "67d62d99fa6ce6a87adbbfa1a5aa69c5e5fd01ff7c0fa29bc2232591652c0927"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Acessoirs_clavier_Base_color.png",
+      "bytes": 2321778,
+      "sha256": "cdbe21e1052237a1c43924b9e37bac7aed360babe2f5092c1131d5cd1686069d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Acessoirs_clavier_Height.png",
+      "bytes": 1243333,
+      "sha256": "14454535d47fb771db7768a5c59563bee1616d3be69c0ce28e40268e2c7e368e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Acessoirs_clavier_Roughness.png",
+      "bytes": 88728,
+      "sha256": "65d4045e26565290c70d999d88c26a04e5d89be1d694034d3427b25627a8982b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Avessoirs_ecran_Base_color.png",
+      "bytes": 91050,
+      "sha256": "96e369c0a1dbce6decdbc9212fac54a0ef1219e1e2d4b176f246068337c7e960"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Avessoirs_ecran_Height.png",
+      "bytes": 770557,
+      "sha256": "0111b32b55e8afe2f254ced50a26a65ed45a1df345856908bf6f2f39947dee92"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Avessoirs_ecran_Roughness.png",
+      "bytes": 161686,
+      "sha256": "a7084209db3ab772335b3fbce07df525d3fcf83487dc338ae9e130d000bf7905"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Boitier_Base_color.png",
+      "bytes": 2195718,
+      "sha256": "2d1a123cbdc8680e09f6de9c047057320bfbc111d277caa0fbd8196287b59fb0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Boitier_Roughness.png",
+      "bytes": 1402307,
+      "sha256": "30d9b7fdc064b25ebdfcf349dc40f38e4c7551811f23e16213bb362bbbe27ce4"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Clavier_Base_color.png",
+      "bytes": 1197377,
+      "sha256": "2dbc6ee72516a37c719853b3e9fc7583089d6209b208d277fa9d8360b66371b2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Clavier_Roughness.png",
+      "bytes": 809457,
+      "sha256": "bc6cac25efb9ca2f1481375f7e0b028a2d2886b01e89303ceda8bda2448560a0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Ecran.png",
+      "bytes": 292859,
+      "sha256": "5d83f320f9b5f456c934a76f2c5ef4ba4152eae3842977deba00f2dd33406666"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/internal_ground_ao_texture.png",
+      "bytes": 98911,
+      "sha256": "35cec9ae65157b912b07d76e023d3fca3a8b7cb6365bf1bfae061ee20c75bafd"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_0.obj",
+      "bytes": 15475,
+      "sha256": "8c86cec378dcc38368db5aea1884464a42674373757fdc52a10f555fc7cb5318"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_1.obj",
+      "bytes": 617964,
+      "sha256": "41d5664404f8f71263d6eb5b7b48ef3fbcb700851d9556ef735ac5023ceb290e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_10.obj",
+      "bytes": 976797,
+      "sha256": "1393369c8243ffbd2540234b1080ad210bffcc2a63eca53ac2697c87997680a6"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_100.obj",
+      "bytes": 232389,
+      "sha256": "31b67b9f555d8559a36dd8950ad3e9c4d7fcf4ccdf85e95263b6239f68547616"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_101.obj",
+      "bytes": 4068045,
+      "sha256": "45883b686f539bada073be5297d2a01ebbae397645806a73517d3b1bae24a959"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_102.obj",
+      "bytes": 1948506,
+      "sha256": "dbf1642363fde9b467598ab2f5bb093d290819f7b3b91a613a8f996dbf31b57e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_103.obj",
+      "bytes": 75488,
+      "sha256": "dea63789fd50cfc3c6923dcb75f8d50dc0cfaeefb74304301f701183f71cf139"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_104.obj",
+      "bytes": 15479,
+      "sha256": "f3db60a0131a42ef2d296762fe176e7f6d1be5009729c9ac1a0fd83bddf788bd"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_105.obj",
+      "bytes": 617968,
+      "sha256": "9d52e102c1043a987110fb5a25fc23bcc48f38d62185eff3a91aee69a7724f2a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_106.obj",
+      "bytes": 976799,
+      "sha256": "0d705c15b9a94d6590ab43dbc274bfb54052058726ea2fdca1f7b420e004198f"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_107.obj",
+      "bytes": 1836799,
+      "sha256": "95ed1cfa50b77a7bd8e286158691245cef06fa0e424e7f1d5484aa2a7e36a672"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_108.obj",
+      "bytes": 232389,
+      "sha256": "46d628c0f81294aa5aecebaed06d740a05ff561ad9a96ed6dcd20cd38a1858a3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_109.obj",
+      "bytes": 4068045,
+      "sha256": "3f7f223feb1aa7e8c06b6dc2874efb9087a42cacba83ff58e4532b148d540a31"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_11.obj",
+      "bytes": 1836797,
+      "sha256": "9a8f1bdf8bc7e148e1b2edad33f8057fd4cf90db4e815fb3c36eee00af33081b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_110.obj",
+      "bytes": 1948506,
+      "sha256": "6d190ec99fbbc8815bba3242971d403052ab3a8cec2f5a175767c040fcd8d9c3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_111.obj",
+      "bytes": 75488,
+      "sha256": "39ade548a1664410216999a49408bc512783a2d3a39eb5ffefe15b3f4e7a0833"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_112.obj",
+      "bytes": 15479,
+      "sha256": "9d7215ca3c655a7f54a876e5c9a422adb0b13b4ef4e2c690076d4da6ee57ce4b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_113.obj",
+      "bytes": 617968,
+      "sha256": "ea9eb2d8acda5bd1a6b1a441e304139e1e949453cd0614da78ced4d2a0590057"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_114.obj",
+      "bytes": 976799,
+      "sha256": "4d0130281d9b4c7ea6d3e4e4775eb35c6f9f571140ae66f2f9f69100e74871b1"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_115.obj",
+      "bytes": 1836799,
+      "sha256": "cd2853621eda07b4b6e69acfedb7cc95a5fe38ba68693f2443b59a4a79b812c4"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_116.obj",
+      "bytes": 232389,
+      "sha256": "627efbc94ef9ad7b1db989ce8aa3491a28ff3e8e868130faab4c6ff83449fd0b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_117.obj",
+      "bytes": 4068045,
+      "sha256": "a679cc60d50e76713f55137f626b6bc77a011ba6587e196ba6462708980ac3d7"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_118.obj",
+      "bytes": 1948506,
+      "sha256": "022111e74be7096d875dbd5755b596f22be88555b303ab0182d361f93cb3a28e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_119.obj",
+      "bytes": 75488,
+      "sha256": "79637c6451e2f183c02b8e8c052b03611fdb4a1d005f4ae2e9a31d66843901eb"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_12.obj",
+      "bytes": 232387,
+      "sha256": "7930d15b57353c73c5a53fec15c83b5fe9eba323b1154774954754e4ee98244e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_120.obj",
+      "bytes": 15479,
+      "sha256": "c3f89eb16830b8492bcac71fde3f8c88c0562e7461ffa91cd6ecb40076daee83"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_121.obj",
+      "bytes": 617968,
+      "sha256": "eb80108d3d5bfdd7b06aef5026ae475cc7edff91300690d1cc38e027db584b52"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_122.obj",
+      "bytes": 976799,
+      "sha256": "26005fac42ec948a3fe2f787c6f10d013931e9eff25f3c5dd494f1aff42bfe99"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_123.obj",
+      "bytes": 1836799,
+      "sha256": "6ce0292fc0aac44ad66334a14f08577fc53c53c9aa8d63648baf3031dbebd848"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_124.obj",
+      "bytes": 232389,
+      "sha256": "18c6743fd2f4193439555fdcd05946b3ba0a9ba0410a1ac4e022176a4c3fb5f5"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_125.obj",
+      "bytes": 4068045,
+      "sha256": "ffd487116f890ec5e73b1d6d1442165a0b624a5bb13e7f75f3a9788795304c0d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_126.obj",
+      "bytes": 1948506,
+      "sha256": "daff35e1288ead35ead920a62966501bae146975e077bad29e591fecccf97c9a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_127.obj",
+      "bytes": 75488,
+      "sha256": "4ae7705486d8d279f7b7a1000691b52a4f8b374184f6a7be6822f0763c8cb904"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_128.obj",
+      "bytes": 15479,
+      "sha256": "685693bb2842c384f34425e79c5ecb927ea3a0e25b6398ddfb262510848570e7"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_129.obj",
+      "bytes": 617968,
+      "sha256": "2bb4119a6257f6a8f9821f31b717d50d34f0af5319ab571382185d9820fc9d85"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_13.obj",
+      "bytes": 4068043,
+      "sha256": "cb47c5e488ba9de1580aaf151a110fa481fd3c06efd6f44ecb1fb784f68424e3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_130.obj",
+      "bytes": 976799,
+      "sha256": "05637698ebe5b68d9ddfa1b7f4f26fafab5055b2913eda1a3e1651ce86acb0b9"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_131.obj",
+      "bytes": 1836799,
+      "sha256": "6e64696b668d27327cbad380b4c8882a1b0e058d3210563ea326a8f6dac04295"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_132.obj",
+      "bytes": 232389,
+      "sha256": "c30edb930b093bd84d2d1ae1e114e188d7f868f87de354e4cde9d38963fd826a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_133.obj",
+      "bytes": 4068045,
+      "sha256": "29d1b152fd89f6456b9cedc1e0022f84cf90faac329a4e641503366ee4263c95"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_134.obj",
+      "bytes": 1948506,
+      "sha256": "a9f0f8356bd231c3409d57584c37fef03b3e5f776222a728a787101ab54e1dbb"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_135.obj",
+      "bytes": 75488,
+      "sha256": "0303420c450311711422947baff45640239d6dd84f5fce44f3d5c1c3c32aeb11"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_136.obj",
+      "bytes": 15479,
+      "sha256": "39d74d1b964a5ffcf41dd2f42f927706e8f2a7346fa247d82a97e008fe9841a0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_137.obj",
+      "bytes": 617968,
+      "sha256": "f8d4a05c829d1618de90d635da7fba0976ac71c81f2e0d9c89129b30fbe2abb3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_138.obj",
+      "bytes": 976799,
+      "sha256": "23985785769ca574712ef01ea2396b6ffa7c01ba3c3a7b1cf5a82dd9e660bb7b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_139.obj",
+      "bytes": 1836799,
+      "sha256": "7817961994a5644018f72809567d4adb5151e6958734f53cf0060a1c558058db"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_14.obj",
+      "bytes": 1948504,
+      "sha256": "f42aeef998c4a65102d5f252b130eeefff04c071efabd3a6465ec913613aad4f"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_140.obj",
+      "bytes": 232389,
+      "sha256": "b5828dc058b8a1c44cb30bd08fd1445dd53bb57a6c89c258b45c7aabf8d4bdf1"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_141.obj",
+      "bytes": 4068045,
+      "sha256": "597fed3b8d572892054622ef08732f2d3afdb700733817c74b8744162aca3706"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_142.obj",
+      "bytes": 1948506,
+      "sha256": "3bb31056a910b863914d35cfc9d5e44fb37cece87afee91b9d95f0c04363e4b3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_143.obj",
+      "bytes": 75488,
+      "sha256": "b709c1cc0ed8d61ac185dfb0bfc24ea81963902127be00d436bab386feaab546"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_144.obj",
+      "bytes": 15479,
+      "sha256": "4b49f210ded334e6989b30942f176d08ae8bfbe151bed481f9e5233efb0ac89d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_145.obj",
+      "bytes": 617968,
+      "sha256": "fc334562e1bc9af8e290d3c5c1667215e432fe5b253ac3f6a5a606b2918e17ee"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_146.obj",
+      "bytes": 976799,
+      "sha256": "6a02984abf78bbe4e4917f58bd78ce0dc739a2ea5cc4a07a7701b86a9e8047c0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_147.obj",
+      "bytes": 1836799,
+      "sha256": "4831df6721b654e9fa7ff47b422d5ff2c41d38a0c6e6ccb8757a9d47bd43f69b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_148.obj",
+      "bytes": 232389,
+      "sha256": "e2e05c160a45be555dccf15cf15372784cf9dee290e446d4aece20644d37f837"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_149.obj",
+      "bytes": 4068045,
+      "sha256": "40d00455e70fe231bad5cfe2cc43e2067462d04957c0f569a2f9ce9f4b058d51"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_15.obj",
+      "bytes": 75486,
+      "sha256": "46a25d5f8e8c24f654dc2c87671271e2c95b011ed5685bdc720a7cee8fcfe4d7"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_150.obj",
+      "bytes": 1948506,
+      "sha256": "c98cab0cfe106d630cf88cd937a409f92cb3a47f33db6333ca6b044d0d335193"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_151.obj",
+      "bytes": 75488,
+      "sha256": "bef383a12fd643b0686376d3d3bb9464d9fee7cf11233ee6c91d5980a01bd6f6"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_152.obj",
+      "bytes": 15479,
+      "sha256": "ae64f44c00b67d3aa7fd63f98538d7e5f65fd6e816c31af2759e607aa7b77474"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_153.obj",
+      "bytes": 617968,
+      "sha256": "4839a2cace0fd283cf303ee357607623b02633e2ffc397801846e6ea5e62a69e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_154.obj",
+      "bytes": 976799,
+      "sha256": "a37a60eb72df802091b1f402b8a51fc0f680f12c02a811c4767275fab38787bf"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_155.obj",
+      "bytes": 1836799,
+      "sha256": "356aea4c6cec1c6d6d7c0c79417ed88a19f7697478e1cc141f8aeb8cb3adaddc"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_156.obj",
+      "bytes": 232389,
+      "sha256": "8003aee087bc0da31d9dbb02ee85e5ee4a5924e5432ee78fa8a749349038726f"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_157.obj",
+      "bytes": 4068045,
+      "sha256": "291e0953f9a65005a1b19b93e032c87129cfe1489ece1faf546240590e31bda8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_158.obj",
+      "bytes": 1948506,
+      "sha256": "1792b988d1c03b6ea7d18ec73fe63c1831699420c2c7f604fc0fd15b6449c89c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_159.obj",
+      "bytes": 75488,
+      "sha256": "108075baa4e67eb246f0cb13bef44c4ce7021a9238e25b4f81a9d14a0258a2c4"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_16.obj",
+      "bytes": 15477,
+      "sha256": "b1b8867900743a99d0fdc2fb5023e8404423717c319ac7640677791181bfd938"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_160.obj",
+      "bytes": 15479,
+      "sha256": "d4d204308ee4a9efed71645d7d8c20df26f52b941737cd02bd70fbf3a8072565"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_161.obj",
+      "bytes": 617968,
+      "sha256": "8ad65a753322dbc854790216554317e7438055dfcac5811598530e6511de32fe"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_162.obj",
+      "bytes": 976799,
+      "sha256": "c72dbe0af5844026ad8439fea0cc3b6629352bcc0c7995a56c0fd5699a7e009d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_163.obj",
+      "bytes": 1836799,
+      "sha256": "cef35a177f008e22efc2305e7b815e508b93d264590451bb775997094d19f7e6"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_164.obj",
+      "bytes": 232389,
+      "sha256": "a8118371e945cebac3996f93a3e95009b844cb944631c6e85114a127dc235ae2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_165.obj",
+      "bytes": 4068045,
+      "sha256": "2a5f9fa831cbbcfe000fd235b0304714693c8a533f6ff1a3b6a808fd69cb19b6"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_166.obj",
+      "bytes": 1948506,
+      "sha256": "4306a6706bb77d2eec76cc1b62b058c0409bc33bb81a9426a53e1872e29a78fa"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_167.obj",
+      "bytes": 75488,
+      "sha256": "51d13711dc840662a51d44355bb374f26f8e82b172d3a52bc05a92c863c2f984"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_168.obj",
+      "bytes": 15479,
+      "sha256": "6e3731781903ba7b8115210875d2f2e55da64cebd8ff910fa236cd71efc93a45"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_169.obj",
+      "bytes": 617968,
+      "sha256": "731d7c13d0a90c82bd7459f43948899569a28e629dc32b1775ece785238cb18c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_17.obj",
+      "bytes": 617966,
+      "sha256": "6d98c8c7ff7e0c004bbcd5184eb9048f1daf4e7fc91e09552845fca1020e9db1"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_170.obj",
+      "bytes": 976799,
+      "sha256": "61ca6275ff9c8461e377a5bb0e20dfa8e30b6a39ef2be449aa0cdfac72e0f4a0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_171.obj",
+      "bytes": 1836799,
+      "sha256": "fef4618f5359e3bd1f68faef77b61ffddd6f464c24c709a4601584a9e3e98346"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_172.obj",
+      "bytes": 232389,
+      "sha256": "1d45f43e53a1c39f957c19900cfd973987688ad21ecc3a92a42aba244774dc47"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_173.obj",
+      "bytes": 4068045,
+      "sha256": "07b875a296edf8677d9b24d1f2f2f85c9785bc42eac9de95bdd3fae08bf42a5e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_174.obj",
+      "bytes": 1948506,
+      "sha256": "6b38f2e8c42485215d6d97fc0549030eb6e2063e1ea9dce6ffc923536537a391"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_175.obj",
+      "bytes": 75488,
+      "sha256": "b3ea266e28cd07e4a56e17545654013bce3d74b0b3e3b9a12d32a6163f5f9ea4"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_176.obj",
+      "bytes": 15479,
+      "sha256": "29992eb29135c61f01807caa8de98565fb1dff841d1c7bfa3423f06320433c34"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_177.obj",
+      "bytes": 617968,
+      "sha256": "bc688b4c222822b5bfaec6d7a4271d9e214a1835fca4c3e262b58cac2dfa7488"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_178.obj",
+      "bytes": 976799,
+      "sha256": "eb012aa9a802cb088676356ea5e3344864409147a76a3102027903e60d2a4bae"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_179.obj",
+      "bytes": 1836799,
+      "sha256": "6be3a5b6a30f8f419f9460a5f44a51dd616af8a7b7bf35a0eef41f15475d5acf"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_18.obj",
+      "bytes": 976797,
+      "sha256": "93fc0cffc8372ef9599def7b181106ca542968d3fbf03b690ad34be9222dc3ca"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_180.obj",
+      "bytes": 232389,
+      "sha256": "108efa1ef93ae73442b5d452d78ece400cea46b263fdfb5016c3a805e07ece07"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_181.obj",
+      "bytes": 4068045,
+      "sha256": "b7a593df6dfdb2253a0eaba36762d4a080a1b3422f28c3ebabf77ed077ad1d3e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_182.obj",
+      "bytes": 1948506,
+      "sha256": "1dbc0c0bfa422c782fedb9c56e87a655a90a196c5ca45b688ee534263a8ce7a8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_183.obj",
+      "bytes": 75488,
+      "sha256": "2e67f6c8d53d12e6559222ba540ba3d62a5709f7aeeffbf159f7c53f195adc75"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_184.obj",
+      "bytes": 15479,
+      "sha256": "7c3ac14e10c0f8ab774320b89e27ad04f17f05357727b3a8058aadc8dfa1c5cc"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_185.obj",
+      "bytes": 617968,
+      "sha256": "2f9645cff1699d369ceb720694d85ba1082868c35b92da6c3237c4a49c811050"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_186.obj",
+      "bytes": 976799,
+      "sha256": "4b45269ade6c08e53823b88ff870e943d51b575fcc3177e406fa71f5f1536f47"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_187.obj",
+      "bytes": 1836799,
+      "sha256": "6687059cb5372d488a6ab02e020008d8d4d4a6b9c920f9fda70d3e335d8f77d8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_188.obj",
+      "bytes": 232389,
+      "sha256": "ad24aa2fd02df2cc2a02aa5101d108e78a407d34760a1da7145a8e5a9a717418"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_189.obj",
+      "bytes": 4068045,
+      "sha256": "f876d740c89a09568de8f961f815fec812f778bfb7093a722d16c0b33689081c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_19.obj",
+      "bytes": 1836797,
+      "sha256": "e5822fd2ec9384c3a6e2858bc170e5b71356da21b3eae6c70449aa9fcaec1c81"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_190.obj",
+      "bytes": 1948506,
+      "sha256": "754d3bdb5e5e62f81c9cb03707217d8d5a6cf955c2a31facad559167322bfacc"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_191.obj",
+      "bytes": 75488,
+      "sha256": "885af26bbe157edf34cdf9353d07940337d0d1bb73e60731ea9b8f92a757bc6a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_192.obj",
+      "bytes": 15479,
+      "sha256": "c46ffd7a140a8ae24e6db1890c03d1cb919b7b89512e93e8710687294b69feba"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_193.obj",
+      "bytes": 617968,
+      "sha256": "2f769e22f528e4f073b5bdd5e471db1366e3a924ec5038f27ab8b4ea1b744e90"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_194.obj",
+      "bytes": 976799,
+      "sha256": "e692d2549c2eb70dad5f9ad911f7fe4a0519b4d1ff0bf60992e5a3b364bcaa74"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_195.obj",
+      "bytes": 1836799,
+      "sha256": "59de96bc4f540617f1f2e9ef13f5d9119186a1d6801dd5e0d988b38ba7ec2659"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_196.obj",
+      "bytes": 232389,
+      "sha256": "930d66c9454ac96f5c4b8d57445accd67743ea752db6981b90d1d528c135146d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_197.obj",
+      "bytes": 4068045,
+      "sha256": "ba386b3d2d0b6693f7cb1a9333d860d0aec08e6d420d09e3ba786eeebd535d33"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_198.obj",
+      "bytes": 1948506,
+      "sha256": "43f6c9ca305fc8e0a07c92aad222de530d04a6e64dc0dde9249eb4dd196fe9dc"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_199.obj",
+      "bytes": 75488,
+      "sha256": "2a41d251415675b78d6651cdffed5e0eb3adbffefb632cca834042a818e1999e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_2.obj",
+      "bytes": 976795,
+      "sha256": "925298ee5c84483bc097411cc17e573735900f018158f5ae6fb17fed651ad21f"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_20.obj",
+      "bytes": 232387,
+      "sha256": "9d564a42c01aa1c7c74191e0408b922677f1ad50fecdcb69145cb84b2956ea3d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_21.obj",
+      "bytes": 4068043,
+      "sha256": "864bbcf6d3ed7006d05bd273c7e9b4b8a303e80b6487463fb5991b4fa75f99d5"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_22.obj",
+      "bytes": 1948504,
+      "sha256": "4d409d9f8a4122fb3fa325dbad092370cbbe5f5d7d3b47a5d4ad7c8543fde017"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_23.obj",
+      "bytes": 75486,
+      "sha256": "e271dd0645bf237302fea0a1715f9d4b88476beebaa01cd20eaa9244dd3c8bb8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_24.obj",
+      "bytes": 15477,
+      "sha256": "cfe4b54eff55218b0f0e7993965003e938df81e42e5f76eb81369a28b10f493a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_25.obj",
+      "bytes": 617966,
+      "sha256": "3740131f732fdaa3e7f18100e0c2c4edac5a06ceb9c18e2fff4905a51d1d6244"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_26.obj",
+      "bytes": 976797,
+      "sha256": "6845e9b6f79f757b7a5a8b0d134ec0fe631f98e69209e85f7af1de4d1aef3582"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_27.obj",
+      "bytes": 1836797,
+      "sha256": "5a3deddba4cbf98a501546b54d24e71ba1e0ad977d92b1615390ddc4475dd66c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_28.obj",
+      "bytes": 232387,
+      "sha256": "c0c8cdf3243d6e76c0b0cfbb6a25a62744963472aa15e39e61e085340fb2ec6f"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_29.obj",
+      "bytes": 4068043,
+      "sha256": "a7e3c040cb3220d5d33c57fc285c527ec89ecd974eadcf7175c4fc329c7a7d13"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_3.obj",
+      "bytes": 1836795,
+      "sha256": "2b60dd5898466982ebdbc29fea4c049453ea0f77f4530fd3e61bc911d0dd1b0a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_30.obj",
+      "bytes": 1948504,
+      "sha256": "d520c41fc3d3e5426c25f03ef22d93ab0b111cf29233d6b4a4032d0b2d04a693"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_31.obj",
+      "bytes": 75486,
+      "sha256": "e8a57ceb41b673a296e53a1b90a5e85a27235be4e64f2d611172264bb2c92a59"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_32.obj",
+      "bytes": 15477,
+      "sha256": "6c85be2010e35c6450cc9e4a709c9bf8daf24b103d60ae9df75ea5d393905db0"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_33.obj",
+      "bytes": 617966,
+      "sha256": "5a219bda60443b40e2d4a78603710df15456b7fe8f179eb19e0a6623592253d8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_34.obj",
+      "bytes": 976797,
+      "sha256": "03f97cfdf41f93feaf22147494c8acfad56c00439785960f55160f18262a2473"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_35.obj",
+      "bytes": 1836797,
+      "sha256": "5cc1c9b5d1a4f7c813263ed5e8327f638cf23894f784ee868ae5c89ff6774930"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_36.obj",
+      "bytes": 232387,
+      "sha256": "2011c864d945b031c69cb03367c3f0ed6515b1d6fb79d6e55e651053dec6e924"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_37.obj",
+      "bytes": 4068043,
+      "sha256": "8a499f8f65ccdd32a43f98fbcc97e7428a7c21414d0207e490db3cb97282c674"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_38.obj",
+      "bytes": 1948504,
+      "sha256": "b02804e64c811a224f595a6cdac60dabab99b6bcf58a3c761f0b68993dba9e26"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_39.obj",
+      "bytes": 75486,
+      "sha256": "4f8d03aac07f1da09d27ecb31e22e9266ffb1d94597ef04ff3067623b2a9bc70"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_4.obj",
+      "bytes": 232385,
+      "sha256": "10c157b9cdd8501791b70391dd59d6c7404613b9fc3f6d7857cce3f5f53c404b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_40.obj",
+      "bytes": 15477,
+      "sha256": "6f3a9d2b80a6bfed8113f45109a5ec6ab98a904cfb625e6f115134895c65550a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_41.obj",
+      "bytes": 617966,
+      "sha256": "c8d6811c2d29a9e732315fcaac8912971e991e13414c730630bce3151e51fd7c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_42.obj",
+      "bytes": 976797,
+      "sha256": "822031b92e3e04041c110a0a740cc0b77261a6dee2c2e6afa065b28fc882d4fd"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_43.obj",
+      "bytes": 1836797,
+      "sha256": "e1f36fc7eced10c32e1dd4bdcd71f5cbe868c06521594f0f691c3fa17ff2e748"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_44.obj",
+      "bytes": 232387,
+      "sha256": "415a965b58b19316e2573042f6f0c9af55a12803b93ee2dfdcfad2ece2491e94"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_45.obj",
+      "bytes": 4068043,
+      "sha256": "32e1a330d4d5f39d65d8d60e71f1df320e4c6f9ebeab831d1b885ad7ea285d9d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_46.obj",
+      "bytes": 1948504,
+      "sha256": "8b0fcc9cf8e2ad9d72d1dffeeb6fe7c482d2b45d89ed11a79d566600d3e94159"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_47.obj",
+      "bytes": 75486,
+      "sha256": "93bb30a84e0033e4d3b2b030a19af2c7c85c8665403357efc93dfe804922c2f5"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_48.obj",
+      "bytes": 15477,
+      "sha256": "beae4b681604c559f7abbb8a8422e0e9497e3742241ab7587d38083cb7fcc81c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_49.obj",
+      "bytes": 617966,
+      "sha256": "41724b2b919252e5c16c3e95738d239959da36e3e789b0ae2b67e78151ba279e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_5.obj",
+      "bytes": 4068041,
+      "sha256": "6e81b7842c8eb1c86d6ea6bc979a2383c7babdb12bb69d734c135c50bbf7ba79"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_50.obj",
+      "bytes": 976797,
+      "sha256": "950f454b9080df36016034c054546d9884209c7089f82f6b0364c385e26f6ba2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_51.obj",
+      "bytes": 1836797,
+      "sha256": "f5e47532fd484679609be65b10586610bbbaf96e7d46ac810bca662b3f0c8b77"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_52.obj",
+      "bytes": 232387,
+      "sha256": "1566bfc1fdf062d8e7f8278dd8d6da356b9658159b5f0c660e2c09500186870e"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_53.obj",
+      "bytes": 4068043,
+      "sha256": "9b9dfb2b3878f801ba2691bb2b8457d177986f58d3f307ae3be3846ed7e74a4b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_54.obj",
+      "bytes": 1948504,
+      "sha256": "5ffd439a168bbdb6ef72126ee95c4d9399e6ecb92d680a3fccc6e98711c682d9"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_55.obj",
+      "bytes": 75486,
+      "sha256": "e447cdf35ba79c8a846dcb1cecf97a4c9bb4331f7992ad53843ca462ad1015b8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_56.obj",
+      "bytes": 15477,
+      "sha256": "ff2f13a7391f268568aed8c062f1afa59b44c8bff6a9f6c9377db8dfcc39c0e2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_57.obj",
+      "bytes": 617966,
+      "sha256": "97812d2c0d4e01ad86634d090e21c2cc3180e199659e77f61d303bf89f9fd210"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_58.obj",
+      "bytes": 976797,
+      "sha256": "c666d4c0a336c159a735ca2cb966772dde0b90af8820a0e56ecd40df7848e937"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_59.obj",
+      "bytes": 1836797,
+      "sha256": "226eb47b68fa135b28ef762e6bdbc3fee45ae3c50c494d7bb8841cf05d810d49"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_6.obj",
+      "bytes": 1948502,
+      "sha256": "6dfdfeb944a49846310b738ab59af9fb1292be08eee9d44c6095addbff08a537"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_60.obj",
+      "bytes": 232387,
+      "sha256": "4ba74c589d05475cab5b1ec4a349aa94ec10eb045a56b5302b9a5a0a02849076"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_61.obj",
+      "bytes": 4068043,
+      "sha256": "6ccf96320db5e4caea3dbf2881a1ca13c0cde6eaca9999dc7e7fa1f99d111086"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_62.obj",
+      "bytes": 1948504,
+      "sha256": "b8c8d241e9a28bcc8c1e5159f4813118ee5765b4d9d2fcd09fbe1357f5da98df"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_63.obj",
+      "bytes": 75486,
+      "sha256": "c2396ab5944fec30c91a185e290c46f858a208792fde09f0032ecbb59d71b325"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_64.obj",
+      "bytes": 15477,
+      "sha256": "e1d7f36f445feff7ca80b58e7a58e1abb3a091fdfdd4a92492be2a285421da0d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_65.obj",
+      "bytes": 617966,
+      "sha256": "465065ee5b1f7cc1c045567b818d4c45534e7343a5851d0f5ce788fd520e6642"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_66.obj",
+      "bytes": 976797,
+      "sha256": "1cedc197e0a5871d159e9349aaf59e72e893c9250e52c7905e6fd9c205574d76"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_67.obj",
+      "bytes": 1836797,
+      "sha256": "0af30b44186bd1d61ffeb6ad0cc20b5cf2015929d773abc1682aa22ce2ecfe4a"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_68.obj",
+      "bytes": 232387,
+      "sha256": "86eb0e2d057cb5f6706a3c723d424b5f50937f866e078ed1ade0e091e89f20de"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_69.obj",
+      "bytes": 4068043,
+      "sha256": "805752f1d066d098b7855137e05cbf942c9fb787e6575123ffa49b056b4a2914"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_7.obj",
+      "bytes": 75484,
+      "sha256": "77f2bfdb6005a36f0ac15628401b0444a3634e6f43dd73cf7e493212409e61bc"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_70.obj",
+      "bytes": 1948504,
+      "sha256": "2d4f0aa11ff3bb528dc59bd453e9dfcdf29f422ca4f133f01a457c5eef294098"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_71.obj",
+      "bytes": 75486,
+      "sha256": "89050652285cd6400c7b9a29d68947a642eb99d9c229d76e16178a28cedf31e3"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_72.obj",
+      "bytes": 15477,
+      "sha256": "445fa7dac1f0c832f450d830bc98d3fc97e20a0dfbe979466b5df50fc99dfba2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_73.obj",
+      "bytes": 617966,
+      "sha256": "2a85036d88bed573cf1e5f5d4dc29df687d65904162cb97dbef991bccb5f44da"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_74.obj",
+      "bytes": 976797,
+      "sha256": "1f42f6923480397342f0cb27d22589aab0ed916e4572af0607a34b74a3a8c25d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_75.obj",
+      "bytes": 1836797,
+      "sha256": "740172acd7f2c12994fc95fa80db87903fc583a857a0d691a7643627b2ed7d94"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_76.obj",
+      "bytes": 232387,
+      "sha256": "e025440354ed2c18e6c774666421bb3707e0ce6fe05597349c9019af4acbdf83"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_77.obj",
+      "bytes": 4068043,
+      "sha256": "9a59570e4ba5018eca58de47a5b97e41434de40ab9cb7e9f867b0755980cc38b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_78.obj",
+      "bytes": 1948504,
+      "sha256": "86d20b1993d8ddf475378f6145f328d04a4fe89f0e3cc8550780199901b77074"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_79.obj",
+      "bytes": 75486,
+      "sha256": "7bd65a5238d171963b3d3a8fb65d93f4f89c89788e9b1cae4e57b2f226fe96c2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_8.obj",
+      "bytes": 15475,
+      "sha256": "bc512fe47ddcc038dadd82d70027ee838bda04d8e8b30a5a86504cf9ff142372"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_80.obj",
+      "bytes": 15477,
+      "sha256": "42204aa4f9abc9dbda001cd2c03c856c4976815d6c8577ccb848a223373d02bb"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_81.obj",
+      "bytes": 617966,
+      "sha256": "58c450e2d93f024dd49f45a296fa71dd26140bd40500ec6da304c64c7e43d920"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_82.obj",
+      "bytes": 976797,
+      "sha256": "32241d2a7c8f753e4e6dcffe3a36fa25120a9cfb2dc6266946234bdce4c8474d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_83.obj",
+      "bytes": 1836797,
+      "sha256": "601cebc47d13578de20d3450160378b1134508376e83c7a32ed4f097f25813e2"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_84.obj",
+      "bytes": 232387,
+      "sha256": "138789a16fc78244dd5553c90c5cfd03e93a95b1db3703371772744ec6f9f8f4"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_85.obj",
+      "bytes": 4068043,
+      "sha256": "b2ef623b1fc208294cf9d4e1708af4f00748b6c57278bc3ba03e691239966402"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_86.obj",
+      "bytes": 1948504,
+      "sha256": "bae8a1622e50c002afda6cd137689cb672cb8fbb71074896e6756b8a8cc414d5"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_87.obj",
+      "bytes": 75486,
+      "sha256": "47e6a0d23e995f8094bc94eb20cd1650ffa2b26e44a5d4dbd104df7e81ca19aa"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_88.obj",
+      "bytes": 15477,
+      "sha256": "99669e579125b3c0566571088e9dc7ee475f6adbc4325e006f9a84ec580177a8"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_89.obj",
+      "bytes": 617966,
+      "sha256": "7f329f9735ba06e578fcfec0606e9145f94dda1f23c6be8024b361de0ab154e6"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_9.obj",
+      "bytes": 617964,
+      "sha256": "09a2dfcd545d55b8b12741f00851eaf37011cdb0f50cac27591541fa5ff1fe35"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_90.obj",
+      "bytes": 976797,
+      "sha256": "8eaf5231d801558ae556d26c7be4881b6b67a12730d27d0e0abd208d08e2d25d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_91.obj",
+      "bytes": 1836797,
+      "sha256": "00f7c23f7224a59b236706b74761a7348e5a4cde169a3805861cdb5ccf6c458b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_92.obj",
+      "bytes": 232387,
+      "sha256": "a8ba446b59f094f0194c10c08f881fd97d07990e55018e9693e535dd8e4a1f4d"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_93.obj",
+      "bytes": 4068043,
+      "sha256": "c6e642e5c7e071c9a6ffa01eec68a4169db1bdf41896a1f16625783463c7897b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_94.obj",
+      "bytes": 1948504,
+      "sha256": "f0e39cb8bd59aff552bc1764bc1ae98e59897ff7df5fee5c2d79ce9c4e4f14c9"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_95.obj",
+      "bytes": 75486,
+      "sha256": "425fbc7826538b48e76287d6358adca8e9b823d0782567eb0516669865a9b549"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_96.obj",
+      "bytes": 15477,
+      "sha256": "48a7a611f17cd6fd1499cef82fe7fd07bb54fa65d7312a4c684878826eb1fb5c"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_97.obj",
+      "bytes": 617966,
+      "sha256": "14c077ff02a15d2804d6708e6578371649d02db4dc3d3493d3f5e23b5e2e40fe"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_98.obj",
+      "bytes": 976797,
+      "sha256": "387c0f05241b3f46ae707b86db5268ffd87ec5e53fa1fd39de5a1564f1322dda"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/model_99.obj",
+      "bytes": 1836797,
+      "sha256": "6d127ec49f560485734877db589eb260bb1a6f5078936284cde30e042f79bb9b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Touches_Base_color.png",
+      "bytes": 1953221,
+      "sha256": "18d5f3bf5dbe44214c98b052305678146087d525316a868e67bd18749fffc2ac"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Touches_Roughness.png",
+      "bytes": 1125403,
+      "sha256": "3b5aa0147fc61bb673ce8e42d636e88d9525ede8fd0cf7012dec0ed1cf78b06b"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Téléphone_Base_color.png",
+      "bytes": 2064878,
+      "sha256": "5927945e87e77879265601b7a26085c5bbb24a307936d5d058f664f9b3395019"
+    },
+    {
+      "path": "06_MODEL/Minitel - TELETEL/Téléphone_Roughness.png",
+      "bytes": 1863957,
+      "sha256": "42a24055248860bf01cef4ff189a12894b583f1828bc182561fc06ce3f5b3e76"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/source/old computer 上传.blend",
+      "bytes": 145623136,
+      "sha256": "f7e543739d887e2d460e1fa4b8d0c3961dd1c28aa5907f12859e402cc5fb8535"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/Capturer.jpeg",
+      "bytes": 84730,
+      "sha256": "0430ecc24f42deec5fb356e15fb8163906cac5a44c8db9d24ea19b83449649b0"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/dchft7197_03_56_.png",
+      "bytes": 275275,
+      "sha256": "e37259d1c5f7e1f273f7eeb26fe4065200ea90d2b162fe44bd542efa55b20c2b"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/minitel1_L_343497_22.jpeg",
+      "bytes": 43264,
+      "sha256": "d1525bae40f67fb9e48c1643770b0b57d4943c87b1b365e1e1202364ac2aa13e"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/minitel1_L_343497_22_1_.jpeg",
+      "bytes": 1618,
+      "sha256": "062a6671789be8e04e58254f94775b805bdeb2d7cae4a7e32b9dab87089d0684"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/minitel1_L_343497_22_2_.jpeg",
+      "bytes": 43754,
+      "sha256": "d9167170f1728adab5e9c9d746d426008b168d92a36841d87448c577994d02b9"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/minitel1_L_343497_22_3_.jpeg",
+      "bytes": 1843,
+      "sha256": "0599f22deeb08522909835f4ad1a285b4a76419ab2f15cab24653d19ad774bad"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/M_052933.jpeg",
+      "bytes": 226819,
+      "sha256": "4bf8b06866c781bdb8af96bfe78b2bb94c0c838ed88aebc0c4efc5a800206aea"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/屏幕材质.png",
+      "bytes": 13016528,
+      "sha256": "3a6d2ff303bc691c3a0c7519ab813ad1560e59ec96f1dfe40a24105f3212b68c"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/底部材质.jpg",
+      "bytes": 13687,
+      "sha256": "d76199d1ce88897c5b940f0e9dbe4beacf9d3ca92e167d4379a73d8b11960542"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/背后材质.png",
+      "bytes": 9991781,
+      "sha256": "1bb2b928d526fbdb860eabdb1308de14d459e6f50e92d62ebe6d185fe98c4f89"
+    },
+    {
+      "path": "06_MODEL/minitel-1982-france/textures/键盘材质.png",
+      "bytes": 14335356,
+      "sha256": "4c37802201c93c86b3680db57232fa723dbdb58ab3fcd638b20093068655427b"
+    },
+    {
+      "path": "06_MODEL/minitel_1982-france.glb",
+      "bytes": 3694964,
+      "sha256": "16b0fdbdd2092299910f0fd407149e2f63099a3c36dc4ae6c53f1a8224397e9d",
+      "gltf": {
+        "asset": {
+          "extras": {
+            "author": "okotaru (https://sketchfab.com/loaferspore)",
+            "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+            "source": "https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf",
+            "title": "Minitel 1982-France"
+          },
+          "generator": "Sketchfab-14.24.0",
+          "version": "2.0"
+        },
+        "meshes": 70,
+        "images": 11,
+        "triangles": 21943
+      }
+    },
+    {
+      "path": "06_MODEL/Table+-+Minitel.blend",
+      "bytes": 111450498,
+      "sha256": "2402243c258d6889b6a5f34eb851552a05693b08f1ce3ae5f71d3c87af0a6bb3"
+    },
+    {
+      "path": "06_MODEL/Table+-+Minitel.fbx",
+      "bytes": 1574428,
+      "sha256": "a19ee99e3a8ffb96fce6fffcb71bed4bdc482c8160b8f2410fff8ef00dc1d38b"
+    },
+    {
+      "path": "06_MODEL/Table+-+Minitel.stl",
+      "bytes": 2802234,
+      "sha256": "6945316cead5126b919dd867ecb4eefaa1b12e3072015805000fe290e2e895b3"
+    },
+    {
+      "path": "06_MODEL/white_mesh.glb",
+      "bytes": 5930248,
+      "sha256": "0e43cca7670118b03da9f857cc74a430a5669c17096b0432c4495451c763c46c",
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "https://github.com/mikedh/trimesh"
+        },
+        "meshes": 1,
+        "images": 0,
+        "triangles": 329478
+      }
+    }
+  ],
+  "totalBytes": 701700017
+}

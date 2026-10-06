@@ -1,0 +1,78 @@
+name: Deploy Minitel
+
+# Build l'application et la publie sous https://sterenna.fr/minitel/
+# (OVH mutualisé, compte sterenn, racine web ~/www). Le site principal
+# sterenna.fr est déployé par MutenRock/sterenna avec rsync --delete :
+# son workflow doit exclure /minitel/, sinon ce dossier serait effacé.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-minitel-ovh
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy to OVH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check
+        run: |
+          npm run typecheck
+          npm run lint
+          npm test
+
+      - name: Build for /minitel/
+        run: npm run build:ovh
+
+      - name: Validate build
+        run: |
+          test -f dist/index.html
+          test -f dist/models/minitel.glb
+          test -f dist/models/ATTRIBUTION.md
+          grep -q '/minitel/assets/' dist/index.html
+          echo "build /minitel/ : OK"
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.OVH_SSH_KEY }}" > ~/.ssh/ovh_key
+          chmod 600 ~/.ssh/ovh_key
+          ssh-keyscan -H "${{ secrets.OVH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Ensure remote target directory exists
+        run: |
+          ssh -i ~/.ssh/ovh_key "${{ secrets.OVH_USER }}@${{ secrets.OVH_HOST }}" "mkdir -p ~/www/minitel"
+
+      - name: Deploy via rsync
+        # --delete reste limité à ~/www/minitel/ : le reste de sterenna.fr n'est pas touché.
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/ovh_key" \
+            dist/ "${{ secrets.OVH_USER }}@${{ secrets.OVH_HOST }}:~/www/minitel/"
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl -fsS -o /dev/null -w "index %{http_code}\n" https://sterenna.fr/minitel/
+          curl -fsS -o /dev/null -w "model %{http_code} %{content_type}\n" https://sterenna.fr/minitel/models/minitel.glb
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/ovh_key

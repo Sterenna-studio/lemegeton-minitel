@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEMEGETON — Rig V3</title>
+<style>
+body{margin:0;background:#0c0f11;color:#eef2f4;font:12px system-ui,Arial;overflow:hidden}
+#ui{position:fixed;z-index:4;left:16px;top:16px;width:390px;padding:15px;background:#15191ddd;border:1px solid #343b40;border-radius:15px;backdrop-filter:blur(12px)}
+h1{font-size:17px;margin:0 0 3px;letter-spacing:.08em}.sub{font-size:10px;color:#9aa5ab;margin-bottom:12px}
+button{background:#22282c;color:#eee;border:1px solid #41494e;border-radius:8px;padding:7px 9px;margin:2px;cursor:pointer}
+button:hover,button.active{border-color:#61dcff}label{display:block;font-size:10px;color:#b9c2c7;margin-top:9px}input{width:100%}
+.tag{display:inline-block;border:1px solid #3d464d;border-radius:5px;padding:3px 5px;margin:2px;font-size:9px;color:#b8c1c6}
+.sep{border-top:1px solid #30373b;margin-top:10px;padding-top:9px}#status{position:fixed;right:16px;top:16px;background:#15191ddd;border:1px solid #343b40;padding:9px 11px;border-radius:9px;font-size:10px}
+</style></head><body>
+<div id="ui">
+<h1>LEMEGETON — RIG V3</h1><div class="sub">MECHANICAL / IK / CONTROLS / EXPLODED INSPECTION</div>
+<div><button id="assembled" class="active">ASSEMBLÉ</button><button id="exploded">ÉCLATÉ</button><button id="reset">CAMÉRA</button></div>
+<label>Éclatement <b id="val">0.00</b></label><input id="amount" type="range" min="0" max="1.8" step=".01" value="0">
+<div class="sep"><b>Contrôleurs</b><br>
+<button data-bone="HEAD">TÊTE</button><button data-bone="SHOULDER_L">ÉPAULE L</button><button data-bone="ELBOW_L">COUDE L</button><button data-bone="WRIST_L">POIGNET L</button>
+<button data-bone="SHOULDER_R">ÉPAULE R</button><button data-bone="ELBOW_R">COUDE R</button><button data-bone="WRIST_R">POIGNET R</button></div>
+<div class="sep"><b>Doigts — 3 + pouce</b><br>
+<button data-bone="FINGER1_L">L1</button><button data-bone="FINGER2_L">L2</button><button data-bone="FINGER3_L">L3</button><button data-bone="THUMB_L">L pouce</button>
+<button data-bone="FINGER1_R">R1</button><button data-bone="FINGER2_R">R2</button><button data-bone="FINGER3_R">R3</button><button data-bone="THUMB_R">R pouce</button></div>
+<div class="sep"><button id="wire">WIREFRAME</button><button id="grid">GRILLE</button><button id="spin">ROTATION</button></div>
+<div class="sep"><span class="tag">V3</span><span class="tag">24 bones base</span><span class="tag">IK Blender</span><span class="tag">3+1 digits</span><span class="tag">mechanical</span></div>
+</div><div id="status">Chargement…</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0c0f11);
+const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.01,100);camera.position.set(3,1.7,3.4);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;document.body.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.target.set(0,1,0);
+scene.add(new THREE.HemisphereLight(0xeaf6ff,0x202020,2.2));const dl=new THREE.DirectionalLight(0xffffff,3);dl.position.set(4,6,5);scene.add(dl);
+const grid=new THREE.GridHelper(8,32,0x465057,0x24292d);scene.add(grid);
+let model=null,bones=new Map(),meshes=[],spin=false,wire=false,original=[];
+new GLTFLoader().load('./LEMEGETON_RIGGED_V3_BASE.glb',g=>{
+ model=g.scene;const box=new THREE.Box3().setFromObject(model),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),d=Math.max(size.x,size.y,size.z);
+ model.position.sub(center);model.position.y+=d*.5;model.scale.setScalar(2.25/d);scene.add(model);
+ model.traverse(o=>{if(o.isBone)bones.set(o.name,o);if(o.isMesh){meshes.push(o);original.push({o,p:o.position.clone()})}});
+ document.getElementById('status').innerHTML='✓ GLB V3 chargé<br>Skin + 24 bones détectés';
+});
+function exploded(v){
+ document.getElementById('val').textContent=(+v).toFixed(2);
+ // Robust visual separation: distribute top-level descendants around their local centers.
+ // This is an inspection mode; it never edits the GLB.
+ if(!model)return;
+ const k=+v;
+ const box=new THREE.Box3().setFromObject(model),c=box.getCenter(new THREE.Vector3());
+ meshes.forEach((m,i)=>{
+   const w=m.getWorldPosition(new THREE.Vector3()), dir=w.clone().sub(c);
+   if(dir.lengthSq()<1e-6)dir.set((i%2?1:-1),.2,0);
+   dir.normalize();
+   m.position.copy(original[i].p).add(dir.multiplyScalar(k*.12));
+ });
+}
+document.getElementById('amount').oninput=e=>exploded(e.target.value);
+document.getElementById('exploded').onclick=()=>{document.getElementById('amount').value=.8;exploded(.8);document.getElementById('exploded').classList.add('active');document.getElementById('assembled').classList.remove('active')};
+document.getElementById('assembled').onclick=()=>{document.getElementById('amount').value=0;exploded(0);document.getElementById('assembled').classList.add('active');document.getElementById('exploded').classList.remove('active')};
+document.getElementById('reset').onclick=()=>{camera.position.set(3,1.7,3.4);controls.target.set(0,1,0);controls.update()};
+document.getElementById('wire').onclick=()=>{wire=!wire;meshes.forEach(m=>(Array.isArray(m.material)?m.material:[m.material]).forEach(x=>x.wireframe=wire))};
+document.getElementById('grid').onclick=()=>grid.visible=!grid.visible;
+document.getElementById('spin').onclick=()=>spin=!spin;
+document.querySelectorAll('[data-bone]').forEach(btn=>btn.onclick=()=>{
+ const b=bones.get(btn.dataset.bone);if(!b)return;
+ b.rotation.z += btn.dataset.bone.includes('_L') ? .18 : -.18;
+});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+const clock=new THREE.Clock();(function loop(){requestAnimationFrame(loop);const dt=clock.getDelta();if(spin&&model)model.rotation.y+=dt*.3;controls.update();renderer.render(scene,camera)})();
+</script></body></html>

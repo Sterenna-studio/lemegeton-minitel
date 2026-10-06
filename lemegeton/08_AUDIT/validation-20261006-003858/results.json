@@ -1,0 +1,56 @@
+[
+  {
+    "name": "typecheck",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:38:58.1699538Z",
+    "endedUtc": "2026-10-06T00:39:01.3703692Z"
+  },
+  {
+    "name": "lint",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:01.3789393Z",
+    "endedUtc": "2026-10-06T00:39:03.1004789Z"
+  },
+  {
+    "name": "unit",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:03.1060550Z",
+    "endedUtc": "2026-10-06T00:39:04.2316868Z"
+  },
+  {
+    "name": "build",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:04.2358509Z",
+    "endedUtc": "2026-10-06T00:39:14.3460237Z"
+  },
+  {
+    "name": "browser",
+    "exitCode": 1,
+    "startedUtc": "2026-10-06T00:39:14.3504745Z",
+    "endedUtc": "2026-10-06T00:39:45.9017016Z"
+  },
+  {
+    "name": "production",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:45.9055731Z",
+    "endedUtc": "2026-10-06T00:39:51.9112282Z"
+  },
+  {
+    "name": "npm-audit",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:51.9151710Z",
+    "endedUtc": "2026-10-06T00:39:53.0336595Z"
+  },
+  {
+    "name": "blender-workshop",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:53.0384601Z",
+    "endedUtc": "2026-10-06T00:39:58.2039122Z"
+  },
+  {
+    "name": "blender-export",
+    "exitCode": 0,
+    "startedUtc": "2026-10-06T00:39:58.2088387Z",
+    "endedUtc": "2026-10-06T00:40:06.6693177Z"
+  }
+]

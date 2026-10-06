@@ -1,0 +1,26 @@
+[
+  {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "assetStatus": 200,
+    "webglCanvas": 1,
+    "debugAbsent": true,
+    "navigation": true,
+    "consoleErrors": []
+  },
+  {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "assetStatus": 200,
+    "webglCanvas": 1,
+    "debugAbsent": true,
+    "navigation": true,
+    "consoleErrors": []
+  }
+]

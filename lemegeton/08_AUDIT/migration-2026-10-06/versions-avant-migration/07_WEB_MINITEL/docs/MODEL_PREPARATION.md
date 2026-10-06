@@ -3,18 +3,14 @@
 ## Source et convention de presentation
 
 Conserver le fichier original et travailler par Save As dans une copie Blender.
-Le modele source est `lemegeton/06_MODEL/minitel_1982-france.glb`, present
-localement mais non versionne. La preparation est reproductible depuis la racine du depot :
+Le modele fourni au projet est `06_MODEL/minitel_1982-france.glb`. La preparation
+est reproductible depuis la racine :
 
 ```powershell
-& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python-exit-code 1 --python .\tools\prepare_model.py
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python-exit-code 1 --python .\07_WEB_MINITEL\tools\prepare_model.py
 ```
 
-Un autre GLB source peut etre passe apres `--`.
-`tools/audit_model.py` s'utilise de la meme facon et regenere les rendus de `docs/asset-audit/`.
-Avec Blender 5.2, la sortie est identique a l'octet pres a `public/models/minitel.glb`.
-
-Cette commande remplace seulement `public/models/minitel.glb` et
+Cette commande remplace seulement `07_WEB_MINITEL/public/models/minitel.glb` et
 le rapport `docs/asset-audit/normalized.json`. Archiver une copie retouchee avant
 de la relancer. Ce script est **specifique a l'asset fourni**, pas un detecteur
 universel d'ecran. Il transforme ses objets, tourne de -110 degres autour du Z

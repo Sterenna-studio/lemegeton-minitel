@@ -1,0 +1,17 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LEMEGETON Rig Lab</title>
+<style>
+body{margin:0;background:#101214;color:#eee;font-family:system-ui,Arial;overflow:hidden}#ui{position:fixed;left:16px;top:16px;width:320px;background:#16191dcc;border:1px solid #343a40;border-radius:14px;padding:15px;backdrop-filter:blur(8px)}h1{font-size:17px;margin:0 0 4px;letter-spacing:.08em}.s{font-size:11px;color:#8f98a1;margin-bottom:12px}button{background:#22272b;color:#eee;border:1px solid #41484e;border-radius:8px;padding:8px;margin:3px;cursor:pointer}button:hover{border-color:#58d7ff}.tag{display:inline-block;padding:4px 7px;margin:2px;border-radius:7px;background:#20252a;font-size:10px;color:#b8c0c7}.ok{color:#72e1a0}#info{margin-top:10px;padding-top:10px;border-top:1px solid #30353a;font-size:11px;line-height:1.5;color:#adb5bd}</style></head>
+<body><div id="ui"><h1>LEMEGETON — RIG LAB</h1><div class="s">Source GLB · mécanique · préparation rig</div>
+<button onclick="mode(0)">Assemblé</button><button onclick="mode(1)">Éclaté</button><button onclick="resetCam()">Caméra</button>
+<div style="margin-top:8px"><span class="tag">ROOT</span><span class="tag">BODY</span><span class="tag">HEAD</span><span class="tag">SHOULDER</span><span class="tag">ELBOW</span><span class="tag">WRIST</span><span class="tag">HAND</span><span class="tag">3+1 DIGITS</span><span class="tag">LEG</span></div>
+<div id="info"><span class="ok">● Source conservée</span><br>Rig mécanique prévu avec pivots séparés. La segmentation réelle du mesh doit être validée avant skinning.</div></div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';import{GLTFLoader}from'three/addons/loaders/GLTFLoader.js';import{OrbitControls}from'three/addons/controls/OrbitControls.js';
+const s=new THREE.Scene();s.background=new THREE.Color(0x101214);const c=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.01,1000);c.position.set(2.8,1.6,3.2);
+const r=new THREE.WebGLRenderer({antialias:true});r.setSize(innerWidth,innerHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));r.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(r.domElement);
+const o=new OrbitControls(c,r.domElement);o.enableDamping=true;o.target.set(0,.7,0);s.add(new THREE.HemisphereLight(0xddeeff,0x202020,2.2));let l=new THREE.DirectionalLight(0xffffff,3);l.position.set(4,6,5);s.add(l);
+let m;let base=[];new GLTFLoader().load('./LEMEGETON.glb',g=>{m=g.scene;let b=new THREE.Box3().setFromObject(m),ce=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3()),d=Math.max(sz.x,sz.y,sz.z);m.position.sub(ce);m.position.y+=d*.5;m.scale.setScalar(2.2/d);s.add(m);m.traverse(x=>{if(x.isMesh)base.push({o:x,p:x.position.clone()})})});
+window.mode=x=>{if(!m)return;m.traverse(o=>{if(o.isMesh){let p=o.position;p.set(0,0,0)}});if(x)m.position.x=0;else m.position.x=0};
+window.resetCam=()=>{c.position.set(2.8,1.6,3.2);o.target.set(0,.7,0);o.update()};addEventListener('resize',()=>{c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});(function a(){requestAnimationFrame(a);o.update();r.render(s,c)})();
+</script></body></html>

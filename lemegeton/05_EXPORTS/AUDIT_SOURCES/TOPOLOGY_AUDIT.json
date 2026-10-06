@@ -1,0 +1,21 @@
+{
+  "source": "02_SOURCES_3D/Rusty Retrobot.glb",
+  "weld_tolerance_for_analysis_only": 1e-05,
+  "iterations": 4,
+  "components": [
+    {
+      "id": 0,
+      "vertices": 738907,
+      "min": [
+        -0.7885050177574158,
+        -0.4309917390346527,
+        -0.9523670077323914
+      ],
+      "max": [
+        0.7936373353004456,
+        0.43286100029945374,
+        0.9508739113807678
+      ]
+    }
+  ]
+}

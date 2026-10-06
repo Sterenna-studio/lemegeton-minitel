@@ -1,0 +1,25 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+*.log
+.vite/
+*.tsbuildinfo
+
+# Pipeline personnage : dossier de travail complet en local, seuls les
+# formats texte (scripts, docs, rapports) sont versionnés. Tout autre format
+# (GLB, .blend, OBJ, images, vidéo, ZIP...) reste ignoré par défaut.
+lemegeton/**
+!lemegeton/**/
+!lemegeton/**/*.md
+!lemegeton/**/*.txt
+!lemegeton/**/*.py
+!lemegeton/**/*.json
+!lemegeton/**/*.csv
+!lemegeton/**/*.html
+!lemegeton/**/*.bat
+!lemegeton/**/*.ps1
+# Exceptions texte non publiées : conversation privée, sauvegardes locales.
+lemegeton/ChatGPT-*.md
+lemegeton/09_SAUVEGARDES/
+lemegeton/**/__pycache__/

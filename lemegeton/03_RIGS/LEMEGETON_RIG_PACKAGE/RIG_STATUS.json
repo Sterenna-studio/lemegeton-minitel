@@ -1,0 +1,12 @@
+{
+  "file": "LEMEGETON_RIGGED_v1.glb",
+  "glTF_version": 2,
+  "nodes": 26,
+  "skins": 1,
+  "bones": 24,
+  "animations": 0,
+  "mesh_primitives": 1,
+  "rig_type": "mechanical rigid-weight v1",
+  "source_preserved": "LEMEGETON_SOURCE.glb",
+  "warning": "Bone weights are first-pass spatial/heuristic assignments because the source is one dense mesh; semantic piece separation and pivot validation still need a Blender inspection pass."
+}
