@@ -373,3 +373,70 @@ test("page documentation : fiches, vues et liens", async ({ page }) => {
   ).toBe(true);
   expect(errors).toEqual([]);
 });
+test("yeux de Lemegeton en mosaique Videotex", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/?ecran=yeux&couleur=ambre");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
+    timeout: 30000,
+  });
+  const reader = page.locator("pre").filter({ hasText: "HUMEUR" });
+  await expect(reader).toContainText("HUMEUR : NEUTRE");
+  await expect(page.locator(".terminal-title")).toContainText("YEUX DE LEMEGETON");
+  await page.waitForTimeout(800);
+  const neutral = await scenePixels(page);
+  await page.locator('[data-testid="scene"] canvas').click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press("Enter"); // Envoi : joie
+  await expect(reader).toContainText("HUMEUR : JOIE");
+  await page.waitForTimeout(300);
+  expect((await scenePixels(page)).hash).not.toBe(neutral.hash);
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  await expect(page.getByLabel("Forme des yeux")).toHaveValue("zyra");
+  await expect(page.getByLabel("Couleur des yeux")).toHaveValue("ambre");
+  await page.getByLabel("Couleur des yeux").selectOption("auto");
+  await expect(page).toHaveURL(/couleur=auto/);
+  await page.getByLabel("3615 Lemegeton").check();
+  await expect(page).not.toHaveURL(/ecran=yeux/);
+  await expect(page.locator(".terminal-title")).toContainText("SOMMAIRE");
+  await page.getByLabel("Yeux de Lemegeton").check();
+  await page
+    .locator(".console-bottom nav")
+    .getByRole("button", { name: /Archives/ })
+    .click();
+  await expect(page.locator(".terminal-title")).toContainText("ARCHIVES");
+  expect(errors).toEqual([]);
+});
+test("yeux classiques lisses, ecran bombe et effets CRT", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/?ecran=yeux&rendu=classique");
+  await expect(page.getByText("Chargement du modele...")).toHaveCount(0, {
+    timeout: 30000,
+  });
+  await page.waitForTimeout(800);
+  const neutral = await scenePixels(page);
+  expect(neutral.colored).toBeGreaterThan(200); // yeux cyan lumineux
+  await page.locator('[data-testid="scene"] canvas').click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(600);
+  expect((await scenePixels(page)).hash).not.toBe(neutral.hash);
+  await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
+  await expect(page.getByLabel("Rendu des yeux")).toHaveValue("classique");
+  await expect(page.getByLabel("Forme des yeux")).toHaveCount(0);
+  const master = page.getByLabel("Effets CRT");
+  await master.uncheck();
+  for (const label of ["Lignes de balayage", "Phosphore", "Vignettage", "Distorsion de l'image"])
+    await expect(page.getByLabel(label, { exact: true })).not.toBeChecked();
+  await master.check();
+  await expect(page.getByLabel("Lignes de balayage", { exact: true })).toBeChecked();
+  await page.getByLabel("Rendu des yeux").selectOption("mosaique");
+  await expect(page).not.toHaveURL(/rendu=/);
+  await expect(page.getByLabel("Forme des yeux")).toHaveValue("zyra");
+  expect(errors).toEqual([]);
+});

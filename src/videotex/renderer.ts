@@ -43,7 +43,7 @@ export function renderTerminal(
     ctx.fillStyle = palette[cell.fg];
     ctx.shadowColor = palette[cell.fg];
     ctx.shadowBlur = effects.glow ? 2 : 0;
-    if (cell.mosaic !== undefined) drawMosaic(ctx, cell.mosaic, x, y, cw, ch);
+    if (cell.mosaic !== undefined) drawMosaic(ctx, cell.mosaic, x, y, cw, ch, cell.separated);
     else ctx.fillText(cell.char, x + cw / 2, y + ch / 2);
   });
   ctx.shadowBlur = 0;
@@ -56,6 +56,16 @@ export function renderTerminal(
       3,
     );
   }
+  applyCrtEffects(ctx, effects, time, reducedMotion);
+}
+
+/** Post-effets CRT (balayage, vignettage, scintillement), communs a tous les rendus 800 x 600. */
+export function applyCrtEffects(
+  ctx: CanvasRenderingContext2D,
+  effects: CrtEffects,
+  time: number,
+  reducedMotion: boolean,
+): void {
   if (effects.scanlines) {
     ctx.fillStyle = "rgba(0,0,0,.13)";
     for (let y = 0; y < HEIGHT; y += 3) ctx.fillRect(0, y, WIDTH, 1);

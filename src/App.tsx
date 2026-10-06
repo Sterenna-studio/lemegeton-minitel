@@ -3,6 +3,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import {
@@ -28,6 +29,17 @@ import { defaultEffects, type CrtEffects } from "./videotex/renderer";
 import { genericProfile } from "./minitel/profiles";
 import { catalog, findEntry, tableCredit } from "./demo/catalog";
 import { ModelInventory } from "./components/ModelInventory";
+import {
+  EYE_PALETTES,
+  EYE_RENDERS,
+  EYE_STYLES,
+  EyesController,
+  MIN_EYE_SCALE,
+  type EyePaletteId,
+  type EyeRenderId,
+  type EyeStyleId,
+} from "./eyes/EyesController";
+import { SmoothEyes } from "./eyes/SmoothEyes";
 import { marbleDataUrl } from "./demo/marble";
 import { MinitelAttachment } from "./minitel/MinitelAttachment";
 import type { ModelInfo, ScreenSource, Vec3 } from "./minitel/types";
@@ -92,6 +104,24 @@ function Antenna() {
 export default function App() {
   const terminal = useMemo(createLemegetonTerminal, []);
   const snapshot = useMinitel(terminal);
+  // ?ecran=yeux shows Lemegeton's eyes (Videotex mosaic, ported from
+  // minitel-face LibEyes) instead of the 3615 pages ; ?couleur= picks a palette.
+  const [screenMode, setScreenMode] = useState<"3615" | "yeux">(() =>
+    new URLSearchParams(window.location.search).get("ecran") === "yeux" ? "yeux" : "3615",
+  );
+  const eyes = useMemo(() => {
+    const query = new URLSearchParams(window.location.search);
+    const palette = EYE_PALETTES.find((p) => p.id === query.get("couleur"))?.id ?? "cyan";
+    const style = EYE_STYLES.find((s) => s.id === query.get("yeux"))?.id ?? "zyra";
+    const scale = Number(query.get("taille") ?? 1);
+    const render = EYE_RENDERS.find((r) => r.id === query.get("rendu"))?.id ?? "mosaique";
+    return new EyesController({ palette, style, scale, render });
+  }, []);
+  const eyesSnapshot = useSyncExternalStore(eyes.subscribe, eyes.getSnapshot);
+  const activeFrame = screenMode === "yeux" ? eyesSnapshot.frame : snapshot.frame;
+  // Classic (smooth) eyes draw into their own canvas, uploaded continuously.
+  const smoothEyes = useMemo(() => new SmoothEyes(eyes), [eyes]);
+  const smoothActive = screenMode === "yeux" && eyesSnapshot.render === "classique";
   const [webgl] = useState(supportsWebGL);
   const [error, setError] = useState("");
   const [reader, setReader] = useState(false);
@@ -99,6 +129,64 @@ export default function App() {
   const [keyboard, setKeyboard] = useState(false);
   const [effects, setEffects] = useState<CrtEffects>(defaultEffects);
   const reducedMotion = useReducedMotion();
+  useEffect(() => {
+    smoothEyes.setOptions({ effects, reducedMotion, scale: eyesSnapshot.scale });
+  }, [smoothEyes, effects, reducedMotion, eyesSnapshot.scale]);
+  useEffect(() => {
+    if (!smoothActive) return;
+    smoothEyes.start();
+    return () => smoothEyes.stop();
+  }, [smoothEyes, smoothActive]);
+  useEffect(() => {
+    // Autonomous blinking, gaze and reactions only while the eyes are shown,
+    // and never when the user prefers reduced motion.
+    if (screenMode !== "yeux" || reducedMotion) return;
+    eyes.start();
+    return () => eyes.stop();
+  }, [eyes, screenMode, reducedMotion]);
+  const setUrlParam = useCallback((name: string, value: string | null) => {
+    const url = new URL(window.location.href);
+    if (value === null) url.searchParams.delete(name);
+    else url.searchParams.set(name, value);
+    window.history.replaceState(null, "", url);
+  }, []);
+  const chooseScreen = useCallback(
+    (mode: "3615" | "yeux") => {
+      setScreenMode(mode);
+      setUrlParam("ecran", mode === "yeux" ? "yeux" : null);
+    },
+    [setUrlParam],
+  );
+  function choosePalette(palette: EyePaletteId) {
+    eyes.setPalette(palette);
+    setUrlParam("couleur", palette);
+  }
+  function chooseStyle(style: EyeStyleId) {
+    eyes.setStyle(style);
+    setUrlParam("yeux", style);
+  }
+  function chooseRender(render: EyeRenderId) {
+    eyes.setRender(render);
+    setUrlParam("rendu", render === "mosaique" ? null : render);
+  }
+  function chooseScale(scale: number) {
+    eyes.setScale(scale);
+    const applied = eyes.getSnapshot().scale;
+    setUrlParam("taille", applied === 1 ? null : String(applied));
+  }
+  // Keys go to the active screen ; Connexion/Fin leaves the eyes for 3615.
+  const sendKey = useCallback(
+    (key: string) => {
+      if (screenMode !== "yeux") return terminal.sendKey(key);
+      if (key === "ConnexionFin") chooseScreen("3615");
+      else eyes.key(key);
+    },
+    [screenMode, terminal, eyes, chooseScreen],
+  );
+  function goTo(page: string) {
+    chooseScreen("3615");
+    terminal.go(page);
+  }
   const [antenna, setAntenna] = useState(false);
   // ?vue=face|profil|dos opens on a given view ; ?capture=1 hides the interface
   // (used by tools/capture_views.mjs to illustrate the documentation page).
@@ -143,8 +231,17 @@ export default function App() {
     document.documentElement.style.setProperty("--marble", `url(${marbleDataUrl()})`);
   }, []);
   const source: ScreenSource = useMemo(
-    () => ({ kind: "videotex", frame: snapshot.frame }),
-    [snapshot.frame],
+    () =>
+      smoothActive
+        ? {
+            kind: "canvas",
+            canvas: smoothEyes.canvas,
+            revision: 0,
+            continuous: true,
+            accessibleText: `Yeux de Lemegeton, humeur : ${eyesSnapshot.moodLabel.toLowerCase()}`,
+          }
+        : { kind: "videotex", frame: activeFrame },
+    [smoothActive, smoothEyes, eyesSnapshot.moodLabel, activeFrame],
   );
   const onInfo = useCallback((value: ModelInfo) => setInfo(value), []);
   const onError = useCallback((message: string) => setError(message), []);
@@ -165,22 +262,22 @@ export default function App() {
       if (event.ctrlKey || event.altKey || event.metaKey) return;
       if (
         event.key.length === 1 ||
-        ["Enter", "Escape", "Backspace", "Home"].includes(event.key)
+        ["Enter", "Escape", "Backspace", "Delete", "Home"].includes(event.key)
       ) {
         event.preventDefault();
-        terminal.sendKey(event.key);
+        sendKey(event.key);
       }
     }
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [terminal]);
+  }, [sendKey]);
   function cameraCommand(kind: CameraCommand["kind"]) {
     setCommand((current) => ({ id: current.id + 1, kind }));
   }
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (input) for (const key of input) terminal.sendKey(key);
-    terminal.sendKey("Enter");
+    if (input) for (const key of input) sendKey(key);
+    sendKey("Enter");
     setInput("");
   }
   const fallback = !webgl || !!error;
@@ -222,7 +319,7 @@ export default function App() {
             command={command}
             onError={onError}
             onInfo={onInfo}
-            onKey={terminal.sendKey}
+            onKey={sendKey}
             debug={import.meta.env.DEV && debug ? inspection : undefined}
             selectedName={
               import.meta.env.DEV && debug ? info?.selected : undefined
@@ -274,7 +371,7 @@ export default function App() {
       {(reader || fallback) && (
         <aside className="reader-panel">
           <div className="panel-title">
-            <h2>{snapshot.frame.title}</h2>
+            <h2>{activeFrame.title}</h2>
             {!fallback && (
               <Tool label="Fermer la lecture" onClick={() => setReader(false)}>
                 <X size={18} />
@@ -282,17 +379,17 @@ export default function App() {
             )}
           </div>
           <AccessibleTerminal
-            frame={snapshot.frame}
+            frame={activeFrame}
             visible
-            onKey={terminal.sendKey}
+            onKey={sendKey}
           />
         </aside>
       )}
       {!reader && !fallback && (
         <AccessibleTerminal
-          frame={snapshot.frame}
+          frame={activeFrame}
           visible={false}
-          onKey={terminal.sendKey}
+          onKey={sendKey}
         />
       )}
       {settings && (
@@ -306,8 +403,22 @@ export default function App() {
               <X size={18} />
             </Tool>
           </div>
+          <label className="setting setting-master">
+            <span>Effets CRT</span>
+            <input
+              type="checkbox"
+              checked={Object.values(effects).some(Boolean)}
+              onChange={(e) =>
+                setEffects(
+                  e.target.checked
+                    ? { ...defaultEffects }
+                    : { curvature: false, scanlines: false, glow: false, vignette: false, flicker: false },
+                )
+              }
+            />
+          </label>
           {Object.entries({
-            curvature: "Courbure",
+            curvature: "Distorsion de l'image",
             scanlines: "Lignes de balayage",
             glow: "Phosphore",
             vignette: "Vignettage",
@@ -328,6 +439,85 @@ export default function App() {
               />
             </label>
           ))}
+          <fieldset className="setting-group">
+            <legend>Ecran</legend>
+            {(
+              [
+                ["3615", "3615 Lemegeton"],
+                ["yeux", "Yeux de Lemegeton"],
+              ] as const
+            ).map(([mode, label]) => (
+              <label className="setting" key={mode}>
+                <span>{label}</span>
+                <input
+                  type="radio"
+                  name="ecran"
+                  checked={screenMode === mode}
+                  onChange={() => chooseScreen(mode)}
+                />
+              </label>
+            ))}
+            {screenMode === "yeux" && (
+              <label className="setting">
+                <span>Rendu des yeux</span>
+                <select
+                  value={eyesSnapshot.render}
+                  onChange={(e) => chooseRender(e.target.value as EyeRenderId)}
+                >
+                  {EYE_RENDERS.map((render) => (
+                    <option key={render.id} value={render.id}>
+                      {render.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {screenMode === "yeux" && eyesSnapshot.render === "mosaique" && (
+              <label className="setting">
+                <span>Forme des yeux</span>
+                <select
+                  value={eyesSnapshot.style}
+                  onChange={(e) => chooseStyle(e.target.value as EyeStyleId)}
+                >
+                  {EYE_STYLES.map((style) => (
+                    <option key={style.id} value={style.id}>
+                      {style.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {screenMode === "yeux" && (
+              <label className="setting setting-range">
+                <span>Taille des yeux</span>
+                <input
+                  type="range"
+                  min={MIN_EYE_SCALE}
+                  max={eyesSnapshot.maxScale}
+                  step={0.1}
+                  value={eyesSnapshot.scale}
+                  aria-valuetext={`fois ${eyesSnapshot.scale.toLocaleString("fr")}`}
+                  onChange={(e) => chooseScale(Number(e.target.value))}
+                />
+                <output>×{eyesSnapshot.scale.toLocaleString("fr")}</output>
+              </label>
+            )}
+            {screenMode === "yeux" && (
+              <label className="setting">
+                <span>Couleur des yeux</span>
+                <select
+                  value={eyesSnapshot.palette}
+                  onChange={(e) => choosePalette(e.target.value as EyePaletteId)}
+                >
+                  {EYE_PALETTES.map((palette) => (
+                    <option key={palette.id} value={palette.id}>
+                      {palette.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </fieldset>
           <label className="setting">
             <span>Antenne experimentale</span>
             <input
@@ -342,14 +532,14 @@ export default function App() {
         <section className="virtual-keyboard" aria-label="Clavier du terminal">
           <div className="number-keys">
             {"1234567890".split("").map((key) => (
-              <button key={key} onClick={() => terminal.sendKey(key)}>
+              <button key={key} onClick={() => sendKey(key)}>
                 {key}
               </button>
             ))}
           </div>
           <div className="function-keys">
             {["Sommaire", "Correction", "Annulation", "Envoi"].map((key) => (
-              <button key={key} onClick={() => terminal.sendKey(key)}>
+              <button key={key} onClick={() => sendKey(key)}>
                 {key}
               </button>
             ))}
@@ -417,9 +607,9 @@ export default function App() {
             <div>
               <strong>3615 LEMEGETON</strong>
               <span>
-                {snapshot.frame.title === "3615 LEMEGETON"
+                {activeFrame.title === "3615 LEMEGETON"
                   ? "SOMMAIRE"
-                  : snapshot.frame.title}
+                  : activeFrame.title}
               </span>
             </div>
             <span className="online">EN LIGNE</span>
@@ -470,16 +660,16 @@ export default function App() {
         </div>
         <div className="console-bottom">
           <nav aria-label="Navigation principale">
-            <button onClick={() => terminal.go("home")} className="home-key">
+            <button onClick={() => goTo("home")} className="home-key">
               Sommaire
             </button>
-            <button onClick={() => terminal.go("connection")}>
+            <button onClick={() => goTo("connection")}>
               <span>1</span>Entrer
             </button>
-            <button onClick={() => terminal.go("archives")}>
+            <button onClick={() => goTo("archives")}>
               <span>2</span>Archives
             </button>
-            <button onClick={() => terminal.go("messages")}>
+            <button onClick={() => goTo("messages")}>
               <span>3</span>Messages
             </button>
           </nav>

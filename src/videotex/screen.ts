@@ -7,6 +7,8 @@ export interface Cell {
   bg: ColorIndex;
   blink?: boolean;
   mosaic?: number;
+  /** Videotex disjoint mosaic : sextants drawn apart. */
+  separated?: boolean;
 }
 export interface TerminalAction {
   key: string;

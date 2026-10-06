@@ -989,3 +989,48 @@ html:has(.experience.transparent) body,
 .experience.transparent {
   background: transparent;
 }
+.setting-group {
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  margin: 0;
+  padding: 4px 0 6px;
+}
+.setting-group legend {
+  font:
+    500 10px "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 0;
+}
+.setting-group .setting:last-child {
+  border-bottom: 0;
+}
+.setting select {
+  background: var(--raised);
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+.setting-range input[type="range"] {
+  flex: 1;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  accent-color: var(--sage-key);
+}
+.setting-range output {
+  font:
+    11px "IBM Plex Mono",
+    monospace;
+  color: var(--gold);
+  min-width: 34px;
+  text-align: right;
+}
+.setting-master span {
+  font-weight: 500;
+  color: var(--gold);
+}

@@ -21,14 +21,34 @@ interface Props {
   effects: CrtEffects;
   reducedMotion: boolean;
 }
-const vertexShader = `varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
+const vertexShader = `
+  varying vec2 vUv; varying vec3 vNormal; varying vec3 vView;
+  void main(){
+    vUv=uv;
+    vNormal=normalize(normalMatrix*normal);
+    vec4 view=modelViewMatrix*vec4(position,1.0);
+    vView=-view.xyz;
+    gl_Position=projectionMatrix*view;
+  }`;
+// "curved" is the optional CRT image distortion. The glass itself (bulged
+// geometry, highlight following the curve, darker rim) is always rendered.
 const fragmentShader = `
-  uniform sampler2D content; uniform float curved; varying vec2 vUv;
+  uniform sampler2D content; uniform float curved;
+  varying vec2 vUv; varying vec3 vNormal; varying vec3 vView;
   void main(){
     vec2 p=vUv*2.0-1.0;
     vec2 uv=(p*(1.0+curved*.018*dot(p,p))+1.0)*.5;
     vec3 color=texture2D(content,uv).rgb;
     if(uv.x<0.0||uv.x>1.0||uv.y<0.0||uv.y>1.0)color=vec3(.012,.025,.018);
+    vec3 n=normalize(vNormal); vec3 v=normalize(vView);
+    float facing=clamp(dot(n,v),0.0,1.0);
+    // Darker rim where the glass turns away, as on a cathode-ray tube.
+    color*=mix(.5,1.0,pow(facing,1.2));
+    // Window-like reflection : a sharp highlight and a broad sheen on the bulge.
+    vec3 h=normalize(normalize(vec3(-.45,.7,.55))+v);
+    float d=max(dot(n,h),0.0);
+    float sheen=pow(d,90.0)*.35+pow(d,12.0)*.07;
+    color+=sheen*vec3(1.0,.95,.86);
     gl_FragColor=vec4(color,1.0);
     #include <colorspace_fragment>
   }`;
@@ -120,16 +140,20 @@ export function MinitelScreen({ source, mesh, effects, reducedMotion }: Props) {
           );
         texture.needsUpdate = true;
         invalidate();
-      } else if (
-        current.source.kind !== "videotex" &&
-        current.source.continuous
-      ) {
-        texture.needsUpdate = true;
-        invalidate();
       }
     }, 125);
     return () => window.clearInterval(timer);
   }, [canvas, texture, invalidate]);
+  // Continuous external sources (animated canvas, video) : upload at ~30 fps.
+  const continuous = source.kind !== "videotex" && !!source.continuous;
+  useEffect(() => {
+    if (!continuous) return;
+    const timer = window.setInterval(() => {
+      texture.needsUpdate = true;
+      invalidate();
+    }, 33);
+    return () => window.clearInterval(timer);
+  }, [continuous, texture, invalidate]);
   useFrame(() => {
     if (source.kind === "texture" && source.continuous)
       texture.needsUpdate = true;
