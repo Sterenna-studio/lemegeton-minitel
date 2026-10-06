@@ -4,7 +4,8 @@ import { Minitel, type MinitelProps } from "../minitel/Minitel";
 import { Lighting } from "./Lighting";
 import { Camera, type CameraCommand } from "./Camera";
 import { Table, TABLE_TOP } from "./Table";
-import { framings } from "./framing";
+import { cameraTarget, framings } from "./framing";
+import { genericProfile } from "../minitel/profiles";
 import type { Vec3 } from "../minitel/types";
 function Metrics({
   onMetrics,
@@ -99,7 +100,12 @@ export function Scene({
         aria-label="Minitel 3D interactif"
       >
         <Lighting />
-        <Camera command={command} framing={framings[table ? "desk" : "floor"]} onCamera={onCamera} />
+        <Camera
+          command={command}
+          framing={framings[table ? "desk" : "floor"]}
+          target={cameraTarget(props.profile ?? genericProfile)}
+          onCamera={onCamera}
+        />
         <ContextMonitor onError={onError} />
         <Minitel {...props} />
         {table && (

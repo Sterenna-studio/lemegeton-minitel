@@ -24,6 +24,8 @@ export interface ModelProfile {
   normalize: boolean;
   screenNames: string[];
   screenFallback: { position: Vec3; rotation?: Vec3; size: [number, number] };
+  /** Centre of the screen in the presentation frame ; the camera aims at it. */
+  screenCenter?: Vec3;
   anchors: Record<string, Anchor>;
   keys: Record<string, string>;
 }

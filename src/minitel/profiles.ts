@@ -14,6 +14,8 @@ export const genericProfile: ModelProfile = {
 export const suppliedProfile: ModelProfile = {
   ...genericProfile,
   normalize: false,
+  // Bounds centre of Minitel_Screen in public/models/minitel.glb.
+  screenCenter: [0, 1.282, 0.743],
   keys: {
     Object_51: "1",
     Object_52: "2",
@@ -71,6 +73,8 @@ export const televisionProfile: ModelProfile = {
   ...genericProfile,
   normalize: false,
   screenFallback: { position: [0, 1.73, 0.5], size: [1.34, 1.12] },
+  // Bounds centre of Minitel_Screen in public/models/television-1950.glb.
+  screenCenter: [0.014, 1.732, 0.46],
   anchors: {
     top: { position: [0, 2.4, 0] },
     left: { position: [-1.78, 1.2, 0] },

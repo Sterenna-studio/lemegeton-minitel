@@ -157,6 +157,9 @@ Pour ajouter un modele :
   d'appoint (`src/scene/Table.tsx`). Le terminal reste a l'origine : la table est
   descendue de sa hauteur, 5,95 unites. La camera passe alors au cadrage `desk` de
   `src/scene/framing.ts`, et le televiseur garde le cadrage `floor`.
+- **Camera** : elle vise toujours le centre de l'ecran du modele (`screenCenter` du
+  `ModelProfile`, ou a defaut `screenFallback.position`). Les vues trois quarts, face,
+  profil et dos sont des decalages depuis ce point.
 - **Inventaire** : les cartes du bas (`src/components/ModelInventory.tsx`) forment
   un groupe radio, au clic comme aux fleches. L'effet 3D est purement CSS (perspective,
   transformations) et se fige avec `prefers-reduced-motion`. Les miniatures detourees

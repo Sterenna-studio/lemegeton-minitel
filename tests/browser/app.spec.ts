@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { PerspectiveCamera, Vector3 } from "three";
-import { framings } from "../../src/scene/framing";
+import { cameraTarget, framings, viewPosition } from "../../src/scene/framing";
+import { suppliedProfile } from "../../src/minitel/profiles";
 test("lecture Canvas apres changement de visibilite avec frame stable", async ({ page }) => {
   await page.goto("/");
   const alpha = await page.evaluate(async () => {
@@ -85,6 +86,14 @@ async function scenePixels(page: Page) {
     };
   });
 }
+// The camera aims at the centre of the screen : the green phosphor block must
+// sit around the middle of the canvas.
+function expectScreenCentered(p: Awaited<ReturnType<typeof scenePixels>>) {
+  const cx = (p.minX + p.maxX) / 2 / p.width;
+  const cy = (p.minY + p.maxY) / 2 / p.height;
+  expect(Math.abs(cx - 0.5)).toBeLessThan(0.06);
+  expect(Math.abs(cy - 0.5)).toBeLessThan(0.06);
+}
 test("asset, ecran dynamique, navigation, camera et responsive", async ({
   page,
 }, testInfo) => {
@@ -106,6 +115,7 @@ test("asset, ecran dynamique, navigation, camera et responsive", async ({
   expect(initial.maxX).toBeLessThan(initial.width - 2);
   expect(initial.minY).toBeGreaterThan(2);
   expect(initial.maxY).toBeLessThan(initial.height - 2);
+  expectScreenCentered(initial);
   await page.screenshot({
     path: `docs/verification/${testInfo.project.name}-home.png`,
   });
@@ -219,8 +229,9 @@ test("touche 3D, clavier physique, zoom et inspection", async ({
   // Default model : Terminatel 255, on its table ("desk" framing).
   const desk = framings.desk;
   const narrow = box.width / box.height < 1.2;
-  camera.position.set(...(narrow ? desk.front.narrow : desk.front.wide));
-  camera.lookAt(...desk.target);
+  const target = cameraTarget(suppliedProfile);
+  camera.position.set(...viewPosition(target, narrow ? desk.front.narrow : desk.front.wide));
+  camera.lookAt(...target);
   camera.updateMatrixWorld();
   const projected = new Vector3(0.595, 0.275, 1.47).project(camera);
   await page.mouse.click(
@@ -318,6 +329,7 @@ test("bascule entre les modeles du catalogue", async ({ page }) => {
   const television = await scenePixels(page);
   expect(television.object).toBeGreaterThan(1000);
   expect(television.colored).toBeGreaterThan(100);
+  expectScreenCentered(television);
   expect(television.hash).not.toBe(terminatel.hash);
   await switcher.getByRole("radio", { name: "Televiseur 1950" }).focus();
   await page.keyboard.press("ArrowLeft");
