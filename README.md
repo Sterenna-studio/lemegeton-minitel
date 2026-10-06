@@ -48,6 +48,27 @@ npm test               # 6 tests unitaires Vitest
 npm run test:browser   # 12 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
+## En ligne
+
+https://sterenna.fr/minitel/ — publié par [`.github/workflows/deploy-ovh.yml`](.github/workflows/deploy-ovh.yml)
+à chaque push sur `main` (ou manuellement via *Run workflow*) : contrôles,
+`npm run build:ovh` (base `/minitel/`), puis `rsync --delete` de `dist/` vers
+`~/www/minitel/` sur l'hébergement OVH, et test de fumée.
+
+- Secrets utilisés : `OVH_SSH_KEY`, `OVH_HOST`, `OVH_USER`, définis au niveau de
+  l'organisation. Sur le plan GitHub Free, ils ne sont transmis qu'aux dépôts
+  **publics** : rendre ce dépôt privé casserait le déploiement.
+- Le site sterenna.fr est déployé dans la même racine par `MutenRock/sterenna`,
+  avec `rsync --delete`. Son workflow exclut `/minitel/` : ne pas retirer cette exclusion.
+- `public/.htaccess` déclare le type MIME du GLB et les durées de cache.
+
+Pour vérifier localement le build de production :
+
+```bash
+npm run build:ovh
+npx vite preview --base=/minitel/   # http://127.0.0.1:4173/minitel/
+```
+
 ## Architecture
 
 ```

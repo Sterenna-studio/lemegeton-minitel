@@ -112,9 +112,10 @@ export default function App() {
   const [camera, setCamera] = useState<Vec3>();
   const [metrics, setMetrics] = useState({ fps: 0, calls: 0 });
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const model = params.get("model") ?? "/models/minitel.glb";
-  const profile =
-    model === "/models/minitel.glb" ? suppliedProfile : genericProfile;
+  // BASE_URL keeps the bundled model reachable when the app is served from a sub-path (/minitel/).
+  const suppliedModel = `${import.meta.env.BASE_URL}models/minitel.glb`;
+  const model = params.get("model") ?? suppliedModel;
+  const profile = model === suppliedModel ? suppliedProfile : genericProfile;
   const source: ScreenSource = useMemo(
     () => ({ kind: "videotex", frame: snapshot.frame }),
     [snapshot.frame],
@@ -160,7 +161,7 @@ export default function App() {
   return (
     <main className="experience">
       <header className="masthead">
-        <a href="/" className="brand" aria-label="Minitel, accueil">
+        <a href={import.meta.env.BASE_URL} className="brand" aria-label="Minitel, accueil">
           <Monitor size={26} />
           <h1>
             MINITEL<span>FRANCE / 1982</span>
