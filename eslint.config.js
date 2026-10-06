@@ -19,6 +19,13 @@ export default ts.config(
     files: ["**/*.{ts,tsx,js,mjs}"],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
     plugins: { "react-hooks": hooks },
-    rules: { ...hooks.configs.recommended.rules },
+    // Seules les deux règles historiques des hooks. Le preset `recommended`
+    // de la v7 ajoute les règles du React Compiler (immutability, use-memo…),
+    // que le projet n'utilise pas : les textures et matériaux Three.js y sont
+    // modifiés impérativement par conception (needsUpdate, uniforms).
+    rules: {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
   },
 );
