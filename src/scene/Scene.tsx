@@ -85,14 +85,14 @@ export function Scene({
         dpr={[1, 1.5]}
         camera={{ fov: 40, near: 0.1, far: 80, position: [4, 3.2, 6.4] }}
         gl={{
+          // Transparent canvas : the page background (CSS marble) shows through.
+          alpha: true,
           antialias: true,
           powerPreference: "high-performance",
           preserveDrawingBuffer: import.meta.env.DEV,
         }}
         aria-label="Minitel 3D interactif"
       >
-        <color attach="background" args={["#e4e8e7"]} />
-        <fog attach="fog" args={["#e4e8e7", 15, 35]} />
         <Lighting />
         <Camera command={command} onCamera={onCamera} />
         <ContextMonitor onError={onError} />
@@ -103,7 +103,8 @@ export function Scene({
           receiveShadow
         >
           <planeGeometry args={[100, 100]} />
-          <meshStandardMaterial color="#e4e8e7" roughness={1} />
+          {/* Shadow catcher only : the floor itself stays invisible. */}
+          <shadowMaterial opacity={0.55} color="#000000" />
         </mesh>
         {import.meta.env.DEV && onMetrics && <Metrics onMetrics={onMetrics} />}
       </Canvas>

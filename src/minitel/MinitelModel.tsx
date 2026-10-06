@@ -16,6 +16,14 @@ import type { ThreeEvent } from "@react-three/fiber";
 import type { ModelInfo, ModelProfile, ScreenSource } from "./types";
 import type { CrtEffects } from "../videotex/renderer";
 import { MinitelScreen } from "./MinitelScreen";
+/** Role of a mesh, as seen by a finish. */
+export type MeshRole = "body" | "key";
+/**
+ * Optional material pass applied to every mesh except the screen, after cloning.
+ * Lets an experience restyle a model (colour, finish) without editing the GLB.
+ * Keep the function stable (module level) : it is part of the memo key.
+ */
+export type MaterialFinish = (mesh: Mesh, material: Material, role: MeshRole) => void;
 export interface DebugSettings {
   axes: boolean;
   wireframe: boolean;
@@ -25,6 +33,7 @@ export interface DebugSettings {
 interface Props {
   model: string;
   profile: ModelProfile;
+  finish?: MaterialFinish;
   screenSource: ScreenSource;
   effects: CrtEffects;
   reducedMotion: boolean;
@@ -36,6 +45,7 @@ interface Props {
 export function MinitelModel({
   model,
   profile,
+  finish,
   screenSource,
   effects,
   reducedMotion,
@@ -87,6 +97,19 @@ export function MinitelModel({
           (name) => m.name.toLowerCase() === name.toLowerCase(),
         ) || m.userData.role === "screen",
     );
+    if (finish)
+      meshes.forEach((mesh) => {
+        if (mesh === screen) return;
+        const role: MeshRole =
+          profile.keys[mesh.name] !== undefined ||
+          typeof mesh.userData.key === "string" ||
+          mesh.name.startsWith("Key_")
+            ? "key"
+            : "body";
+        (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).forEach(
+          (material) => finish(mesh, material, role),
+        );
+      });
     let fallback: Mesh | undefined;
     if (!screen) {
       fallback = new Mesh(
@@ -127,7 +150,7 @@ export function MinitelModel({
         textures: textures.size,
       },
     };
-  }, [gltf.scene, profile]);
+  }, [gltf.scene, profile, finish]);
   useEffect(() => {
     onInfo?.(prepared.info);
   }, [prepared, onInfo]);
