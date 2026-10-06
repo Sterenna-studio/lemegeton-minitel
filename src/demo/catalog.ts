@@ -25,6 +25,8 @@ export interface ModelEntry {
   file: string;
   profile: ModelProfile;
   finish?: MaterialFinish;
+  /** Shown on the side table (desk terminals) or standing on the floor. */
+  onTable: boolean;
   credit: ModelCredit;
 }
 
@@ -51,8 +53,9 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
   }
   material.map = marbleTexture();
   material.color.set("#ffffff");
-  material.roughness = 0.28;
-  material.metalness = 0.05;
+  // Matte plastic : the marble reads through soft highlights, not a varnish.
+  material.roughness = 0.68;
+  material.metalness = 0;
   material.needsUpdate = true;
 };
 
@@ -69,6 +72,7 @@ export const catalog: ModelEntry[] = [
     file: `${base}models/minitel.glb`,
     profile: suppliedProfile,
     finish: terminatelFinish,
+    onTable: true,
     credit: { ...okotaru, changes: "copie adaptee, finition marbre procedurale" },
   },
   {
@@ -80,6 +84,7 @@ export const catalog: ModelEntry[] = [
     tagline: "FRANCE / 1982",
     file: `${base}models/minitel.glb`,
     profile: suppliedProfile,
+    onTable: true,
     credit: okotaru,
   },
   {
@@ -91,6 +96,7 @@ export const catalog: ModelEntry[] = [
     tagline: "TUBE CATHODIQUE / 1950",
     file: `${base}models/television-1950.glb`,
     profile: televisionProfile,
+    onTable: false,
     credit: {
       title: "1950's Retro Television",
       author: "Huuxloc",
@@ -108,3 +114,13 @@ export const defaultEntry = catalog[0];
 export function findEntry(id: string | null): ModelEntry {
   return catalog.find((entry) => entry.id === id) ?? defaultEntry;
 }
+
+export const tableCredit: ModelCredit = {
+  title: "Wood Drawer & Tables Set",
+  author: "brandon_grey",
+  source:
+    "https://sketchfab.com/3d-models/wood-drawer-tables-set-958db224ef514b2eabd69ac0a4e59ca0",
+  license: "CC BY 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+  changes: "table d'appoint extraite, textures JPEG",
+};

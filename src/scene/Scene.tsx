@@ -1,8 +1,10 @@
-import { Component, useEffect, useRef, type ReactNode } from "react";
+import { Component, Suspense, useEffect, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Minitel, type MinitelProps } from "../minitel/Minitel";
 import { Lighting } from "./Lighting";
 import { Camera, type CameraCommand } from "./Camera";
+import { Table, TABLE_TOP } from "./Table";
+import { framings } from "./framing";
 import type { Vec3 } from "../minitel/types";
 function Metrics({
   onMetrics,
@@ -70,8 +72,11 @@ export function Scene({
   onError,
   onCamera,
   onMetrics,
+  table = false,
   ...props
 }: MinitelProps & {
+  /** Put the terminal on the side table (its top is at y = 0). */
+  table?: boolean;
   command: CameraCommand;
   onError: (message: string) => void;
   onCamera?: (position: Vec3) => void;
@@ -94,12 +99,17 @@ export function Scene({
         aria-label="Minitel 3D interactif"
       >
         <Lighting />
-        <Camera command={command} onCamera={onCamera} />
+        <Camera command={command} framing={framings[table ? "desk" : "floor"]} onCamera={onCamera} />
         <ContextMonitor onError={onError} />
         <Minitel {...props} />
+        {table && (
+          <Suspense fallback={null}>
+            <Table />
+          </Suspense>
+        )}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -0.02, 0]}
+          position={[0, table ? -TABLE_TOP - 0.02 : -0.02, 0]}
           receiveShadow
         >
           <planeGeometry args={[100, 100]} />

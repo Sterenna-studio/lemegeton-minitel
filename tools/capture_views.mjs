@@ -1,4 +1,5 @@
-// Captures the views shown on the documentation page, from the 3D app itself :
+// Captures, from the 3D app itself, the views of the documentation page and the
+// cut-out miniatures of the inventory (transparent PNG, cropped to the model) :
 // node tools/capture_views.mjs [http://127.0.0.1:5174]
 // Needs a running dev or preview server. Uses the installed Edge, like the tests.
 import { chromium } from "@playwright/test";
@@ -9,10 +10,12 @@ import path from "node:path";
 const base = (process.argv[2] ?? "http://127.0.0.1:5174").replace(/\/$/, "");
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "public/documentation/vues");
+const minis = path.join(root, "public/inventaire");
 const models = ["terminatel-255", "minitel-1", "televiseur-1950"];
 const views = ["trois-quarts", "face", "profil", "dos"];
 
 await mkdir(out, { recursive: true });
+await mkdir(minis, { recursive: true });
 const browser = await chromium.launch({
   channel: "msedge",
   args: ["--enable-webgl", "--ignore-gpu-blocklist"],
@@ -30,6 +33,37 @@ try {
       await page.locator('[data-testid="scene"]').screenshot({ path: file, type: "jpeg", quality: 82 });
       console.log("capture", path.relative(root, file));
     }
+  // Miniatures : transparent background, cropped to the opaque pixels of the
+  // model (the shadow catcher is translucent and ignored).
+  await page.setViewportSize({ width: 560, height: 560 });
+  for (const model of models) {
+    await page.goto(`${base}/?modele=${model}&capture=1&transparent=1`);
+    await page.waitForFunction(() => !document.body.textContent?.includes("Chargement du modele"), null, { timeout: 30000 });
+    await page.waitForTimeout(1500);
+    const box = await page.locator('[data-testid="scene"] canvas').evaluate((canvas) => {
+      const gl = canvas.getContext("webgl2");
+      const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+      const pixels = new Uint8Array(w * h * 4);
+      gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+      let minX = w, maxX = 0, minY = h, maxY = 0;
+      for (let i = 0; i < pixels.length; i += 4)
+        if (pixels[i + 3] >= 250) {
+          const x = (i / 4) % w, y = h - 1 - Math.floor(i / 4 / w);
+          minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+        }
+      const rect = canvas.getBoundingClientRect(), ratio = rect.width / w, pad = 6;
+      return {
+        x: rect.left + Math.max(0, minX * ratio - pad),
+        y: rect.top + Math.max(0, minY * ratio - pad),
+        width: Math.min(rect.width, (maxX - minX) * ratio + pad * 2),
+        height: Math.min(rect.height, (maxY - minY) * ratio + pad * 2),
+      };
+    });
+    const file = path.join(minis, `${model}.png`);
+    await page.screenshot({ path: file, clip: box, omitBackground: true });
+    console.log("miniature", path.relative(root, file), Math.round(box.width), "x", Math.round(box.height));
+  }
   if (errors.length) throw new Error(errors.join("\n"));
 } finally {
   await browser.close();

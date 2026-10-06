@@ -151,6 +151,22 @@ Pour ajouter un modele :
 3. ajouter l'entree au catalogue, avec un credit complet ;
 4. completer `public/models/ATTRIBUTION.md` et `docs/ASSETS.md`.
 
+## Table, inventaire et eclairage
+
+- **Table** : une entree du catalogue avec `onTable: true` pose le terminal sur la table
+  d'appoint (`src/scene/Table.tsx`). Le terminal reste a l'origine : la table est
+  descendue de sa hauteur, 5,95 unites. La camera passe alors au cadrage `desk` de
+  `src/scene/framing.ts`, et le televiseur garde le cadrage `floor`.
+- **Inventaire** : les cartes du bas (`src/components/ModelInventory.tsx`) forment
+  un groupe radio, au clic comme aux fleches. L'effet 3D est purement CSS (perspective,
+  transformations) et se fige avec `prefers-reduced-motion`. Les miniatures detourees
+  `public/inventaire/*.png` sont produites par `tools/capture_views.mjs`, avec
+  `?capture=1&transparent=1`.
+- **Eclairage** : la lumiere est chaude et les reflets faibles, avec un environnement
+  a `environmentIntensity` 0,4 et des finitions mates. Une lampe lointaine ambree
+  respire, a cote d'un halo CSS accorde. Pour rester econome, elle demande des
+  images a 20 Hz et s'arrete en mouvement reduit.
+
 ## Remplacer le modele
 
 Lire [MODEL_PREPARATION.md](MODEL_PREPARATION.md).

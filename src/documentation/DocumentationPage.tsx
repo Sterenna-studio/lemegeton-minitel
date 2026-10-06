@@ -190,7 +190,8 @@ export function DocumentationPage() {
       </main>
       <footer className="doc-footer">
         Modeles 3D sous licence CC BY 4.0 : Minitel 1982-France par okotaru,
-        1950&apos;s Retro Television par Huuxloc. Marbre procedural.
+        1950&apos;s Retro Television par Huuxloc, Wood Drawer &amp; Tables Set par
+        brandon_grey. Marbre procedural.
       </footer>
     </div>
   );

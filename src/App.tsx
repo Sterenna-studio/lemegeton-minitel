@@ -26,7 +26,8 @@ import { useMinitel } from "./hooks/useMinitel";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { defaultEffects, type CrtEffects } from "./videotex/renderer";
 import { genericProfile } from "./minitel/profiles";
-import { catalog, findEntry } from "./demo/catalog";
+import { catalog, findEntry, tableCredit } from "./demo/catalog";
+import { ModelInventory } from "./components/ModelInventory";
 import { marbleDataUrl } from "./demo/marble";
 import { MinitelAttachment } from "./minitel/MinitelAttachment";
 import type { ModelInfo, ScreenSource, Vec3 } from "./minitel/types";
@@ -124,6 +125,10 @@ export default function App() {
   const model = custom ?? entry.file;
   const profile = custom ? genericProfile : entry.profile;
   const finish = custom ? undefined : entry.finish;
+  // ?capture=1 : machine alone (no table), for documentation views and the
+  // inventory miniatures ; &transparent=1 also drops the page background.
+  const capture = params.has("capture");
+  const onTable = !custom && !capture && entry.onTable;
   function chooseModel(id: string) {
     const next = findEntry(id);
     setEntry(next);
@@ -132,15 +137,6 @@ export default function App() {
     url.searchParams.set("modele", next.id);
     url.searchParams.delete("model");
     window.history.replaceState(null, "", url);
-  }
-  function switcherKey(event: React.KeyboardEvent) {
-    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
-    if (!step) return;
-    event.preventDefault();
-    const index = catalog.findIndex((item) => item.id === entry.id);
-    const next = catalog[(index + step + catalog.length) % catalog.length];
-    chooseModel(next.id);
-    document.getElementById(`model-${next.id}`)?.focus();
   }
   useEffect(() => {
     // Procedural marble behind the transparent 3D canvas (no photograph).
@@ -189,7 +185,15 @@ export default function App() {
   }
   const fallback = !webgl || !!error;
   return (
-    <main className={params.get("capture") ? "experience capture" : "experience"}>
+    <main
+      className={[
+        "experience",
+        capture && "capture",
+        capture && params.has("transparent") && "transparent",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <header className="masthead">
         <a href={import.meta.env.BASE_URL} className="brand" aria-label="Minitel, accueil">
           <Monitor size={26} />
@@ -197,28 +201,6 @@ export default function App() {
             MINITEL<span>{custom ? "MODELE EXTERNE" : entry.tagline}</span>
           </h1>
         </a>
-        <div
-          className="model-switcher"
-          role="radiogroup"
-          aria-label="Modele 3D"
-          onKeyDown={switcherKey}
-        >
-          {catalog.map((item) => {
-            const checked = !custom && item.id === entry.id;
-            return (
-              <button
-                key={item.id}
-                id={`model-${item.id}`}
-                role="radio"
-                aria-checked={checked}
-                tabIndex={checked || (custom && item === catalog[0]) ? 0 : -1}
-                onClick={() => chooseModel(item.id)}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </div>
         <div className="service">
           <a className="doc-link" href={`${import.meta.env.BASE_URL}documentation/`}>
             <FileText size={14} /> Documentation
@@ -234,6 +216,7 @@ export default function App() {
             model={model}
             profile={profile}
             finish={finish}
+            table={onTable}
             screenSource={source}
             effects={effects}
             command={command}
@@ -267,6 +250,11 @@ export default function App() {
           <strong>{custom ? "Modele externe" : entry.title}</strong>
           <span>{custom ? custom : entry.subtitle}</span>
         </div>
+        <ModelInventory
+          entries={catalog}
+          selected={custom ? undefined : entry.id}
+          onSelect={chooseModel}
+        />
         <div className="camera-tools">
           <Tool label="Vue de face" onClick={() => cameraCommand("front")}>
             <Crosshair size={19} />
@@ -524,6 +512,15 @@ export default function App() {
               {entry.credit.license}
             </a>{" "}
             · {entry.credit.changes}
+            {onTable && (
+              <>
+                {" "}· Table :{" "}
+                <a href={tableCredit.source} target="_blank" rel="noreferrer">
+                  {tableCredit.title}
+                </a>{" "}
+                par {tableCredit.author} / {tableCredit.license}
+              </>
+            )}
           </span>
         )}
       </div>
