@@ -30,6 +30,7 @@ const minitelAsset: Fact[] = [
   { label: "Textures", value: "11 images d'origine (32 a 1024 px)" },
   { label: "Modele source", value: "Minitel 1982-France, okotaru · CC BY 4.0" },
   { label: "Preparation", value: "tools/prepare_model.py : orientation, echelle, ecran extrait" },
+  { label: "Presentation", value: "pose sur une table d'appoint (Wood Drawer & Tables Set, brandon_grey · CC BY 4.0)" },
 ];
 
 export const modelDocs: ModelDoc[] = [
@@ -49,7 +50,8 @@ export const modelDocs: ModelDoc[] = [
     ],
     asset: [
       ...minitelAsset.slice(0, 3),
-      { label: "Finition 3D", value: "marbre procedural (src/demo/marble.ts), aucune photo utilisee" },
+      { label: "Finition 3D", value: "marbre procedural mat (src/demo/marble.ts), aucune photo utilisee" },
+      { label: "Presentation", value: "pose sur une table d'appoint (Wood Drawer & Tables Set, brandon_grey · CC BY 4.0)" },
       minitelAsset[3],
     ],
     note: "Aucune source publique n'a ete trouvee sur ce modele (recherche du 6 octobre 2026). Ces informations viennent uniquement des photos de reference et restent a confirmer.",

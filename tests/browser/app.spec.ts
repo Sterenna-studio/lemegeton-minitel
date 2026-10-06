@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import { PerspectiveCamera, Vector3 } from "three";
+import { framings } from "../../src/scene/framing";
 test("lecture Canvas apres changement de visibilite avec frame stable", async ({ page }) => {
   await page.goto("/");
   const alpha = await page.evaluate(async () => {
@@ -51,8 +52,15 @@ async function scenePixels(page: Page) {
       minY = Infinity,
       maxY = 0;
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 3] >= 250) {
-        object++;
+      if (pixels[i + 3] >= 250) object++;
+      // Bounds follow the green phosphor of the screen : the terminal itself
+      // must stay in frame, while its table may run off the edges.
+      if (
+        pixels[i + 3] >= 250 &&
+        pixels[i + 1] > pixels[i] * 1.2 &&
+        pixels[i + 1] > pixels[i + 2] * 1.05
+      ) {
+        colored++;
         const x = (i / 4) % gl.drawingBufferWidth;
         const y = Math.floor(i / 4 / gl.drawingBufferWidth);
         minX = Math.min(minX, x);
@@ -60,11 +68,6 @@ async function scenePixels(page: Page) {
         minY = Math.min(minY, y);
         maxY = Math.max(maxY, y);
       }
-      if (
-        pixels[i + 1] > pixels[i] * 1.2 &&
-        pixels[i + 1] > pixels[i + 2] * 1.05
-      )
-        colored++;
       hash =
         (hash + pixels[i] * 3 + pixels[i + 1] * 5 + pixels[i + 2] * 7) %
         1000000007;
@@ -213,8 +216,11 @@ test("touche 3D, clavier physique, zoom et inspection", async ({
   const box = await canvas.boundingBox();
   if (!box) throw new Error("Canvas absent");
   const camera = new PerspectiveCamera(40, box.width / box.height, 0.1, 80);
-  camera.position.set(0, 2.5, testInfo.project.name === "mobile" ? 9.5 : 7.3);
-  camera.lookAt(0, 1, 0.3);
+  // Default model : Terminatel 255, on its table ("desk" framing).
+  const desk = framings.desk;
+  const narrow = box.width / box.height < 1.2;
+  camera.position.set(...(narrow ? desk.front.narrow : desk.front.wide));
+  camera.lookAt(...desk.target);
   camera.updateMatrixWorld();
   const projected = new Vector3(0.595, 0.275, 1.47).project(camera);
   await page.mouse.click(
