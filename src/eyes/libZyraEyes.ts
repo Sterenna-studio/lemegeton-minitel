@@ -9,6 +9,12 @@ const FULL = 0x7f;
 const EMPTY = 0x20;
 const TOP = 0x70;
 const BOTTOM = 0x2f;
+// Coins arrondis de la capsule. En G1, 0x70 remplit le TIERS BAS de la cellule
+// et 0x2F les DEUX TIERS HAUTS : LibZyra place [TOP ... BOTTOM] sur une meme
+// rangee, ce qui arrondit le bout gauche et cisaille le bout droit. Ici les deux
+// bouts d'une rangee recoivent le meme coin, symetrique entre haut et bas.
+const ROUND_TOP = 0x70; // rangee du haut : seul le tiers bas est allume
+const ROUND_BOTTOM = 0x23; // rangee du bas : seul le tiers haut est allume
 const LEFT = 10;
 const RIGHT = 24;
 const repeat = (byte: number, count: number) => Array(count).fill(byte);
@@ -25,9 +31,9 @@ const both = (rows: [number, VideotexColor, number[]][]): RowPatch[] => [
 
 const openEyes = (gazeX: number, c: VideotexColor) =>
   both([
-    [9, c, [TOP, FULL, FULL, FULL, FULL, FULL, BOTTOM]],
+    [9, c, [ROUND_TOP, FULL, FULL, FULL, FULL, FULL, ROUND_TOP]],
     [10, c, pupilRow(gazeX)],
-    [11, c, [BOTTOM, FULL, FULL, FULL, FULL, FULL, TOP]],
+    [11, c, [ROUND_BOTTOM, FULL, FULL, FULL, FULL, FULL, ROUND_BOTTOM]],
   ]);
 const closedEyes = (c: VideotexColor) =>
   both([
@@ -44,7 +50,7 @@ const halfEyes = (gazeX: number, c: VideotexColor) =>
 const happyEyes = (c: VideotexColor) =>
   both([
     [9, c, repeat(EMPTY, 7)],
-    [10, c, [BOTTOM, FULL, FULL, FULL, FULL, FULL, TOP]],
+    [10, c, [ROUND_TOP, FULL, FULL, FULL, FULL, FULL, ROUND_TOP]],
     [11, c, repeat(FULL, 7)],
   ]);
 function angryEyes(gazeX: number, c: VideotexColor): RowPatch[] {
