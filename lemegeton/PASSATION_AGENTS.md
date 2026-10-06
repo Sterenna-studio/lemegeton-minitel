@@ -62,8 +62,8 @@ Entrees de code :
 - `src/components/AccessibleTerminal.tsx` : texte et actions DOM synchronises.
 - `src/scene` : camera responsive, lumiere, contexte WebGL et fallback.
 
-Lire [README Web](07_WEB_MINITEL/README.md) et
-[MODEL_PREPARATION](07_WEB_MINITEL/docs/MODEL_PREPARATION.md) avant de changer
+Lire [README Web](../docs/USAGE.md) et
+[MODEL_PREPARATION](../docs/MODEL_PREPARATION.md) avant de changer
 un asset. Le composant Minitel s'utilise dans un Canvas R3F ; fournir aussi le
 contenu DOM accessible lors d'une integration dans un autre site.
 

@@ -3,7 +3,7 @@
 ## Branche Web Minitel - 6 octobre 2026
 
 Une application independante est ajoutee dans
-[07_WEB_MINITEL](07_WEB_MINITEL/README.md), avec une copie preparee du GLB
+[07_WEB_MINITEL](../docs/USAGE.md), avec une copie preparee du GLB
 Minitel de `06_MODEL`. Le moteur d'ecran est generique ; Lemegéton n'est que
 la premiere demonstration. Cette branche ne remplace ni la segmentation
 PartField prevue ci-dessous, ni la correction du personnage.
@@ -16,12 +16,12 @@ Instructions de modele, nouvel ecran et accessoire dans le README de l'applicati
 
 Premiere version verifiee : compilation, lint, TypeScript, 6 tests unitaires,
 10 tests navigateur et deux essais du build de production. Les captures et
-limites sont dans [VERIFICATION.md](07_WEB_MINITEL/docs/VERIFICATION.md).
+limites sont dans [VERIFICATION.md](../docs/VERIFICATION.md).
 Ces essais ne constituent pas une validation artistique ou sur telephone physique.
 
 - [ ] Valider artistiquement la copie texturee fournie et sa teinte de plastique.
 - [ ] Essayer sur appareils mobiles physiques, puis mesurer textures et draw calls.
-- [ ] Preparer une coque/CRT amelioree selon [MODEL_PREPARATION.md](07_WEB_MINITEL/docs/MODEL_PREPARATION.md), avec profil d'ecran et anchors adaptes.
+- [ ] Preparer une coque/CRT amelioree selon [MODEL_PREPARATION.md](../docs/MODEL_PREPARATION.md), avec profil d'ecran et anchors adaptes.
 - [ ] Choisir ensuite une integration reseau/VDT ou narrative sans coupler le moteur au personnage.
 
 ## Branche personnage - reprise du 5 octobre 2026

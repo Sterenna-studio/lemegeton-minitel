@@ -17,7 +17,7 @@
 
 Revalidation de passation : les neuf controles passes et leurs journaux sont
 indexes dans `../../08_AUDIT/LATEST_VALIDATION.json`. Voir aussi
-[l'audit global](../../08_AUDIT/AUDIT_GLOBAL.md).
+[l'audit global](../lemegeton/08_AUDIT/AUDIT_GLOBAL.md).
 
 Les tests de developpement couvrent WebGL non vide, changement de pixels lors
 de la navigation, camera/orbite/zoom, clic sur la touche 3D 1, clavier physique
