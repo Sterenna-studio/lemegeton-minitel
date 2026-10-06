@@ -60,6 +60,27 @@ Après export :
 - vérifier la surface d'écran ;
 - vérifier les points d'ancrage.
 
+## Préparation du modèle actuel
+
+`tools/prepare_model.py` produit `public/models/minitel.glb` à partir du GLB
+Sketchfab, sans modifier l'original :
+
+1. rotation de −110° autour de la verticale, écran face à +Z dans Three.js ;
+2. mise à l'échelle à 2,4 unités de haut, origine centrée au sol ;
+3. extraction des deux plus grands triangles de la façade (l'écran photographié)
+   en un mesh `Minitel_Screen` doté d'UV propres, retirés de `Minitel_Bezel` ;
+4. renommage du corps en `Minitel_Body`, export GLB.
+
+`tools/audit_model.py` produit les rendus et le rapport de `docs/asset-audit/`.
+
+```bash
+blender --background --python-exit-code 1 --python tools/prepare_model.py -- chemin/vers/minitel_1982-france.glb
+blender --background --python-exit-code 1 --python tools/audit_model.py -- chemin/vers/minitel_1982-france.glb
+```
+
+Sans argument, les scripts cherchent `assets-src/minitel_1982-france.glb`
+(dossier ignoré par Git). Avec Blender 5.2, la sortie est identique à l'octet près.
+
 ## Modèle temporaire
 
 Un modèle placeholder est acceptable pour démarrer le développement Web.
