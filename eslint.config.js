@@ -9,6 +9,8 @@ export default ts.config(
       "node_modules/**",
       "test-results/**",
       "playwright-report/**",
+      // Pipeline personnage et versions archivées : hors du code de l'application.
+      "lemegeton/**",
     ],
   },
   js.configs.recommended,
