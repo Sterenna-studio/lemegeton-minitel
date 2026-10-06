@@ -21,7 +21,7 @@ export function AccessibleTerminal({
         0,
         true,
       );
-  }, [frame]);
+  }, [frame, visible]);
   return (
     <section
       aria-label="Contenu du terminal"

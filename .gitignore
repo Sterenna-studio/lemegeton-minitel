@@ -6,3 +6,14 @@ playwright-report/
 .vite/
 *.tsbuildinfo
 assets-src/
+
+# Pipeline personnage : seuls scripts et documentation sont versionnés
+lemegeton/**/*.glb
+lemegeton/**/*.blend
+lemegeton/**/*.blend1
+lemegeton/**/*.mp4
+lemegeton/**/*.png
+lemegeton/**/*.npz
+lemegeton/**/*.zip
+lemegeton/**/*.log
+lemegeton/09_SAUVEGARDES/

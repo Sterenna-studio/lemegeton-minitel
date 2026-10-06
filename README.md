@@ -45,7 +45,7 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 npm run typecheck
 npm run lint
 npm test               # 6 tests unitaires Vitest
-npm run test:browser   # 10 tests Playwright (Edge headless, serveur dev sur 5174)
+npm run test:browser   # 12 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## Architecture
@@ -65,6 +65,7 @@ public/
 
 tools/          # préparation Blender, inventaire des assets, vérification de production
 tests/          # Vitest (tests/*.test.ts) et Playwright (tests/browser/)
+lemegeton/      # pipeline du personnage : scripts Blender, rigs, rapports, passation
 docs/           # cadrage, guide, préparation du modèle, rapports de vérification
 ```
 
@@ -72,6 +73,19 @@ docs/           # cadrage, guide, préparation du modèle, rapports de vérifica
 - [Préparation du modèle](docs/MODEL_PREPARATION.md), [assets et licences](docs/ASSETS.md).
 - [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
 - [Cadrage du projet](docs/3D_WEB_PROJECT.md).
+
+## Personnage Lemegéton (`lemegeton/`)
+
+Scripts et documentation du pipeline 3D du personnage : rigs V1 à V3, atelier
+Blender V4, rapports d'audit, feuille de route et passation entre agents.
+Point d'entrée : [lemegeton/PASSATION_AGENTS.md](lemegeton/PASSATION_AGENTS.md),
+puis [la pipeline](lemegeton/PIPELINE_TRAVAIL.md).
+
+Les binaires (GLB, `.blend`, rendus, références, sauvegardes) ne sont pas
+versionnés : ils restent dans le dossier de travail local `lemegeton_3d`, où
+les scripts s'exécutent. Leurs empreintes SHA-256 sont dans
+[TRI_MANIFEST.csv](lemegeton/TRI_MANIFEST.csv). Le personnage reste au stade
+expérimental : géométrie, doigts et pivots sont à reprendre avant l'animation.
 
 ## État du MVP
 

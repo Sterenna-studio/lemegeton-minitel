@@ -1,5 +1,30 @@
 import { test, expect, type Page } from "@playwright/test";
 import { PerspectiveCamera, Vector3 } from "three";
+test("lecture Canvas apres changement de visibilite avec frame stable", async ({ page }) => {
+  await page.goto("/");
+  const alpha = await page.evaluate(async () => {
+    const reactUrl = "/node_modules/.vite/deps/react.js";
+    const clientUrl = "/node_modules/.vite/deps/react-dom_client.js";
+    const componentUrl = "/src/components/AccessibleTerminal.tsx";
+    const screenUrl = "/src/videotex/screen.ts";
+    const reactModule: { default: typeof import("react") } = await import(reactUrl);
+    const clientModule: { default: typeof import("react-dom/client") } = await import(clientUrl);
+    const react = reactModule.default;
+    const client = clientModule.default;
+    const component: typeof import("../../src/components/AccessibleTerminal") = await import(componentUrl);
+    const screen: typeof import("../../src/videotex/screen") = await import(screenUrl);
+    const host = document.createElement("div"); document.body.append(host);
+    const root = client.createRoot(host); const frame = screen.createScreen("STABLE");
+    try {
+      root.render(react.createElement(component.AccessibleTerminal, {frame, visible: false, onKey: () => {}}));
+      await new Promise(resolve => setTimeout(resolve, 60));
+      root.render(react.createElement(component.AccessibleTerminal, {frame, visible: true, onKey: () => {}}));
+      await new Promise(resolve => setTimeout(resolve, 60));
+      return host.querySelector("canvas")?.getContext("2d")?.getImageData(0, 0, 1, 1).data[3] ?? 0;
+    } finally {root.unmount(); host.remove();}
+  });
+  expect(alpha).toBe(255);
+});
 async function scenePixels(page: Page) {
   return page.locator('[data-testid="scene"] canvas').evaluate((canvas) => {
     const gl = (canvas as HTMLCanvasElement).getContext("webgl2");

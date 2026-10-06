@@ -9,10 +9,15 @@
 | `npm run typecheck` | OK, TypeScript strict |
 | `npm run lint` | OK |
 | `npm test` | 6 tests unitaires passes |
-| `npm run test:browser` | 10 tests Edge headless passes |
+| `npm run test:browser` | 12 tests Edge headless passes, dont regression de visibilite du lecteur Canvas |
 | `npm run build` | OK ; avertissement non bloquant de taille du bundle |
 | `node tools/verify_production.mjs` | Bureau/mobile OK, GLB HTTP 200, navigation, aucun inspecteur ni erreur console |
 | Sources historiques | 51 SHA-256 compares a `TRI_MANIFEST.csv`, aucun changement |
+| `npm audit --json` | Aucune vulnerabilite connue signalee apres mise a jour Vitest 4.1.11 |
+
+Revalidation de passation : les neuf controles passes et leurs journaux sont
+indexes dans `../../08_AUDIT/LATEST_VALIDATION.json`. Voir aussi
+[l'audit global](../../08_AUDIT/AUDIT_GLOBAL.md).
 
 Les tests de developpement couvrent WebGL non vide, changement de pixels lors
 de la navigation, camera/orbite/zoom, clic sur la touche 3D 1, clavier physique
@@ -29,8 +34,10 @@ dev reste sur http://127.0.0.1:5174/ pour essayer la demonstration.
 
 ## Asset et provenance
 
-Inventaire `06_MODEL` : **241 fichiers**, environ **696 Mo**, dont 200 OBJ
-TELETEL et quatre GLB. Seule la copie Minitel 1982-France est embarquee :
+Inventaire `06_MODEL` : **242 fichiers**, **701 700 017 octets**, dont 200 OBJ
+TELETEL et cinq GLB. `white_mesh.glb` est conserve mais non qualifie (provenance,
+licence et apparence a examiner). L'inventaire initial de 241 fichiers est
+archive dans `08_AUDIT/historique`. Seule la copie Minitel 1982-France est embarquee :
 **3 641 192 octets**, **71 meshes**, **21 943 triangles**, **11 images**,
 resolution des images d'origine de 32 a 1024 pixels. La source a 70 meshes ;
 la separation des deux triangles CRT ajoute un objet, pas de triangles.

@@ -1265,7 +1265,21 @@
       "path": "06_MODEL/Table+-+Minitel.stl",
       "bytes": 2802234,
       "sha256": "6945316cead5126b919dd867ecb4eefaa1b12e3072015805000fe290e2e895b3"
+    },
+    {
+      "path": "06_MODEL/white_mesh.glb",
+      "bytes": 5930248,
+      "sha256": "0e43cca7670118b03da9f857cc74a430a5669c17096b0432c4495451c763c46c",
+      "gltf": {
+        "asset": {
+          "version": "2.0",
+          "generator": "https://github.com/mikedh/trimesh"
+        },
+        "meshes": 1,
+        "images": 0,
+        "triangles": 329478
+      }
     }
   ],
-  "totalBytes": 695769769
+  "totalBytes": 701700017
 }
