@@ -29,3 +29,7 @@ lemegeton/**/__pycache__/
 docs/Minitel Telic*/**/*.webp
 docs/Minitel Telic*/**/*.png
 docs/Minitel Telic*/**/*.jpg
+
+# Archives Minitel/BBS de reference (481 Mo, executables DOS, textes de tiers) :
+# consultation locale uniquement, jamais publiees.
+docs/archive_minitel/

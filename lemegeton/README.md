@@ -33,7 +33,7 @@ Aucun fichier d'origine n'a ete supprime ou modifie lors du rangement du 5 octob
 
 ### Minitel interactif pour le Web
 
-La nouvelle application est dans [07_WEB_MINITEL](07_WEB_MINITEL/README.md).
+La nouvelle application est dans [07_WEB_MINITEL](../docs/USAGE.md).
 Elle utilise une copie du vrai Minitel ajoute dans `06_MODEL`, avec ecran
 Canvas/Videotex dynamique, pages 3615 LEMEGETON, clavier, camera et anchors.
 Les sources 3D originales restent conservees ; ce composant est independant du rig du personnage.
@@ -45,7 +45,7 @@ npm run dev
 ```
 
 URL locale : http://127.0.0.1:5174/. Voir les instructions de remplacement du
-GLB et [preparation Blender](07_WEB_MINITEL/docs/MODEL_PREPARATION.md).
+GLB et [preparation Blender](../docs/MODEL_PREPARATION.md).
 
 ### Personnage et rig
 

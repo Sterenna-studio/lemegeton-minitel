@@ -3,7 +3,7 @@
 ## Objet
 
 Réunir dans le dépôt `Sterenna-studio/lemegeton-minitel` tout le contenu de
-l'ancien dossier de travail `C:\Users\pierr\Downloads\lemegeton_3d`. Après la
+l'ancien dossier de travail `Downloads\lemegeton_3d`. Après la
 migration, `C:\DEV\repos\lemegeton-minitel` est le seul dossier de travail du
 projet.
 

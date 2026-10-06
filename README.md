@@ -113,6 +113,7 @@ docs/           # cadrage, guide, préparation du modèle, rapports de vérifica
 - [Préparation du modèle](docs/MODEL_PREPARATION.md), [assets et licences](docs/ASSETS.md).
 - [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
 - [Cadrage du projet](docs/3D_WEB_PROJECT.md).
+- [Audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md) : bilan des trois dépôts, vérifications, points ouverts.
 
 ## Personnage Lemegéton (`lemegeton/`)
 
