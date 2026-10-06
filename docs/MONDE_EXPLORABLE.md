@@ -26,6 +26,7 @@ Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
 | Son | **Coupé par défaut**, avec un bouton pour l'activer (7 octobre). |
 | Panneau 3615, yeux, réglages | Affichés **seulement au poste `terminal`**, devant le terminal (7 octobre). |
 | Téléphone de référence | **iPhone 11** : le site doit y rester fluide (7 octobre). |
+| Modèles de la porte et de l'horloge | **Provisoirement des modèles gratuits** trouvés en ligne (§10) ; notre propre modèle viendra plus tard (7 octobre). |
 | Version simple (éco) | La version actuelle est **conservée telle quelle** comme version simple : terminal seul, cartes d'inventaire, 3615, yeux, réglages, mobilier (7 octobre). Voir §3. |
 | Date du Terminatel | Le compteur de sa porte affiche **« 198? »**, faute de source publique. |
 | Ambiance générale | Rétro mystérieux, années 1920 à 1960 : bois sombre, laiton, cuir, verre, vieux papier, mécanique, lumière chaude. |
@@ -343,8 +344,9 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
 
 | Élément | Lot | Origine recommandée |
 | --- | --- | --- |
-| Porte et poignée | B | à décider plus tard (§13, question 3) ; Blender fait maison recommandé |
-| Horloge de porte | B | à décider plus tard (§13, question 3) ; Blender fait maison recommandé |
+| Porte et poignée | B | **provisoire** : « Door_Wooden_Old » de Mehdi Shahsavan (ahmagh2e), CC BY 4.0, porte à panneaux en bois sombre avec cadre ([Sketchfab](https://sketchfab.com/3d-models/none-77815b3a55504037aa4641eb9650e9de)) ; modèle maison plus tard |
+| Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois avec aiguilles riggées ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard |
+| Décor du couloir (option) | C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet riggée ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)) |
 | Mur, sol, moulure, applique | C | kit Blender + matériaux ambientCG / Poly Haven (CC0) |
 | Bureau, chaise, lampe, machine à écrire | E | Poly Haven (CC0), sinon Sketchfab CC BY |
 
@@ -378,7 +380,7 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 | Lot | Contenu | Critères d'acceptation |
 | --- | --- | --- |
 | **A. Préparation** (aucun changement visible) | entrée `simple/` (= App actuelle) ; panneaux et hook d'URL extraits d'App.tsx ; Lighting en presets (`terminatel` = actuel) ; `far` paramétrable ; lampe et écran suspendus hors scène ; `src/world/` (types, rails, navigation, sequence, url, rooms) avec tests ; entrée Vite `atelier/` vide ; chaîne KTX2/meshopt dans `tools/` | 22/22 tests navigateur inchangés ; nouveaux tests unitaires verts ; build et déploiement OK |
-| **B. Porte temporelle** | modèle (origine à décider, question 3 : pivot, poignée, horloge), compteur canvas, lumière, sons, séquence ; atelier `?brique=porte` | séquence conforme au §5, aller et retour ; mouvement réduit ; captures ; budget de la porte respecté |
+| **B. Porte temporelle** | modèles provisoires du §10 préparés (pivot du battant, poignée, aiguilles), compteur canvas, lumière, sons, séquence ; atelier `?brique=porte` | séquence conforme au §5, aller et retour ; mouvement réduit ; captures ; budget de la porte respecté |
 | **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté, vérifié sur iPhone 11 |
 | **D. Rails et navigation** | `RailCamera`, points d'intérêt DOM, parallaxe, clavier, toucher, URL et historique, fondus ; salles provisoires (boîtes) | parcours complet au clavier ; Retour du navigateur ; `?salle=` et `?poste=` |
 | **E. Salles** | `terminatel-255` (scène actuelle dans une pièce), puis `minitel-1` (bureau 80s), puis `televiseur-1950` (salon 50s) ; poste `inspect` = caméra actuelle | non-régression au poste `terminal` ; budget « salle » respecté ; ambiances conformes à la DA |
@@ -387,15 +389,17 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 
 ## 13. Questions ouvertes
 
-Quatre questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
+Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
 1. **Page d'arrivée** : le couloir.
 2. **Son** : coupé par défaut.
+3. **Modèles de la porte et de l'horloge** : provisoirement des modèles gratuits trouvés en ligne, choisis au §10. Notre propre modèle viendra plus tard.
 4. **Panneau 3615, yeux et réglages** : seulement devant le terminal.
 5. **Téléphone de référence** : iPhone 11. La version actuelle est conservée en version simple.
 
-Il en reste une, à trancher avant le lot B.
-
-3. **Origine des modèles 3D de la porte et de l'horloge** (avant B) : reportée par l'utilisateur, « on verra plus tard ». Deux options : les faire nous-mêmes dans Blender, ce qui est recommandé pour maîtriser les pivots, le compteur et les licences ; ou adapter un modèle gratuit CC0. Les lots A, C et D n'en dépendent pas : la porte peut y être une boîte provisoire.
+Toutes les questions sont tranchées. Le modèle provisoire ne change rien à
+l'architecture : la porte reste paramétrée par `TemporalDoor`. Remplacer son GLB par
+le modèle maison ne demandera qu'un nouveau passage par `tools/prepare_*.py`, avec
+les mêmes noms de nœuds (battant, poignée, aiguilles).
 
 ## 14. Risques
 
