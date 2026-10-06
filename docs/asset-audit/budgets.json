@@ -1,0 +1,126 @@
+[
+  {
+    "file": "public/models/minitel.glb",
+    "kilobytes": 3556,
+    "triangles": 21943,
+    "vertices": 18931,
+    "meshes": 71,
+    "primitives": 71,
+    "materials": 71,
+    "textures": 11,
+    "texture_kilobytes": 2767,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg",
+      "image/png"
+    ],
+    "gpu_texture_megabytes": 24.0,
+    "extensions": []
+  },
+  {
+    "file": "public/models/mobilier/chevet-haut.glb",
+    "kilobytes": 359,
+    "triangles": 4312,
+    "vertices": 2967,
+    "meshes": 1,
+    "primitives": 1,
+    "materials": 1,
+    "textures": 3,
+    "texture_kilobytes": 216,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg"
+    ],
+    "gpu_texture_megabytes": 16.8,
+    "extensions": []
+  },
+  {
+    "file": "public/models/mobilier/meuble-niche.glb",
+    "kilobytes": 279,
+    "triangles": 2354,
+    "vertices": 1887,
+    "meshes": 1,
+    "primitives": 1,
+    "materials": 1,
+    "textures": 3,
+    "texture_kilobytes": 190,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg"
+    ],
+    "gpu_texture_megabytes": 16.8,
+    "extensions": []
+  },
+  {
+    "file": "public/models/mobilier/table-basse.glb",
+    "kilobytes": 322,
+    "triangles": 3272,
+    "vertices": 2163,
+    "meshes": 1,
+    "primitives": 1,
+    "materials": 1,
+    "textures": 3,
+    "texture_kilobytes": 217,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg"
+    ],
+    "gpu_texture_megabytes": 16.8,
+    "extensions": []
+  },
+  {
+    "file": "public/models/mobilier/table-tiroir.glb",
+    "kilobytes": 327,
+    "triangles": 3148,
+    "vertices": 2308,
+    "meshes": 1,
+    "primitives": 1,
+    "materials": 1,
+    "textures": 3,
+    "texture_kilobytes": 217,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg"
+    ],
+    "gpu_texture_megabytes": 16.8,
+    "extensions": []
+  },
+  {
+    "file": "public/models/television-1950.glb",
+    "kilobytes": 1558,
+    "triangles": 5718,
+    "vertices": 6901,
+    "meshes": 5,
+    "primitives": 5,
+    "materials": 5,
+    "textures": 4,
+    "texture_kilobytes": 1303,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/jpeg",
+      "image/png"
+    ],
+    "gpu_texture_megabytes": 12.1,
+    "extensions": [
+      "KHR_materials_specular"
+    ]
+  }
+]
