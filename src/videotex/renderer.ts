@@ -56,6 +56,16 @@ export function renderTerminal(
       3,
     );
   }
+  applyCrtEffects(ctx, effects, time, reducedMotion);
+}
+
+/** Post-effets CRT (balayage, vignettage, scintillement), communs a tous les rendus 800 x 600. */
+export function applyCrtEffects(
+  ctx: CanvasRenderingContext2D,
+  effects: CrtEffects,
+  time: number,
+  reducedMotion: boolean,
+): void {
   if (effects.scanlines) {
     ctx.fillStyle = "rgba(0,0,0,.13)";
     for (let y = 0; y < HEIGHT; y += 3) ctx.fillRect(0, y, WIDTH, 1);

@@ -4,6 +4,8 @@ import { COLS, createScreen, plainText } from "../src/videotex/screen";
 import { buildEyes, initialEyeState } from "../src/eyes/libEyes";
 import { EyesController } from "../src/eyes/EyesController";
 import { buildZyraEyes } from "../src/eyes/libZyraEyes";
+import { targetShapes } from "../src/eyes/SmoothEyes";
+import { scaleRows, sextantBounds } from "../src/videotex/scale";
 
 const cell = (frame: ReturnType<typeof createScreen>, row: number, col: number) =>
   frame.cells[row * COLS + (col - 1)];
@@ -54,8 +56,8 @@ describe("yeux Zyra", () => {
     expect(buildZyraEyes({ ...initialEyeState, mood: "love" }, "AUTO")[0][2]).toBe("MAGENTA");
     expect(buildZyraEyes({ ...initialEyeState, mood: "love" }, "VERT")[0][2]).toBe("VERT");
   });
-  it("garde le style classique LibEyes au choix", () => {
-    const eyes = new EyesController({ style: "classique", palette: "blanc" });
+  it("garde le style LibEyes (barres) au choix", () => {
+    const eyes = new EyesController({ style: "libeyes", palette: "blanc" });
     expect(cell(eyes.getSnapshot().frame, 13, 7)).toMatchObject({ mosaic: 63, fg: 7 });
     eyes.setStyle("zyra");
     expect(cell(eyes.getSnapshot().frame, 13, 7).mosaic).toBeUndefined();
@@ -97,5 +99,80 @@ describe("moteur des yeux", () => {
     expect(seen.has("closed")).toBe(true);
     eyes.stop();
     expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("taille des yeux", () => {
+  const bounds = (eyes: EyesController) => {
+    const cells = eyes.getSnapshot().frame.cells
+      .map((c, i) => (c.mosaic ? i : -1))
+      .filter((i) => i >= 0 && Math.floor(i / COLS) < 22);
+    const cols = cells.map((i) => i % COLS);
+    const rows = cells.map((i) => Math.floor(i / COLS));
+    return { w: Math.max(...cols) - Math.min(...cols) + 1, h: Math.max(...rows) - Math.min(...rows) + 1, left: Math.min(...cols) };
+  };
+
+  it("garde le dessin d'origine a x1", () => {
+    const rows = buildZyraEyes(initialEyeState, "CYAN");
+    const ref = sextantBounds(rows);
+    const scaled = scaleRows(rows, 1, ref, 21);
+    const a = createScreen("A"), b = createScreen("B");
+    paintRows(a, rows);
+    paintRows(b, scaled);
+    expect(b.cells).toEqual(a.cells);
+  });
+
+  it("agrandit et reduit les yeux en restant dans l'ecran", () => {
+    const eyes = new EyesController({ palette: "cyan" });
+    const normal = bounds(eyes);
+    eyes.setScale(1.5);
+    const big = bounds(eyes);
+    expect(big.w).toBeGreaterThan(normal.w * 1.3);
+    expect(big.h).toBeGreaterThan(normal.h * 1.3);
+    eyes.setScale(0.6);
+    expect(bounds(eyes).w).toBeLessThan(normal.w);
+    eyes.setScale(99);
+    expect(eyes.getSnapshot().scale).toBe(eyes.getSnapshot().maxScale);
+    const max = bounds(eyes);
+    expect(max.left).toBeGreaterThanOrEqual(0);
+    expect(max.w).toBeLessThanOrEqual(COLS);
+    expect(plainText(eyes.getSnapshot().frame)).toContain("HUMEUR : NEUTRE");
+  });
+
+  it("ne change pas de taille selon l'humeur", () => {
+    const eyes = new EyesController({ scale: 1.5 });
+    const open = bounds(eyes);
+    eyes.setMood("happy");
+    expect(bounds(eyes).left).toBe(open.left);
+  });
+
+  it("borne la taille selon le style", () => {
+    const eyes = new EyesController({ style: "zyra", scale: 1.9 });
+    eyes.setStyle("libeyes");
+    expect(eyes.getSnapshot().scale).toBeLessThanOrEqual(eyes.getSnapshot().maxScale);
+    expect(eyes.getSnapshot().maxScale).toBeLessThan(1.9);
+  });
+});
+
+describe("rendu classique (lisse)", () => {
+  it("traduit les etats en formes d'yeux", () => {
+    const [left, right] = targetShapes(initialEyeState);
+    expect(left).toMatchObject({ open: 1, smile: 0, tilt: 0 });
+    expect(targetShapes({ ...initialEyeState, mood: "happy" })[0].smile).toBe(1);
+    expect(targetShapes({ ...initialEyeState, mood: "angry" })[0].tilt).toBe(1);
+    expect(targetShapes({ ...initialEyeState, eyeState: "closed" })[1].open).toBe(0);
+    const wink = targetShapes({ ...initialEyeState, eyeState: "wink_left" });
+    expect([wink[0].open, wink[1].open]).toEqual([0, 1]);
+    expect(right.dx).toBe(0);
+    expect(targetShapes({ ...initialEyeState, gazeX: 1 })[0].dx).toBe(1);
+  });
+  it("a sa propre taille maximale et garde la mosaique en lecture", () => {
+    const eyes = new EyesController({ render: "classique", scale: 99 });
+    expect(eyes.getSnapshot().scale).toBe(1.7);
+    eyes.setRender("mosaique");
+    expect(eyes.getSnapshot().scale).toBeLessThanOrEqual(eyes.getSnapshot().maxScale);
+    expect(eyes.getSnapshot().moodLabel).toBe("NEUTRE");
+    expect(eyes.key("Delete")).toBe(true);
+    expect(eyes.getSnapshot().moodLabel).toBe("COLERE");
   });
 });

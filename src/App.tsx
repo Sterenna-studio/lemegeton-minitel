@@ -31,11 +31,15 @@ import { catalog, findEntry, tableCredit } from "./demo/catalog";
 import { ModelInventory } from "./components/ModelInventory";
 import {
   EYE_PALETTES,
+  EYE_RENDERS,
   EYE_STYLES,
   EyesController,
+  MIN_EYE_SCALE,
   type EyePaletteId,
+  type EyeRenderId,
   type EyeStyleId,
 } from "./eyes/EyesController";
+import { SmoothEyes } from "./eyes/SmoothEyes";
 import { marbleDataUrl } from "./demo/marble";
 import { MinitelAttachment } from "./minitel/MinitelAttachment";
 import type { ModelInfo, ScreenSource, Vec3 } from "./minitel/types";
@@ -109,10 +113,15 @@ export default function App() {
     const query = new URLSearchParams(window.location.search);
     const palette = EYE_PALETTES.find((p) => p.id === query.get("couleur"))?.id ?? "cyan";
     const style = EYE_STYLES.find((s) => s.id === query.get("yeux"))?.id ?? "zyra";
-    return new EyesController({ palette, style });
+    const scale = Number(query.get("taille") ?? 1);
+    const render = EYE_RENDERS.find((r) => r.id === query.get("rendu"))?.id ?? "mosaique";
+    return new EyesController({ palette, style, scale, render });
   }, []);
   const eyesSnapshot = useSyncExternalStore(eyes.subscribe, eyes.getSnapshot);
   const activeFrame = screenMode === "yeux" ? eyesSnapshot.frame : snapshot.frame;
+  // Classic (smooth) eyes draw into their own canvas, uploaded continuously.
+  const smoothEyes = useMemo(() => new SmoothEyes(eyes), [eyes]);
+  const smoothActive = screenMode === "yeux" && eyesSnapshot.render === "classique";
   const [webgl] = useState(supportsWebGL);
   const [error, setError] = useState("");
   const [reader, setReader] = useState(false);
@@ -120,6 +129,14 @@ export default function App() {
   const [keyboard, setKeyboard] = useState(false);
   const [effects, setEffects] = useState<CrtEffects>(defaultEffects);
   const reducedMotion = useReducedMotion();
+  useEffect(() => {
+    smoothEyes.setOptions({ effects, reducedMotion, scale: eyesSnapshot.scale });
+  }, [smoothEyes, effects, reducedMotion, eyesSnapshot.scale]);
+  useEffect(() => {
+    if (!smoothActive) return;
+    smoothEyes.start();
+    return () => smoothEyes.stop();
+  }, [smoothEyes, smoothActive]);
   useEffect(() => {
     // Autonomous blinking, gaze and reactions only while the eyes are shown,
     // and never when the user prefers reduced motion.
@@ -147,6 +164,15 @@ export default function App() {
   function chooseStyle(style: EyeStyleId) {
     eyes.setStyle(style);
     setUrlParam("yeux", style);
+  }
+  function chooseRender(render: EyeRenderId) {
+    eyes.setRender(render);
+    setUrlParam("rendu", render === "mosaique" ? null : render);
+  }
+  function chooseScale(scale: number) {
+    eyes.setScale(scale);
+    const applied = eyes.getSnapshot().scale;
+    setUrlParam("taille", applied === 1 ? null : String(applied));
   }
   // Keys go to the active screen ; Connexion/Fin leaves the eyes for 3615.
   const sendKey = useCallback(
@@ -205,8 +231,17 @@ export default function App() {
     document.documentElement.style.setProperty("--marble", `url(${marbleDataUrl()})`);
   }, []);
   const source: ScreenSource = useMemo(
-    () => ({ kind: "videotex", frame: activeFrame }),
-    [activeFrame],
+    () =>
+      smoothActive
+        ? {
+            kind: "canvas",
+            canvas: smoothEyes.canvas,
+            revision: 0,
+            continuous: true,
+            accessibleText: `Yeux de Lemegeton, humeur : ${eyesSnapshot.moodLabel.toLowerCase()}`,
+          }
+        : { kind: "videotex", frame: activeFrame },
+    [smoothActive, smoothEyes, eyesSnapshot.moodLabel, activeFrame],
   );
   const onInfo = useCallback((value: ModelInfo) => setInfo(value), []);
   const onError = useCallback((message: string) => setError(message), []);
@@ -227,7 +262,7 @@ export default function App() {
       if (event.ctrlKey || event.altKey || event.metaKey) return;
       if (
         event.key.length === 1 ||
-        ["Enter", "Escape", "Backspace", "Home"].includes(event.key)
+        ["Enter", "Escape", "Backspace", "Delete", "Home"].includes(event.key)
       ) {
         event.preventDefault();
         sendKey(event.key);
@@ -368,8 +403,22 @@ export default function App() {
               <X size={18} />
             </Tool>
           </div>
+          <label className="setting setting-master">
+            <span>Effets CRT</span>
+            <input
+              type="checkbox"
+              checked={Object.values(effects).some(Boolean)}
+              onChange={(e) =>
+                setEffects(
+                  e.target.checked
+                    ? { ...defaultEffects }
+                    : { curvature: false, scanlines: false, glow: false, vignette: false, flicker: false },
+                )
+              }
+            />
+          </label>
           {Object.entries({
-            curvature: "Courbure",
+            curvature: "Distorsion de l'image",
             scanlines: "Lignes de balayage",
             glow: "Phosphore",
             vignette: "Vignettage",
@@ -410,6 +459,21 @@ export default function App() {
             ))}
             {screenMode === "yeux" && (
               <label className="setting">
+                <span>Rendu des yeux</span>
+                <select
+                  value={eyesSnapshot.render}
+                  onChange={(e) => chooseRender(e.target.value as EyeRenderId)}
+                >
+                  {EYE_RENDERS.map((render) => (
+                    <option key={render.id} value={render.id}>
+                      {render.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {screenMode === "yeux" && eyesSnapshot.render === "mosaique" && (
+              <label className="setting">
                 <span>Forme des yeux</span>
                 <select
                   value={eyesSnapshot.style}
@@ -421,6 +485,21 @@ export default function App() {
                     </option>
                   ))}
                 </select>
+              </label>
+            )}
+            {screenMode === "yeux" && (
+              <label className="setting setting-range">
+                <span>Taille des yeux</span>
+                <input
+                  type="range"
+                  min={MIN_EYE_SCALE}
+                  max={eyesSnapshot.maxScale}
+                  step={0.1}
+                  value={eyesSnapshot.scale}
+                  aria-valuetext={`fois ${eyesSnapshot.scale.toLocaleString("fr")}`}
+                  onChange={(e) => chooseScale(Number(e.target.value))}
+                />
+                <output>×{eyesSnapshot.scale.toLocaleString("fr")}</output>
               </label>
             )}
             {screenMode === "yeux" && (

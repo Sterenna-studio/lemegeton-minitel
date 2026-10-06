@@ -14,6 +14,7 @@ import {
   type SequenceStep,
 } from "./libEyes";
 import { buildZyraEyes } from "./libZyraEyes";
+import { maxScale, scaleRows, sextantBounds, type SextantBox } from "../videotex/scale";
 
 /** Palettes de l'overlay OBS (nitro-clicker COLOR_PRESETS) ramenees aux 8 couleurs Videotex. */
 export const EYE_PALETTES = [
@@ -30,9 +31,37 @@ export type EyePaletteId = (typeof EYE_PALETTES)[number]["id"];
 /** Formes reprises de minitel-face : capsules Zyra Eyes ou yeux LibEyes. */
 export const EYE_STYLES = [
   { id: "zyra", label: "Zyra (capsule)" },
-  { id: "classique", label: "Classique (LibEyes)" },
+  { id: "libeyes", label: "Barres (LibEyes)" },
 ] as const;
 export type EyeStyleId = (typeof EYE_STYLES)[number]["id"];
+
+/** Rendus : mosaique Videotex (formes minitel-face) ou classique lisse (overlay OBS). */
+export const EYE_RENDERS = [
+  { id: "mosaique", label: "Mosaique Videotex" },
+  { id: "classique", label: "Classique (lisse)" },
+] as const;
+export type EyeRenderId = (typeof EYE_RENDERS)[number]["id"];
+/** Taille maximale du rendu classique : ovales de 62 x 105 px a 150 px du centre. */
+const SMOOTH_MAX_SCALE = 1.7;
+
+/** Taille des yeux : facteur applique aux formes de minitel-face (x1 = d'origine). */
+export const MIN_EYE_SCALE = 0.6;
+/** Les yeux s'arretent avant la ligne d'humeur (ligne 22). */
+const LAST_EYE_ROW = 21;
+const references = new Map<EyeStyleId, SextantBox>();
+/** Cadre des yeux ouverts au repos : reference fixe, pour que la taille ne saute pas selon l'humeur. */
+function reference(style: EyeStyleId): SextantBox {
+  let box = references.get(style);
+  if (!box) {
+    box = sextantBounds(style === "zyra" ? buildZyraEyes(initialEyeState, "BLANC") : buildEyes(initialEyeState));
+    references.set(style, box);
+  }
+  return box;
+}
+/** Plus grande taille qui tient dans l'ecran pour ce style, arrondie au dixieme inferieur. */
+export function maxEyeScale(style: EyeStyleId): number {
+  return Math.floor(maxScale(reference(style), LAST_EYE_ROW) * 10) / 10;
+}
 
 const MOOD_LABELS: Record<Mood, string> = {
   default: "NEUTRE",
@@ -50,9 +79,16 @@ export interface EyesSnapshot {
   state: EyeState;
   palette: EyePaletteId;
   style: EyeStyleId;
+  render: EyeRenderId;
+  scale: number;
+  maxScale: number;
+  /** Humeur affichee, en clair (lecture accessible). */
+  moodLabel: string;
 }
 
 export interface EyesOptions {
+  scale?: number;
+  render?: EyeRenderId;
   palette?: EyePaletteId;
   style?: EyeStyleId;
   random?: () => number;
@@ -68,6 +104,8 @@ export class EyesController {
   private state: EyeState = { ...initialEyeState };
   private palette: EyePaletteId;
   private style: EyeStyleId;
+  private scale = 1;
+  private render: EyeRenderId;
   private random: () => number;
   private listeners = new Set<() => void>();
   private snapshot: EyesSnapshot;
@@ -79,6 +117,8 @@ export class EyesController {
   constructor(options: EyesOptions = {}) {
     this.palette = options.palette ?? "cyan";
     this.style = options.style ?? "zyra";
+    this.render = options.render ?? "mosaique";
+    this.scale = this.clampScale(options.scale ?? 1);
     this.random = options.random ?? Math.random;
     this.snapshot = this.build();
   }
@@ -92,16 +132,27 @@ export class EyesController {
   private build(): EyesSnapshot {
     const color = EYE_PALETTES.find((p) => p.id === this.palette)?.color ?? "CYAN";
     const frame = createScreen("YEUX DE LEMEGETON", "LEMEGETON");
-    paintRows(
-      frame,
+    const rows =
       this.style === "zyra"
         ? buildZyraEyes(this.state, color)
-        : buildEyes(this.state, color === "AUTO" ? "BLANC" : color),
+        : buildEyes(this.state, color === "AUTO" ? "BLANC" : color);
+    paintRows(
+      frame,
+      this.scale === 1 ? rows : scaleRows(rows, this.scale, reference(this.style), LAST_EYE_ROW),
     );
     const mood = this.state.moodOverride ?? this.state.mood;
     const label = `HUMEUR : ${MOOD_LABELS[mood]}`;
     text(frame, Math.floor((40 - label.length) / 2), 22, label, 4);
-    return { frame, state: { ...this.state }, palette: this.palette, style: this.style };
+    return {
+      frame,
+      state: { ...this.state },
+      palette: this.palette,
+      style: this.style,
+      render: this.render,
+      scale: this.scale,
+      maxScale: this.maxScale(),
+      moodLabel: MOOD_LABELS[mood],
+    };
   }
   private emit() {
     this.snapshot = this.build();
@@ -118,6 +169,24 @@ export class EyesController {
   }
   setStyle(style: EyeStyleId) {
     this.style = style;
+    this.scale = this.clampScale(this.scale);
+    this.emit();
+  }
+  private maxScale() {
+    return this.render === "classique" ? SMOOTH_MAX_SCALE : maxEyeScale(this.style);
+  }
+  private clampScale(scale: number) {
+    if (!Number.isFinite(scale)) return 1;
+    return Math.round(Math.max(MIN_EYE_SCALE, Math.min(this.maxScale(), scale)) * 10) / 10;
+  }
+  setRender(render: EyeRenderId) {
+    this.render = render;
+    this.scale = this.clampScale(this.scale);
+    this.emit();
+  }
+  /** Taille globale des yeux, bornee pour rester dans l'ecran. */
+  setScale(scale: number) {
+    this.scale = this.clampScale(scale);
     this.emit();
   }
   setMood(mood: Mood) {
@@ -153,7 +222,8 @@ export class EyesController {
    * Correction fatigue, Suite clin d'oeil.
    */
   key(key: string): boolean {
-    const name = { Enter: "Envoi", Escape: "Sommaire", Backspace: "Correction" }[key] ?? key;
+    const name =
+      { Enter: "Envoi", Escape: "Sommaire", Backspace: "Correction", Delete: "Annulation" }[key] ?? key;
     switch (name) {
       case "Envoi":
         this.setMood("happy");

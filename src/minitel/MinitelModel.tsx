@@ -16,6 +16,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import type { ModelInfo, ModelProfile, ScreenSource } from "./types";
 import type { CrtEffects } from "../videotex/renderer";
 import { MinitelScreen } from "./MinitelScreen";
+import { bulgedScreenGeometry } from "./bulge";
 /** Role of a mesh, as seen by a finish. */
 export type MeshRole = "body" | "key";
 /**
@@ -97,6 +98,12 @@ export function MinitelModel({
           (name) => m.name.toLowerCase() === name.toLowerCase(),
         ) || m.userData.role === "screen",
     );
+    // A flat screen becomes curved glass (geometry of the clone only).
+    const curved =
+      screen && profile.screenBulge
+        ? bulgedScreenGeometry(screen.geometry.clone(), profile.screenBulge)
+        : null;
+    if (screen && curved) screen.geometry = curved;
     if (finish)
       meshes.forEach((mesh) => {
         if (mesh === screen) return;
@@ -141,6 +148,7 @@ export function MinitelModel({
       materials,
       screen: screen ?? fallback!,
       fallback,
+      curved,
       info: {
         meshes: meshes.map((m) => ({
           name: m.name,
@@ -158,6 +166,7 @@ export function MinitelModel({
     () => () => {
       prepared.materials.forEach((m) => m.dispose());
       prepared.fallback?.geometry.dispose();
+      prepared.curved?.dispose();
     },
     [prepared],
   );

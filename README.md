@@ -44,8 +44,8 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 ```bash
 npm run typecheck
 npm run lint
-npm test               # 16 tests unitaires Vitest
-npm run test:browser   # 18 tests Playwright (Edge headless, serveur dev sur 5174)
+npm test               # 22 tests unitaires Vitest
+npm run test:browser   # 20 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne
@@ -149,7 +149,9 @@ L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
 (Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
 nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face.
 Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
-humeur. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
+humeur. Deux rendus sont proposés : la mosaïque Vidéotex, ou un rendu classique lisse
+comme l'overlay. La taille se règle au curseur. Dans tous les cas, l'écran est bombé
+comme un vrai tube, avec des effets CRT activables. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
 
 Restent ouverts : la validation artistique (textures grises d'origine conservées),
 les essais sur téléphones physiques, l'optimisation du chargement (bundle

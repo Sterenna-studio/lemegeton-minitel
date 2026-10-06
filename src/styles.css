@@ -1015,3 +1015,22 @@ html:has(.experience.transparent) body,
   padding: 3px 6px;
   font-size: 12px;
 }
+.setting-range input[type="range"] {
+  flex: 1;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  accent-color: var(--sage-key);
+}
+.setting-range output {
+  font:
+    11px "IBM Plex Mono",
+    monospace;
+  color: var(--gold);
+  min-width: 34px;
+  text-align: right;
+}
+.setting-master span {
+  font-weight: 500;
+  color: var(--gold);
+}

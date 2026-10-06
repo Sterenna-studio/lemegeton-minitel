@@ -26,6 +26,11 @@ export interface ModelProfile {
   screenFallback: { position: Vec3; rotation?: Vec3; size: [number, number] };
   /** Centre of the screen in the presentation frame ; the camera aims at it. */
   screenCenter?: Vec3;
+  /**
+   * Bombe du verre (unites du modele) applique a un ecran plat, comme un tube
+   * cathodique. Toujours actif, independamment des effets CRT.
+   */
+  screenBulge?: number;
   anchors: Record<string, Anchor>;
   keys: Record<string, string>;
 }

@@ -16,6 +16,8 @@ export const suppliedProfile: ModelProfile = {
   normalize: false,
   // Bounds centre of Minitel_Screen in public/models/minitel.glb.
   screenCenter: [0, 1.282, 0.743],
+  // Minitel_Screen is two flat triangles : bulge it like the CRT glass.
+  screenBulge: 0.16,
   keys: {
     Object_51: "1",
     Object_52: "2",
