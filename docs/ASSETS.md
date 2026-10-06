@@ -173,8 +173,9 @@ En résumé :
 
 Les sources lourdes restent locales et hors Git, comme le pipeline `lemegeton/`.
 Cela concerne les `.blend`, les téléchargements bruts, les textures 4K et les sons
-sources. On propose un dossier `monde/` à la racine, avec une liste blanche de
-formats texte dans `.gitignore`, à créer au lot A :
+sources. Elles vivent dans le dossier `monde/` à la racine, créé le 7 octobre 2026. Une liste
+blanche dans `.gitignore` n'y versionne que les formats texte (`.md`, `.csv`, `.py`).
+La provenance de chaque fichier est dans [monde/SOURCES.csv](../monde/SOURCES.csv) :
 
 ```text
 monde/

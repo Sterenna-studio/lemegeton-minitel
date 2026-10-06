@@ -345,8 +345,8 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
 | Élément | Lot | Origine recommandée |
 | --- | --- | --- |
 | Porte et poignée | B | **provisoire** : « Door_Wooden_Old » de Mehdi Shahsavan (ahmagh2e), CC BY 4.0, porte à panneaux en bois sombre avec cadre ([Sketchfab](https://sketchfab.com/3d-models/none-77815b3a55504037aa4641eb9650e9de)) ; modèle maison plus tard |
-| Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois avec aiguilles riggées ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard |
-| Décor du couloir (option) | C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet riggée ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)) |
+| Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard. Téléchargée le 7 octobre (glTF 1k, `monde/00_CORE/`). **Dans le glTF, les aiguilles sont fusionnées au boîtier** : le rig n'existe que dans le `.blend`. Pour les animer, il faut les séparer depuis le `.blend` riggé (3,9 Mo, Blender 5.2 disponible), ou confier l'animation à la grande horloge. |
+| Décor du couloir (option) | C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)). Téléchargée le 7 octobre (glTF 1k, `monde/01_CORRIDOR/`) : **aiguilles séparées** (`minute_hand`, `houd_hand`), animables telles quelles ; 2,19 m ; 8 582 triangles. |
 | Mur, sol, moulure, applique | C | kit Blender + matériaux ambientCG / Poly Haven (CC0) |
 | Bureau, chaise, lampe, machine à écrire | E | Poly Haven (CC0), sinon Sketchfab CC BY |
 
