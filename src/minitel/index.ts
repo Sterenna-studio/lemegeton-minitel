@@ -1,5 +1,12 @@
-// Reusable Minitel API, independent from any narrative demo.
-export { MinitelModel, DEFAULT_MODEL_URL, DEFAULT_SCREEN_MESH, type MinitelModelInfo, type MinitelModelProps } from './MinitelModel';
-export { MinitelKeypad, type MinitelKeypadProps } from './MinitelKeypad';
-export { useVideotexTexture } from './useVideotexTexture';
-export { FUNCTION_KEYS, CONNEXION_FIN, keyFromEvent } from './keys';
+export { Minitel, type MinitelProps } from "./Minitel";
+export { MinitelAttachment } from "./MinitelAttachment";
+export { genericProfile, suppliedProfile } from "./profiles";
+export type { ModelProfile, ScreenSource, Anchor } from "./types";
+export { Terminal, type TerminalPage } from "../videotex/terminal";
+export {
+  createScreen,
+  text,
+  plainText,
+  type TerminalFrame,
+} from "../videotex/screen";
+export { useMinitel } from "../hooks/useMinitel";

@@ -1,88 +1,118 @@
-# Préparation du modèle 3D
+# Preparation d'un modele Minitel
 
-## But
+## Source et convention de presentation
 
-Transformer un modèle de Minitel en asset exploitable proprement dans Three.js.
+Conserver le fichier original et travailler par Save As dans une copie Blender.
+Le modele source est `minitel_1982-france.glb` (dossier de travail `06_MODEL/`,
+hors depot). La preparation est reproductible depuis la racine du depot :
 
-## Checklist Blender
-
-### Géométrie
-
-- [ ] origine et orientation cohérentes ;
-- [ ] transformations appliquées ;
-- [ ] normales correctes ;
-- [ ] géométrie inutile supprimée ;
-- [ ] subdivision maîtrisée ;
-- [ ] détails visibles sans surcharge excessive.
-
-### Nommage
-
-Utiliser des noms prévisibles, par exemple :
-
-```
-Minitel
-Minitel_Body
-Minitel_ScreenFrame
-Minitel_Screen
-Minitel_Keyboard
+```powershell
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python-exit-code 1 --python .\tools\prepare_model.py -- chemin\vers\minitel_1982-france.glb
 ```
 
-### Écran
+Sans argument, le script cherche `assets-src/minitel_1982-france.glb` (ignore par Git).
+`tools/audit_model.py` s'utilise de la meme facon et regenere les rendus de `docs/asset-audit/`.
+Avec Blender 5.2, la sortie est identique a l'octet pres a `public/models/minitel.glb`.
 
-L'objet ou la surface d'écran doit être facilement identifiable.
+Cette commande remplace seulement `public/models/minitel.glb` et
+le rapport `docs/asset-audit/normalized.json`. Archiver une copie retouchee avant
+de la relancer. Ce script est **specifique a l'asset fourni**, pas un detecteur
+universel d'ecran. Il transforme ses objets, tourne de -110 degres autour du Z
+Blender, centre la coque et ramene sa hauteur a 2,4 unites de presentation.
+Cette echelle n'est pas une mesure physique du Minitel.
 
-Prévoir un cas où le rendu Web remplace ou recouvre son matériau par une texture dynamique.
+Pour une nouvelle source, utiliser des dimensions physiques documentees en
+metres dans Blender si disponibles, appliquer rotation/scale, poser la base au
+sol et centrer l'origine au milieu de la coque. Blender : Z vertical, face vers
+-Y. Apres export glTF Y-up : Y vertical, face vers +Z. Le profil generique
+normalise la hauteur a 2,4 unites ; les anchors et l'overlay utilisent ce repere.
+Ne pas utiliser ces unites normalisees pour fabriquer une piece mecanique.
 
-### Anchors
+## Objets et geometrie
 
-Prévoir progressivement :
+- `Minitel_Body` : coque rigide.
+- `Minitel_Bezel` : cadre CRT et raccords.
+- `Minitel_Screen` : surface uniquement emissive, independante.
+- `Minitel_Keyboard` : support des touches.
+- `Key_0` ... `Key_9`, `Key_A` ... `Key_Z`, `Key_Envoi`, `Key_Sommaire`, `Key_Correction`, `Key_ConnexionFin` : touches individuelles.
+- Accessoires, antenne et cables : objets distincts si animation ou remplacement prevus.
 
+Ces noms facilitent la preparation, mais l'application utilise un profil et
+peut reconnaitre les extras glTF `role: screen` et `key: Envoi`.
+Un nom quelconque ne permet pas de deviner automatiquement sa fonction.
+En cas de mesh fusionne, selectionner les faces pertinentes puis Separate >
+Selection ; reconstruire les raccords caches et verifier les normales.
+By Loose Parts separe la connexite, pas les fonctions mecaniques.
+
+Pour la copie actuelle, les deux plus grandes faces de `Object_73` sont le
+rectangle photographie de l'ecran. Elles sont retirees de la geometrie du
+cadre et exportees comme `Minitel_Screen`. Les touches etaient deja separees ;
+leurs noms `Object_...` sont conserves et leurs evenements sont calibres dans
+`suppliedProfile.keys`. Le clavier numerique est ainsi reellement cliquable.
+Pour des touches animees, placer chaque origine au centre de sa course,
+nommer les objets et definir un axe d'enfoncement local.
+
+## UV et materiaux
+
+L'ecran doit avoir une UV continue couvrant [0,1] x [0,1], gauche a droite,
+bas a haut dans Blender ; verifier avec une mire asymetrique et du texte apres
+export, car glTF et Canvas ont des conventions verticales differentes.
+La copie preparee recoit des UV planaires ; les CanvasTextures Web y utilisent
+`flipY=false`. L'ecran runtime remplace son materiau sans modifier la coque.
+
+Conserver les UV de la coque et des touches. Eviter d'utiliser leur atlas pour
+le contenu dynamique. Limiter les materiaux identiques et consolider les
+textures de coque si une optimisation est necessaire ; ne pas fusionner les
+touches interactives par erreur. Plastique : metallique 0, roughness plutot
+elevee ; le runtime actuel conserve les textures et ajuste roughness a 0,8.
+Utiliser des images sRGB pour la couleur, des donnees lineaires pour normales,
+roughness et metallic. Eviter une emission forte qui brule l'ecran.
+
+Un CRT bombe peut etre prepare en subdivisant moderement la surface et en
+ajoutant une faible convexite, avec UV coherentes. La version actuelle emploie
+un plan et une distorsion shader faible : la vitre n'est pas un volume physique.
+
+## Export et remplacement
+
+Exporter les objets utiles seulement, format GLB, Y-up et materiaux embarques.
+Exclure lampes, cameras, collections de reference et geometrie masquee inutile.
+Verifier la reimportation dans une scene neuve puis dans le navigateur.
+Pour animer des parties, exporter les clips et cuire les contraintes non glTF.
+
+Deposer le resultat dans `public/models/`. Mettre a jour `ModelProfile` :
+
+```ts
+const profile = {
+  normalize: true,
+  screenNames: ["MonCRT"],
+  screenFallback: { position: [0, 1.28, 0.75], size: [1.91, 1.56] },
+  anchors: { top: { position: [0, 2.4, 0] } },
+  keys: { MaTouche1: "1", MaToucheVerte: "Enter" },
+};
 ```
-Anchor_Screen
-Anchor_Keyboard
-Anchor_Rear
-Anchor_Top
-Anchor_Accessory
-```
 
-Ces anchors pourront servir aux accessoires et animations futures.
+Annoter ce literal avec `ModelProfile` pour verifier les tuples TypeScript.
+Sans ecran reconnu, l'overlay de secours est place **dans le repere de
+presentation**, pas arbitrairement dans le repere d'un mesh importe. Ajuster
+position/rotation/taille avec la camera de face, puis de trois quarts ; eviter
+z-fighting et penetration du cadre. C'est un repli temporaire documente, pas
+une segmentation automatique.
 
-## Export
+## Performance et validation
 
-Exporter en GLB quand cela est adapté.
+La source choisie contient 70 meshes, 21 943 triangles et 11 images (1024 au
+maximum). La copie separe le CRT : 71 meshes, nombre de triangles conserve.
+Les 200 OBJ TELETEL, le fichier Table + Minitel et les autres GLB restent des
+sources possibles mais ne sont pas charges par cette application.
 
-Après export :
+Ne pas imposer une decimation sur cette source deja raisonnable. Mesurer d'abord
+draw calls, memoire des textures et fluidite sur les appareils cibles. Eventuellement
+dedupliquer les materiaux et reduire les atlas ; tester Meshopt/Draco et KTX2
+seulement avec les decodeurs correspondants configures dans le chargeur.
+Le chargeur actuel ne promet pas de prendre en charge ces compressions sans configuration.
 
-- tester le chargement dans Three.js ;
-- contrôler les dimensions ;
-- vérifier l'aspect des matériaux ;
-- vérifier le coût mémoire ;
-- vérifier la surface d'écran ;
-- vérifier les points d'ancrage.
-
-## Préparation du modèle actuel
-
-`tools/prepare_model.py` produit `public/models/minitel.glb` à partir du GLB
-Sketchfab, sans modifier l'original :
-
-1. rotation de −110° autour de la verticale, écran face à +Z dans Three.js ;
-2. mise à l'échelle à 2,4 unités de haut, origine centrée au sol ;
-3. extraction des deux plus grands triangles de la façade (l'écran photographié)
-   en un mesh `Minitel_Screen` doté d'UV propres, retirés de `Minitel_Bezel` ;
-4. renommage du corps en `Minitel_Body`, export GLB.
-
-`tools/audit_model.py` produit les rendus et le rapport de `docs/asset-audit/`.
-
-```bash
-blender --background --python-exit-code 1 --python tools/prepare_model.py -- chemin/vers/minitel_1982-france.glb
-blender --background --python-exit-code 1 --python tools/audit_model.py -- chemin/vers/minitel_1982-france.glb
-```
-
-Sans argument, les scripts cherchent `assets-src/minitel_1982-france.glb`
-(dossier ignoré par Git). Avec Blender 5.2, la sortie est identique à l'octet près.
-
-## Modèle temporaire
-
-Un modèle placeholder est acceptable pour démarrer le développement Web.
-
-Le code ne doit pas dépendre d'un maillage précis pour fonctionner.
+Checklist de livraison : silhouette et clavier complets, texte dans le bon
+sens, ecran non occulte, clic sur 1/Envoi, zoom/orbite, UV et couleurs preservees,
+anchors coherents, tests mobile/tablette, fallback accessible et attribution.
+Garder la licence, le nom de l'auteur, la source et la liste des modifications
+avec chaque nouveau modele ; ne pas supposer que tous les assets ont la meme licence.

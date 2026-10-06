@@ -16,10 +16,14 @@ Le projet peut exploiter temporairement un modèle de remplacement en attendant 
 | Licence | CC BY 4.0 : usage commercial et redistribution autorisés, crédit obligatoire |
 | Fichier | `public/models/minitel.glb` (3,6 Mo) |
 | Modifications | rotation, échelle, origine au sol, écran extrait en `Minitel_Screen` |
+| Attribution | `public/models/ATTRIBUTION.md`, à distribuer avec le modèle |
 
 Licence et auteur vérifiés via l'API Sketchfab ; ils figurent aussi dans
 `asset.extras` du GLB d'origine. Le crédit est affiché dans l'interface et
-dans le README. Le GLB d'origine et ses textures ne sont pas versionnés.
+dans le README.
+
+Les polices IBM Plex Sans et Mono (paquets `@fontsource`) sont sous licence
+SIL OFL 1.1 ; leurs licences sont copiées dans `public/licenses/`. Le GLB d'origine et ses textures ne sont pas versionnés.
 
 Autres pistes repérées, non retenues :
 

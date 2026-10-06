@@ -1,64 +1,68 @@
-import { describe, expect, it } from 'vitest';
-import { createLemegetonTerminal } from '../src/demo/LemegetonTerminal';
-import { createScreen, plainText, text, COLS, ROWS } from '../src/videotex/screen';
-import { keyFromEvent } from '../src/minitel/keys';
-
-const key = (value: string) => ({ key: value, ctrlKey: false, metaKey: false, altKey: false });
-
-describe('screen', () => {
-  it('creates a 40x25 grid and clips text to it', () => {
-    const screen = createScreen('TEST');
-    expect(screen.cells).toHaveLength(COLS * ROWS);
-    text(screen, 38, 0, 'ABCD');
-    text(screen, 0, ROWS, 'HORS ECRAN');
-    expect(plainText(screen)).toBe('AB');
-  });
-});
-
-describe('terminal', () => {
-  it('opens on the home page', () => {
+import { describe, it, expect } from "vitest";
+import { createLemegetonTerminal } from "../src/demo/LemegetonTerminal";
+import {
+  COLS,
+  ROWS,
+  createScreen,
+  text,
+  plainText,
+} from "../src/videotex/screen";
+describe("terminal reutilisable", () => {
+  it("navigue et revient au sommaire", () => {
     const terminal = createLemegetonTerminal();
-    expect(terminal.getSnapshot().page).toBe('home');
-    expect(plainText(terminal.getSnapshot().frame)).toContain('3615 LEMEGETON');
+    terminal.sendKey("1");
+    expect(terminal.getSnapshot().page).toBe("connection");
+    terminal.sendKey("Envoi");
+    expect(terminal.getSnapshot().page).toBe("identity");
+    expect(plainText(terminal.getSnapshot().frame)).toContain("ACCES AUTORISE");
+    terminal.sendKey("Sommaire");
+    expect(terminal.getSnapshot().page).toBe("home");
   });
-
-  it('follows a direct action key and returns with Sommaire', () => {
+  it("affiche les archives et les messages", () => {
     const terminal = createLemegetonTerminal();
-    terminal.sendKey('2');
-    expect(terminal.getSnapshot().page).toBe('archives');
-    terminal.sendKey('Sommaire');
-    expect(terminal.getSnapshot().page).toBe('home');
+    terminal.sendKey("2");
+    expect(terminal.getSnapshot().page).toBe("archives");
+    terminal.sendKey("0");
+    terminal.sendKey("3");
+    expect(terminal.getSnapshot().page).toBe("messages");
   });
-
-  it('notifies subscribers on navigation', () => {
+  it("edite une commande bornee et notifie les abonnes", () => {
     const terminal = createLemegetonTerminal();
-    let calls = 0;
-    const unsubscribe = terminal.subscribe(() => calls++);
-    terminal.sendKey('1');
+    let updates = 0;
+    const unsubscribe = terminal.subscribe(() => updates++);
+    for (let i = 0; i < 50; i++) terminal.sendKey("a");
+    expect(terminal.getSnapshot().input).toHaveLength(28);
+    terminal.sendKey("Correction");
+    expect(terminal.getSnapshot().input).toHaveLength(27);
+    terminal.sendKey("Annulation");
+    expect(terminal.getSnapshot().input).toBe("");
+    expect(updates).toBeGreaterThan(0);
     unsubscribe();
-    terminal.sendKey('Sommaire');
-    expect(calls).toBe(1);
+    const before = updates;
+    terminal.sendKey("a");
+    expect(updates).toBe(before);
   });
-
-  it('types, corrects and sends input', () => {
+  it("conserve des snapshots stables entre modifications", () => {
     const terminal = createLemegetonTerminal();
-    terminal.sendKey('1');
-    terminal.sendKey('x');
-    expect(terminal.getSnapshot().input).toBe('X');
-    terminal.sendKey('Correction');
-    expect(terminal.getSnapshot().input).toBe('');
-    terminal.sendKey('Envoi');
-    expect(terminal.getSnapshot().page).toBe('identity');
+    expect(terminal.getSnapshot()).toBe(terminal.getSnapshot());
+    const before = terminal.getSnapshot();
+    terminal.sendKey("2");
+    expect(terminal.getSnapshot()).not.toBe(before);
+  });
+  it("refuse une destination inconnue", () => {
+    expect(() => createLemegetonTerminal().go("absente")).toThrow(
+      "Page absente",
+    );
   });
 });
-
-describe('keyboard mapping', () => {
-  it('maps PC keys to Minitel keys', () => {
-    expect(keyFromEvent(key('Enter'))).toBe('Envoi');
-    expect(keyFromEvent(key('Backspace'))).toBe('Correction');
-    expect(keyFromEvent(key('Escape'))).toBe('Sommaire');
-    expect(keyFromEvent(key('7'))).toBe('7');
-    expect(keyFromEvent(key('Shift'))).toBeNull();
-    expect(keyFromEvent({ ...key('r'), ctrlKey: true })).toBeNull();
+describe("grille videotex", () => {
+  it("dispose de 40 x 25 cellules et protege les limites", () => {
+    const s = createScreen("test");
+    expect(s.cells).toHaveLength(COLS * ROWS);
+    text(s, 39, 0, "ABCDE");
+    expect(s.cells[39].char).toBe("A");
+    expect(s.cells[40].char).toBe(" ");
+    text(s, 0, 25, "invisible");
+    expect(plainText(s)).toBe("A");
   });
 });

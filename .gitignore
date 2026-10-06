@@ -3,5 +3,6 @@ dist/
 test-results/
 playwright-report/
 *.log
-assets-src/
+.vite/
 *.tsbuildinfo
+assets-src/
