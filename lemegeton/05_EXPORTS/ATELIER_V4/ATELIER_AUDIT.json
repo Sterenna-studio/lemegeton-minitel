@@ -1,0 +1,133 @@
+{
+  "source": "02_SOURCES_3D/Rusty Retrobot.glb",
+  "source_preserved": true,
+  "height_metres": 2,
+  "normalization_scale": 1.0508390665054321,
+  "vertices": 738907,
+  "triangles": 1354718,
+  "connected_surface_count": 1,
+  "texture_images": [
+    "Image_0",
+    "Image_1",
+    "Image_2"
+  ],
+  "deform_bones": 24,
+  "control_bones": 28,
+  "weights": {
+    "ROOT": 0,
+    "BODY": 170896,
+    "HEAD": 158246,
+    "ANTENNA": 4532,
+    "SHOULDER_L": 26720,
+    "ELBOW_L": 39599,
+    "WRIST_L": 22521,
+    "HAND_L": 44922,
+    "THUMB_L": 0,
+    "FINGER1_L": 0,
+    "FINGER2_L": 0,
+    "FINGER3_L": 0,
+    "LEG_L": 38957,
+    "FOOT_L": 48263,
+    "SHOULDER_R": 17618,
+    "ELBOW_R": 27285,
+    "WRIST_R": 16602,
+    "HAND_R": 38260,
+    "THUMB_R": 0,
+    "FINGER1_R": 0,
+    "FINGER2_R": 0,
+    "FINGER3_R": 0,
+    "LEG_R": 37332,
+    "FOOT_R": 47154
+  },
+  "triangles_crossing_rigid_regions": 12899,
+  "warning": "Spatial weight study only. Connected triangles across joints stretch. Fingers require reconstruction/segmentation.",
+  "wave_test": {
+    "sample_frame": 60,
+    "max_edge_stretch_ratio_on_crossing_triangles": 402.8042907714844,
+    "production_accepted": false
+  },
+  "partition": {
+    "objects": 15,
+    "source_faces_assigned_exactly_once": 1354718,
+    "closed_cut_surfaces": false,
+    "parts": [
+      {
+        "name": "BODY",
+        "caps": 0,
+        "boundary_edges": 2968
+      },
+      {
+        "name": "HEAD",
+        "caps": 0,
+        "boundary_edges": 1049
+      },
+      {
+        "name": "ANTENNA",
+        "caps": 0,
+        "boundary_edges": 90
+      },
+      {
+        "name": "SHOULDER_L",
+        "caps": 0,
+        "boundary_edges": 1026
+      },
+      {
+        "name": "ELBOW_L",
+        "caps": 0,
+        "boundary_edges": 1247
+      },
+      {
+        "name": "WRIST_L",
+        "caps": 0,
+        "boundary_edges": 974
+      },
+      {
+        "name": "HAND_L",
+        "caps": 0,
+        "boundary_edges": 808
+      },
+      {
+        "name": "LEG_L",
+        "caps": 0,
+        "boundary_edges": 1233
+      },
+      {
+        "name": "FOOT_L",
+        "caps": 0,
+        "boundary_edges": 454
+      },
+      {
+        "name": "SHOULDER_R",
+        "caps": 0,
+        "boundary_edges": 722
+      },
+      {
+        "name": "ELBOW_R",
+        "caps": 0,
+        "boundary_edges": 1005
+      },
+      {
+        "name": "WRIST_R",
+        "caps": 0,
+        "boundary_edges": 690
+      },
+      {
+        "name": "HAND_R",
+        "caps": 0,
+        "boundary_edges": 270
+      },
+      {
+        "name": "LEG_R",
+        "caps": 0,
+        "boundary_edges": 961
+      },
+      {
+        "name": "FOOT_R",
+        "caps": 0,
+        "boundary_edges": 391
+      }
+    ],
+    "status": "PROVISIONAL - geometry cuts estimated, fingers not separated",
+    "production_accepted": false
+  }
+}

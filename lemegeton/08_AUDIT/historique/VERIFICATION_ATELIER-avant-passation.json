@@ -1,0 +1,14 @@
+{
+  "rest_delta_metres": 1.7881393432617188e-07,
+  "max_rigid_edge_length_error_metres": 1.9045546650886536e-07,
+  "feet_body_head_left_arm_delta_metres": 0,
+  "right_arm_movement_metres": 0.150260329246521,
+  "return_to_rest_delta_metres": 0.0,
+  "packed_textures": 3,
+  "production_validated": false,
+  "remaining": [
+    "joint cut and pivot review",
+    "independent finger segmentation",
+    "IK pole review"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "version": "V2",
+  "base": "LEMEGETON_RIGGED_V2_BASE.glb",
+  "mechanical_pivots": [
+    "HEAD",
+    "SHOULDER_L",
+    "ELBOW_L",
+    "WRIST_L",
+    "SHOULDER_R",
+    "ELBOW_R",
+    "WRIST_R",
+    "LEG_L",
+    "FOOT_L",
+    "LEG_R",
+    "FOOT_R"
+  ],
+  "controls": [
+    "CTRL_ROOT",
+    "CTRL_BODY",
+    "CTRL_HEAD",
+    "CTRL_ARM_L_IK",
+    "CTRL_ARM_R_IK",
+    "CTRL_ELBOW_L_POLE",
+    "CTRL_ELBOW_R_POLE",
+    "CTRL_LEG_L_IK",
+    "CTRL_LEG_R_IK",
+    "CTRL_FOOT_L",
+    "CTRL_FOOT_R",
+    "CTRL_FINGER1_L",
+    "CTRL_FINGER2_L",
+    "CTRL_FINGER3_L",
+    "CTRL_THUMB_L",
+    "CTRL_FINGER1_R",
+    "CTRL_FINGER2_R",
+    "CTRL_FINGER3_R",
+    "CTRL_THUMB_R"
+  ],
+  "hands": "exactly 3 fingers + 1 thumb per hand",
+  "exploded_sync": "shared exploded_amount parameter for web/Blender presentation",
+  "note": "V2 control architecture is layered over the V1 skinned base; final semantic mesh separation and pivot validation remain production tasks."
+}

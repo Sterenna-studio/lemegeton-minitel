@@ -1,0 +1,18 @@
+{
+  "meshes": 15,
+  "skin_joints": 24,
+  "animations": 1,
+  "clip_name": "Animation",
+  "clip_duration_seconds": 5,
+  "textures": 3,
+  "imported_start_frame": 0.0,
+  "bounds_error_metres_by_frame": {
+    "1": 3.5762786865234375e-07,
+    "61": 5.960464477539062e-07,
+    "121": 3.5762786865234375e-07
+  },
+  "accessor_bounds_valid": true,
+  "roundtrip_blender_passed": true,
+  "browser_playback_tested": false,
+  "production_validated": false
+}

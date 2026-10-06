@@ -1,0 +1,71 @@
+{
+  "asset": "LEMEGETON – MINITEL BOT",
+  "source_file": "LEMEGETON_SOURCE.glb",
+  "source_status": {
+    "format": "glTF 2.0 binary (.glb)",
+    "meshes": 1,
+    "nodes": 2,
+    "skins": 0,
+    "animations": 0,
+    "rigged": false,
+    "source_preserved": true
+  },
+  "rig_type": "mechanical rigid-part rig",
+  "design_constraints": {
+    "screen": "OFF / dark convex CRT glass",
+    "head_cables": false,
+    "hands": "4 digits total: 3 fingers + 1 opposable thumb per hand",
+    "shoulder": "spherical joint, rotational",
+    "wrist": "ring joint, 360-degree rotation",
+    "elbow": "orientable",
+    "legs": "articulated",
+    "feet": "broad/stable",
+    "modular_arm": "replaceable forearm/segment for spiral-hose extension"
+  },
+  "planned_bones": [
+    "ROOT",
+    "BODY",
+    "HEAD",
+    "ANTENNA",
+    "SHOULDER_L",
+    "ELBOW_L",
+    "WRIST_L",
+    "HAND_L",
+    "THUMB_L",
+    "FINGER1_L",
+    "FINGER2_L",
+    "FINGER3_L",
+    "SHOULDER_R",
+    "ELBOW_R",
+    "WRIST_R",
+    "HAND_R",
+    "THUMB_R",
+    "FINGER1_R",
+    "FINGER2_R",
+    "FINGER3_R",
+    "LEG_L",
+    "FOOT_L",
+    "LEG_R",
+    "FOOT_R"
+  ],
+  "deformation_strategy": {
+    "body": "rigid/near-rigid",
+    "head": "rigid parent to HEAD",
+    "arms": "rigid mechanical segments, joints rotate",
+    "hands": "separate rigid digits when segmentation permits",
+    "legs": "rigid mechanical segments",
+    "no_smooth_organic_weights": true
+  },
+  "next_production_steps": [
+    "Separate source geometry into mechanical parts where topology/material/loose-part boundaries allow.",
+    "Create the armature with the planned bone hierarchy.",
+    "Place pivots at shoulder ball, elbow, wrist ring, head neck and leg joints.",
+    "Assign rigid weights/parenting to parts.",
+    "Add IK controls for arms and legs.",
+    "Add independent finger controls.",
+    "Add head look/rotation control.",
+    "Add modular arm socket/extension control.",
+    "Bake test poses and validate deformation.",
+    "Export a rigged GLB and, if useful, FBX/Blender source."
+  ]
+}
