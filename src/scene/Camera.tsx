@@ -4,7 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import type { Vec3 } from "../minitel/types";
 export interface CameraCommand {
   id: number;
-  kind: "reset" | "front" | "zoomIn" | "zoomOut";
+  kind: "reset" | "front" | "side" | "back" | "zoomIn" | "zoomOut";
 }
 export function Camera({
   command,
@@ -32,6 +32,10 @@ export function Camera({
     const narrow = size.width / size.height < 1.2;
     if (command.kind === "front")
       camera.position.set(0, 2.5, narrow ? 9.5 : 7.3);
+    else if (command.kind === "side")
+      camera.position.set(narrow ? 9.5 : 7.3, 2.5, 0.3);
+    else if (command.kind === "back")
+      camera.position.set(0, 2.5, narrow ? -9.5 : -7.3);
     else if (command.kind === "reset")
       camera.position.set(
         narrow ? 2.5 : 4,

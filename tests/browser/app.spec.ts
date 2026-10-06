@@ -325,3 +325,33 @@ test("bascule entre les modeles du catalogue", async ({ page }) => {
   );
   expect(errors).toEqual([]);
 });
+test("page documentation : fiches, vues et liens", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Documentation" }).click();
+  await expect(page).toHaveURL(/\/documentation\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Documentation des terminaux",
+  );
+  for (const title of ["Terminatel 255", "Minitel 1", "Televiseur 1950"])
+    await expect(page.getByRole("heading", { level: 2, name: title })).toBeVisible();
+  const section = page.locator("#televiseur-1950");
+  await section.getByRole("button", { name: "Dos" }).click();
+  await expect(section.locator(".viewer > img")).toHaveAttribute(
+    "src",
+    /televiseur-1950-dos\.jpg$/,
+  );
+  await expect(section.getByRole("link", { name: /Ouvrir dans le terminal 3D/ })).toHaveAttribute(
+    "href",
+    /\?modele=televiseur-1950$/,
+  );
+  await expect(page.locator(".reference-list li")).toHaveCount(18);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+  ).toBe(true);
+  expect(errors).toEqual([]);
+});

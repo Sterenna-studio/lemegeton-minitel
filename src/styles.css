@@ -823,3 +823,30 @@ svg {
     bottom: 245px;
   }
 }
+/* ?capture=1 : scene seule, pour les vues de la documentation. */
+.experience.capture .masthead,
+.experience.capture .scene-caption,
+.experience.capture .camera-tools,
+.experience.capture .console,
+.experience.capture .credits,
+.experience.capture .model-loading {
+  display: none;
+}
+.experience.capture .scene {
+  inset: 0;
+}
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--cream);
+  text-decoration: none;
+}
+.doc-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}

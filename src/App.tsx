@@ -11,6 +11,7 @@ import {
   Box,
   Cable,
   Crosshair,
+  FileText,
   Keyboard,
   Monitor,
   RotateCcw,
@@ -98,9 +99,12 @@ export default function App() {
   const [effects, setEffects] = useState<CrtEffects>(defaultEffects);
   const reducedMotion = useReducedMotion();
   const [antenna, setAntenna] = useState(false);
-  const [command, setCommand] = useState<CameraCommand>({
-    id: 0,
-    kind: "reset",
+  // ?vue=face|profil|dos opens on a given view ; ?capture=1 hides the interface
+  // (used by tools/capture_views.mjs to illustrate the documentation page).
+  const [command, setCommand] = useState<CameraCommand>(() => {
+    const view = new URLSearchParams(window.location.search).get("vue");
+    const kinds: Record<string, CameraCommand["kind"]> = { face: "front", profil: "side", dos: "back" };
+    return { id: 0, kind: (view && kinds[view]) || "reset" };
   });
   const [input, setInput] = useState("");
   const [debug, setDebug] = useState(false);
@@ -185,7 +189,7 @@ export default function App() {
   }
   const fallback = !webgl || !!error;
   return (
-    <main className="experience">
+    <main className={params.get("capture") ? "experience capture" : "experience"}>
       <header className="masthead">
         <a href={import.meta.env.BASE_URL} className="brand" aria-label="Minitel, accueil">
           <Monitor size={26} />
@@ -216,6 +220,9 @@ export default function App() {
           })}
         </div>
         <div className="service">
+          <a className="doc-link" href={`${import.meta.env.BASE_URL}documentation/`}>
+            <FileText size={14} /> Documentation
+          </a>
           <span className="status-dot" />
           <span>3615 LEMEGETON</span>
           <span className="service-state">LIAISON ETABLIE</span>

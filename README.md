@@ -45,7 +45,7 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 npm run typecheck
 npm run lint
 npm test               # 6 tests unitaires Vitest
-npm run test:browser   # 14 tests Playwright (Edge headless, serveur dev sur 5174)
+npm run test:browser   # 16 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne
@@ -68,6 +68,25 @@ Pour vérifier localement le build de production :
 npm run build:ovh
 npx vite preview --base=/minitel/   # http://127.0.0.1:4173/minitel/
 ```
+
+## Documentation en ligne
+
+`/documentation/` (https://sterenna.fr/minitel/documentation/) présente chaque
+modèle : quatre vues, caractéristiques, provenance, licence, et un lien vers le
+terminal 3D. La page liste aussi les photos de référence du Terminatel 255 et
+renvoie à la documentation du projet. Son contenu est dans
+`src/documentation/content.ts`.
+
+Les vues sont des captures du terminal 3D lui-même (`?vue=face|profil|dos` et
+`?capture=1`). Pour les régénérer, lancer `npm run dev` puis :
+
+```bash
+node tools/capture_views.mjs http://127.0.0.1:5174
+```
+
+Les photos de référence (annonce eBay) ne s'affichent qu'en local, avec
+`npm run dev`. Le build n'en contient aucune, et le workflow de déploiement
+le vérifie.
 
 ## Architecture
 
