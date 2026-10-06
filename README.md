@@ -45,7 +45,7 @@ Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
 npm run typecheck
 npm run lint
 npm test               # 6 tests unitaires Vitest
-npm run test:browser   # 12 tests Playwright (Edge headless, serveur dev sur 5174)
+npm run test:browser   # 14 tests Playwright (Edge headless, serveur dev sur 5174)
 ```
 
 ## En ligne
@@ -111,10 +111,20 @@ expérimental : géométrie, doigts et pivots sont à reprendre avant l'animatio
 
 ## État du MVP
 
-Les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont atteints : Minitel 3D
-visible et manipulable, écran dynamique indépendant, UI Vidéotex, démo
-3615 Lemegéton, responsive, modèle remplaçable via un profil, touches 3D
-cliquables et accessoires par anchors.
+Les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont atteints :
+- Minitel 3D visible et manipulable, avec un écran dynamique indépendant ;
+- UI Vidéotex et démo 3615 Lemegéton ;
+- page responsive ;
+- modèle remplaçable via un profil ;
+- touches 3D cliquables et accessoires par anchors.
+
+Un sélecteur propose trois modèles :
+- le Terminatel 255, en finition marbre noir ;
+- le Minitel 1 d'origine ;
+- un téléviseur des années 1950.
+
+La page suit la direction artistique du Terminatel 255 (voir
+[assets et licences](docs/ASSETS.md)).
 
 Restent ouverts : la validation artistique (textures grises d'origine conservées),
 les essais sur téléphones physiques, l'optimisation du chargement (bundle

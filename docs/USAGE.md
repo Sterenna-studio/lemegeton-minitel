@@ -129,6 +129,28 @@ Une cellule peut recevoir `mosaic: 0..63` ou `blink: true`. Les actions par chif
 naviguent directement ; `Envoi` est traduit en `Enter`, Sommaire/Echap reviennent
 a l'accueil. Le champ de commande n'exerce pas un shell ni un eval JavaScript.
 
+## Catalogue de modeles et finitions
+
+Le selecteur en haut de page liste les entrees de `src/demo/catalog.ts`. Le
+choix est conserve dans l'URL (`?modele=terminatel-255`, `minitel-1`,
+`televiseur-1950`) ; `?model=<url>` charge toujours un GLB quelconque avec le
+profil generique. Chaque entree declare son fichier, son `ModelProfile`, sa
+legende et son credit, affiche en pied de page.
+
+Une entree peut ajouter une finition sans modifier le GLB. Le prop `finish` de
+`<Minitel>` est une fonction `(mesh, material, role) => void` ; `role` vaut
+`"key"` pour les touches du profil et `"body"` pour le reste. Elle est appelee
+sur des materiaux clones, jamais sur l'ecran. Il faut la declarer au niveau du
+module, car elle fait partie de la cle de memoisation. L'entree Terminatel 255
+s'en sert pour poser le marbre procedural sur la coque et assombrir les touches.
+
+Pour ajouter un modele :
+1. preparer une copie Web, avec par exemple un script Blender sur le modele de
+   `tools/prepare_television.py` ;
+2. declarer un profil dans `src/minitel/profiles.ts` ;
+3. ajouter l'entree au catalogue, avec un credit complet ;
+4. completer `public/models/ATTRIBUTION.md` et `docs/ASSETS.md`.
+
 ## Remplacer le modele
 
 Lire [MODEL_PREPARATION.md](MODEL_PREPARATION.md).

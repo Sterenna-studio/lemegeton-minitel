@@ -27,6 +27,18 @@ Prévoir un point d'ancrage et une surface explicitement dédiée au rendu Vidé
 - couleurs et grilles Vidéotex ;
 - curseur et clignotement lorsque pertinent.
 
+### Décision du 6 octobre 2026 : direction artistique Terminatel 255
+
+Choix du porteur du projet : la page abandonne le fond clair au profit de la
+direction artistique du Minitel Telic Alcatel Terminatel 255, série limitée.
+
+- **Matières** : marbre noir veiné or sable et gris, touches anthracite à
+  légendes crème, touche Envoi vert sauge.
+- **Typographie** : marquage incliné et détouré pour le titre.
+
+Le marbre est procédural et l'écran CRT garde son phosphore vert. Le Minitel
+beige et gris d'origine reste disponible dans le sélecteur de modèles.
+
 ### 4. Préparer la réutilisation
 
 API cible possible :

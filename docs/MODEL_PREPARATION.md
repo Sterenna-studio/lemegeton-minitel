@@ -14,6 +14,9 @@ Un autre GLB source peut etre passe apres `--`.
 `tools/audit_model.py` s'utilise de la meme facon et regenere les rendus de `docs/asset-audit/`.
 Avec Blender 5.2, la sortie est identique a l'octet pres a `public/models/minitel.glb`.
 
+Le televiseur se prepare de la meme facon avec `tools/prepare_television.py`,
+qui ecrit `public/models/television-1950.glb` et `docs/asset-audit/television-1950.json`.
+
 Cette commande remplace seulement `public/models/minitel.glb` et
 le rapport `docs/asset-audit/normalized.json`. Archiver une copie retouchee avant
 de la relancer. Ce script est **specifique a l'asset fourni**, pas un detecteur

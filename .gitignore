@@ -23,3 +23,9 @@ lemegeton/**
 lemegeton/ChatGPT-*.md
 lemegeton/09_SAUVEGARDES/
 lemegeton/**/__pycache__/
+
+# Photos de reference du Terminatel 255 (annonce eBay) : droits du vendeur,
+# usage local uniquement. Le README et l'inventaire CSV restent versionnes.
+docs/Minitel Telic*/**/*.webp
+docs/Minitel Telic*/**/*.png
+docs/Minitel Telic*/**/*.jpg
