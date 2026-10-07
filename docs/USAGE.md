@@ -310,6 +310,7 @@ les viewports, le cout du build et les niveaux de preuve.
 - Les touches sont cliquables ; leur enfoncement mecanique et le son restent a ajouter.
 - Pas de compression Draco/KTX2 imposee. DPR limite a 1,5, geometrie moderee, ombres 1024, rendu a la demande et mise a jour terminal a 8 Hz. Le bundle Three.js reste un cout a mesurer sur les sites cibles.
 - La permanence de phosphore temporelle n'est pas simulee ; glow faible, scanlines, vignette, courbure et scintillement sont independants et desactivables. Mouvement reduit neutralise clignotement/curseur anime et scintillement.
+- Evolution prevue : un monde explorable (couloir, portes temporelles, une salle par terminal), voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
 - Priorites suivantes : validation sur appareils physiques, consolidation des materiaux et touches, couleur plastique selon references, texture CRT encore plus lisible ; puis decodeur VDT ou adaptation WebSocket suivant le projet integrateur.
 
 ## Provenance

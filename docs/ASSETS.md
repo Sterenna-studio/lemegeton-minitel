@@ -121,3 +121,71 @@ Avant intégration :
 8. tester dans la scène Web.
 
 Voir `MODEL_PREPARATION.md`.
+
+## Monde explorable : sources et règles
+
+Ces règles s'appliquent aux assets du couloir, des portes et des salles. Le cadrage
+est dans [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md). Le dépôt est **public** :
+tout fichier sous `public/` est redistribué, à la fois par le site et par le dépôt.
+
+### Licences acceptées et refusées
+
+| Licence | Statut | Condition |
+| --- | --- | --- |
+| CC0 | acceptée | aucune ; on crédite quand même la source dans `ATTRIBUTION.md` (traçabilité) |
+| CC BY 3.0 / 4.0 | acceptée | crédit dans `public/models/ATTRIBUTION.md` et sur la page |
+| CC BY-SA | au cas par cas | l'asset modifié reste sous BY-SA ; on le signale dans `ATTRIBUTION.md` |
+| CC BY-NC, BY-ND et leurs variantes | **refusée** | usage commercial ou modification interdits |
+| « Royalty Free », Standard, Editorial (boutiques) | **refusée** | interdisent en général la redistribution du fichier (précédent : TELTEL de CGTrader) |
+| Sans licence ou sans auteur identifiable | **refusée** | précédent : `white_mesh.glb` |
+
+### Sources vérifiées le 7 octobre 2026
+
+| Source | Licence constatée | Usage dans ce dépôt |
+| --- | --- | --- |
+| [Poly Haven](https://polyhaven.com/license) | CC0 (modèles, textures, HDRI), redistribution autorisée | source principale : mobilier, objets, HDRI |
+| [ambientCG](https://docs.ambientcg.com/license/) | CC0 1.0 | source principale : matériaux PBR (bois, plâtre, laiton, tapis) |
+| [Sketchfab](https://sketchfab.com/) | variable, **modèle par modèle** | seulement les modèles CC0 / CC BY ; licence et auteur relevés via l'API, comme pour okotaru |
+| [Kenney](https://kenney.nl/assets), [Quaternius](https://quaternius.com/) | CC0 | possible, mais leur style s'accorde mal à la DA |
+| [OpenGameArt](https://opengameart.org/), [itch.io](https://itch.io/game-assets/free) | variable | au cas par cas, selon la licence de chaque pack |
+| [Freesound](https://freesound.org/) | variable par son (CC0, CC BY, CC BY-NC) | filtrer sur CC0 et CC BY ; BY-NC refusé |
+| [Sonniss GDC Bundle](https://sonniss.com/gdc-bundle-license/) | libre de droits, sans crédit ; **interdit de distribuer les sons en tant que sons** et d'entraîner une IA | **ne pas versionner dans ce dépôt public**, car un fichier dans `public/` serait redistribué brut. N'est utilisable que si les sons restent hors du dépôt. |
+
+### Visuels générés
+
+Les portraits, documents, cartes et affiches générés pour l'univers suivent les
+règles de [DIRECTION_ARTISTIQUE.md](DIRECTION_ARTISTIQUE.md#visuels-2d-générés).
+En résumé :
+- pas de personne réelle, de marque, ni de document officiel imité ;
+- provenance consignée dans `docs/asset-audit/visuels.json` ;
+- conditions de l'outil employé vérifiées.
+
+### Chaîne de préparation
+
+1. Relever la licence, l'auteur, l'URL source et la date de téléchargement.
+2. Préparer l'asset avec un script `tools/prepare_*.py` : échelle (1 m = 8 unités), origine, pivots, noms, compression. À partir du lot A : textures KTX2 et géométrie meshopt.
+3. Écrire un rapport dans `docs/asset-audit/` (mesures, comme `mobilier.json`).
+4. Contrôler le budget avec `python tools/budget_glb.py public/models/<fichier>.glb`, au regard des cibles de [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md#8-budgets).
+5. Ajouter une ligne à ce document et le crédit dans `public/models/ATTRIBUTION.md`.
+6. Ajouter le GLB à la liste vérifiée par `.github/workflows/deploy-ovh.yml`.
+
+### Sources locales
+
+Les sources lourdes restent locales et hors Git, comme le pipeline `lemegeton/`.
+Cela concerne les `.blend`, les téléchargements bruts, les textures 4K et les sons
+sources. Elles vivent dans le dossier `monde/` à la racine, créé le 7 octobre 2026. Une liste
+blanche dans `.gitignore` n'y versionne que les formats texte (`.md`, `.csv`, `.py`).
+La provenance de chaque fichier est dans [monde/SOURCES.csv](../monde/SOURCES.csv) :
+
+```text
+monde/
+  00_CORE/        porte temporelle, poignée, horloge, compteur, effet temporel
+  01_CORRIDOR/    kit : murs, sol, plafond, moulures, appliques
+  02_FURNITURE/   bureaux, chaises, meubles, étagères, tables
+  03_VINTAGE/     machine à écrire, téléphone, radio, projecteur, horloges
+  04_PROPS/       livres, papiers, bouteilles, lampes, boîtes
+  05_TEXTURES/    bois, plâtre, métal, tapis, papier peint
+  06_STORY/       lettres, photos, cartes, journaux, documents (générés)
+  07_AUDIO/       portes, horloges, ambiances, machines, pas
+  SOURCES.csv     fichier, source, auteur, licence, URL, date (versionné)
+```
