@@ -33,7 +33,10 @@ est affiche automatiquement et reste navigable.
 - `src/hooks/` : abonnement React au terminal et preference de mouvement reduit.
 - `src/scene/` : lumiere, ombres, camera tactile, suivi de contexte WebGL et fallback d'erreur.
 - `src/components/AccessibleTerminal.tsx` : contenu textuel et actions DOM synchronises.
-- `src/App.tsx` : demonstration, commandes, reglages et inspection de developpement.
+- `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et, plus tard, par le poste terminal des salles.
+- `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
+- `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
+- `src/atelier/` : page `atelier/` des briques du monde.
 - `public/models/minitel.glb` : copie preparee pour le Web, environ 3,6 Mo et 22 000 triangles.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.

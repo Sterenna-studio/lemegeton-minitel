@@ -387,6 +387,21 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 | **F. Intégration** | `/minitel/` passe au monde ; passerelles et suggestion de la version simple ; tests actuels sur `/simple/` ; inventaire en raccourci, compatibilité `?modele=`, docs (USAGE, ASSETS, ATTRIBUTION), contrôle du déploiement, page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
 | **G. Objets interactifs** (plus tard) | horloge de jeu, machine à écrire, téléphone, radio, objets mystérieux | à cadrer au moment venu |
 
+### Avancement
+
+**Lot A — terminé le 7 octobre 2026**, sans changement visible (branche `feat/lot-a-preparation`) :
+- `App.tsx` passe de 742 à 306 lignes et devient la version simple. L'expérience du terminal et ses panneaux sont dans `src/terminal/`, l'état d'URL dans `src/hooks/urlParams.ts`.
+- Éclairage en presets : `terminatelLighting` reproduit l'actuel valeur pour valeur. `Scene` accepte `lighting`, `cameraFar` et `paused` ; avec `paused`, la lampe et l'écran cessent de demander des images.
+- Nouvelles entrées `simple/` (version simple) et `atelier/` (coquille des briques), vérifiées par le déploiement.
+- `src/world/` (types, salles, rails, navigation, séquence, URL) : 15 tests unitaires. Un test de mutation confirme qu'ils détectent un mauvais ordre chronologique.
+- Chaîne d'assets : `tools/optimize_glb.mjs` (KTX2 + meshopt, sans binaire externe), et `tools/budget_glb.py` qui lit le KTX2.
+- Essai sur la porte provisoire, en local : 5,56 → 0,74 Mo, textures GPU de ~34 à 4,2 Mo. Le fichier se charge dans three.js avec `KTX2Loader` et meshopt.
+- Vérifications : 38 tests unitaires, 26 tests navigateur (les 22 d'origine + `/simple/` et `/atelier/`, sur ordinateur et mobile), typecheck, lint, build.
+
+Reporté au lot B :
+- le chargement KTX2 dans l'application (`KTX2Loader`, transcodeur Basis servi avec le site) : il ne sert qu'à partir du premier GLB compressé affiché ;
+- le réglage fin de la porte pour passer de 0,74 à 0,6 Mo (taille de la texture du cadre), avec vérification visuelle.
+
 ## 13. Questions ouvertes
 
 Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.

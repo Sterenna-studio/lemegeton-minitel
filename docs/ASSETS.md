@@ -163,7 +163,7 @@ En résumé :
 ### Chaîne de préparation
 
 1. Relever la licence, l'auteur, l'URL source et la date de téléchargement.
-2. Préparer l'asset avec un script `tools/prepare_*.py` : échelle (1 m = 8 unités), origine, pivots, noms, compression. À partir du lot A : textures KTX2 et géométrie meshopt.
+2. Préparer l'asset avec un script `tools/prepare_*.py` : échelle (1 m = 8 unités), origine, pivots, noms. Puis le compresser avec `node tools/optimize_glb.mjs <entrée> <sortie.glb> [--max 1024] [--secondary 512] [--drop a,b]` : textures redimensionnées puis converties en KTX2 (ETC1S pour la couleur, UASTC pour les normales), géométrie meshopt. L'application doit alors charger `KTX2Loader` et le décodeur meshopt (lot B).
 3. Écrire un rapport dans `docs/asset-audit/` (mesures, comme `mobilier.json`).
 4. Contrôler le budget avec `python tools/budget_glb.py public/models/<fichier>.glb`, au regard des cibles de [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md#8-budgets).
 5. Ajouter une ligne à ce document et le crédit dans `public/models/ATTRIBUTION.md`.
