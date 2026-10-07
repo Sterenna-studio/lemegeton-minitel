@@ -6,7 +6,8 @@ Sans argument, mesure tout public/models/ et ecrit docs/asset-audit/budgets.json
 Pour chaque fichier : poids, triangles, sommets, meshes et materiaux (chaque
 primitive coute au moins un appel de rendu), textures embarquees (nombre,
 format, plus grande taille) et estimation de la memoire GPU des textures
-(RGBA 8 bits + mipmaps, sans compression GPU).
+(mipmaps compris : RGBA 8 bits pour PNG/JPEG/WebP, 1 octet par pixel pour
+KTX2, transcode dans un format compresse du GPU).
 """
 import json
 import struct
@@ -16,7 +17,12 @@ from pathlib import Path
 WEB = Path(__file__).resolve().parents[1]
 
 
+KTX2_ID = b'\xabKTX 20\xbb\r\n\x1a\n'
+
+
 def image_size(b):
+    if b[:12] == KTX2_ID:
+        return list(struct.unpack('<II', b[20:28]))
     if b[:8] == b'\x89PNG\r\n\x1a\n':
         return list(struct.unpack('>II', b[16:24]))
     if b[:2] == b'\xff\xd8':
@@ -62,7 +68,10 @@ def measure(path):
         size = image_size(data[start:start + view['byteLength']])
         texture_bytes += view['byteLength']
         if size:
-            gpu += size[0] * size[1] * 4 * 4 / 3
+            # KTX2 is transcoded to a GPU format (ASTC 4x4, BC7...) : 1 byte per
+            # pixel ; other formats are decoded to RGBA : 4 bytes per pixel.
+            per_pixel = 1 if image.get('mimeType') == 'image/ktx2' else 4
+            gpu += size[0] * size[1] * per_pixel * 4 / 3
         textures.append({'mime': image.get('mimeType'), 'size': size})
     sizes = [t['size'] for t in textures if t['size']]
     return {
