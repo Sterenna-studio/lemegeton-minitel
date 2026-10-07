@@ -20,6 +20,8 @@ interface Props {
   mesh: Mesh;
   effects: CrtEffects;
   reducedMotion: boolean;
+  /** No timer-driven updates (terminal out of view). */
+  paused?: boolean;
 }
 const vertexShader = `
   varying vec2 vUv; varying vec3 vNormal; varying vec3 vView;
@@ -52,7 +54,7 @@ const fragmentShader = `
     gl_FragColor=vec4(color,1.0);
     #include <colorspace_fragment>
   }`;
-export function MinitelScreen({ source, mesh, effects, reducedMotion }: Props) {
+export function MinitelScreen({ source, mesh, effects, reducedMotion, paused = false }: Props) {
   const invalidate = useThree((state) => state.invalidate);
   const canvas = useMemo(() => {
     const c = document.createElement("canvas");
@@ -126,6 +128,7 @@ export function MinitelScreen({ source, mesh, effects, reducedMotion }: Props) {
     invalidate();
   }, [source, effects, reducedMotion, canvas, texture, material, invalidate]);
   useEffect(() => {
+    if (paused) return;
     const timer = window.setInterval(() => {
       const current = latest.current;
       if (current.source.kind === "videotex" && !current.reducedMotion) {
@@ -143,9 +146,9 @@ export function MinitelScreen({ source, mesh, effects, reducedMotion }: Props) {
       }
     }, 125);
     return () => window.clearInterval(timer);
-  }, [canvas, texture, invalidate]);
+  }, [canvas, texture, invalidate, paused]);
   // Continuous external sources (animated canvas, video) : upload at ~30 fps.
-  const continuous = source.kind !== "videotex" && !!source.continuous;
+  const continuous = !paused && source.kind !== "videotex" && !!source.continuous;
   useEffect(() => {
     if (!continuous) return;
     const timer = window.setInterval(() => {
@@ -155,7 +158,7 @@ export function MinitelScreen({ source, mesh, effects, reducedMotion }: Props) {
     return () => window.clearInterval(timer);
   }, [continuous, texture, invalidate]);
   useFrame(() => {
-    if (source.kind === "texture" && source.continuous)
+    if (!paused && source.kind === "texture" && source.continuous)
       texture.needsUpdate = true;
   });
   return null;

@@ -1,7 +1,7 @@
 import { Component, Suspense, useEffect, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Minitel, type MinitelProps } from "../minitel/Minitel";
-import { Lighting } from "./Lighting";
+import { Lighting, type LightingPreset } from "./Lighting";
 import { Camera, type CameraCommand } from "./Camera";
 import { Table } from "./Table";
 import type { Furniture } from "./furniture";
@@ -75,6 +75,8 @@ export function Scene({
   onCamera,
   onMetrics,
   table,
+  lighting,
+  cameraFar = 80,
   ...props
 }: MinitelProps & {
   /** Furniture under the terminal (its top is at y = 0) ; none : on the floor. */
@@ -83,6 +85,10 @@ export function Scene({
   onError: (message: string) => void;
   onCamera?: (position: Vec3) => void;
   onMetrics?: (fps: number, calls: number) => void;
+  /** Lighting preset of the place (default : the current terminatel look). */
+  lighting?: LightingPreset;
+  /** Far plane, in units (1 m = 8) : 80 frames a terminal, a corridor needs more. */
+  cameraFar?: number;
 }) {
   return (
     <SceneBoundary onError={onError}>
@@ -90,7 +96,7 @@ export function Scene({
         shadows
         frameloop="demand"
         dpr={[1, 1.5]}
-        camera={{ fov: 40, near: 0.1, far: 80, position: [4, 3.2, 6.4] }}
+        camera={{ fov: 40, near: 0.1, far: cameraFar, position: [4, 3.2, 6.4] }}
         gl={{
           // Transparent canvas : the page background (CSS marble) shows through.
           alpha: true,
@@ -100,7 +106,7 @@ export function Scene({
         }}
         aria-label="Minitel 3D interactif"
       >
-        <Lighting />
+        <Lighting preset={lighting} paused={props.paused} />
         <Camera
           command={command}
           framing={framings[table?.file ? "desk" : "floor"]}
