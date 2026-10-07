@@ -48,6 +48,8 @@ jobs:
           test -f dist/models/ATTRIBUTION.md
           test -f dist/models/television-1950.glb
           test -f dist/documentation/index.html
+          test -f dist/simple/index.html
+          test -f dist/atelier/index.html
           # Les photos de reference (annonce eBay) ne doivent jamais etre publiees.
           ! find dist -iname '*.webp' | grep -q .
           grep -q '/minitel/assets/' dist/index.html

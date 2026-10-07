@@ -42,6 +42,8 @@ interface Props {
   onInfo?: (info: ModelInfo) => void;
   debug?: DebugSettings;
   selectedName?: string;
+  /** Stops the screen updates while the terminal is out of view. */
+  paused?: boolean;
 }
 export function MinitelModel({
   model,
@@ -54,6 +56,7 @@ export function MinitelModel({
   onInfo,
   debug,
   selectedName,
+  paused = false,
 }: Props) {
   const gltf = useGLTF(model);
   const prepared = useMemo(() => {
@@ -252,6 +255,7 @@ export function MinitelModel({
         mesh={prepared.screen}
         effects={effects}
         reducedMotion={reducedMotion}
+        paused={paused}
       />
       {debug?.axes && <axesHelper args={[3]} />}
       {(debug?.bounds || (debug && selectedName)) && (

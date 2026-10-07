@@ -95,9 +95,15 @@ src/
   minitel/      # composant Minitel, profils de modèle, écran dynamique, anchors, API (index.ts)
   videotex/     # grille 40 × 25, palette, mosaïques 2 × 3, rendu Canvas, contrôleur Terminal
   scene/        # caméra tactile, lumière, ombres, suivi du contexte WebGL
-  components/   # AccessibleTerminal : contenu et actions DOM synchronisés
-  hooks/        # abonnement au terminal, mouvement réduit
-  demo/         # pages 3615 Lemegéton, seul module narratif
+  components/   # AccessibleTerminal, inventaire, bouton Tool
+  hooks/        # abonnement au terminal, mouvement réduit, paramètres d'URL
+  demo/         # pages 3615 Lemegéton, seul module narratif ; catalogue des terminaux
+  terminal/     # expérience du terminal (3615, yeux, effets) et ses panneaux, réutilisables
+  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé)
+  atelier/      # page atelier : chaque brique du monde vue seule
+  App.tsx       # version simple : le terminal seul
+
+simple/, atelier/, documentation/   # entrées Vite des autres pages
 
 public/
   models/       # minitel.glb préparé + ATTRIBUTION.md
