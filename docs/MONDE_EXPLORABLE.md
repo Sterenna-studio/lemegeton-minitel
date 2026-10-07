@@ -192,7 +192,7 @@ poste      --PRECEDENT------>    trajet vers le poste précédent de l'historiqu
 Une seule porte est modélisée. Elle a un pivot de charnière à l'origine du battant
 et une poignée séparée, et elle porte trois éléments animables :
 - un **compteur à rouleaux**, de quatre rouleaux. C'est une texture canvas, en chiffres IBM Plex Mono. Le dernier rouleau sait afficher `?` ;
-- une **horloge** dont les aiguilles sont des objets séparés ;
+- une **pendule** fixe au-dessus du chambranle. Les aiguilles qui s'emballent sont celles de la **grande horloge** du couloir, des objets séparés (décision du 7 octobre) ;
 - une **lumière** d'entrebâillement : un `rectAreaLight` ou un plan émissif, dans la teinte de l'époque.
 
 La séquence d'ouverture dure environ 3 s, sans compter le travelling.
@@ -202,7 +202,7 @@ La séquence d'ouverture dure environ 3 s, sans compter le travelling.
 | --- | --- |
 | 0,0 | La poignée tourne ; un tic-tac démarre. |
 | 0,2 → 1,4 | Le compteur roule de l'année du couloir (« 19?? ») jusqu'à l'année cible. Le tic-tac accélère. |
-| 0,6 → 1,6 | Les aiguilles de l'horloge s'emballent. |
+| 0,6 → 1,6 | Les aiguilles de la grande horloge du couloir s'emballent ; la pendule au-dessus de la porte reste fixe. |
 | 1,2 → 2,0 | La lumière de l'époque filtre et monte en intensité. |
 | 1,6 → 3,0 | Le battant s'ouvre (`openAngle`) ; un souffle se fait entendre. |
 | 3,0 → | Passage : travelling au travers et effet temporel (§7), puis arrivée à `salle:<id>:entree`. |
@@ -345,8 +345,8 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
 | Élément | Lot | Origine recommandée |
 | --- | --- | --- |
 | Porte et poignée | B | **provisoire** : « Door_Wooden_Old » de Mehdi Shahsavan (ahmagh2e), CC BY 4.0, porte à panneaux en bois sombre avec cadre ([Sketchfab](https://sketchfab.com/3d-models/none-77815b3a55504037aa4641eb9650e9de)) ; modèle maison plus tard. Déposée le 7 octobre (glTF, `monde/00_CORE/porte/`) : **battant et poignée séparés**, pivot du battant déjà sur les charnières ; 1,00 × 2,30 m (8 × 18,4 unités) ; 5 289 triangles, 4 appels de rendu. **Hors budget en l'état** (6 textures PNG 1024², 5,4 Mo, environ 34 Mo GPU) : il faudra du KTX2 et des cartes secondaires en 512 pour tenir 0,6 Mo et 24 Mo. |
-| Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard. Téléchargée le 7 octobre (glTF 1k, `monde/00_CORE/`). **Dans le glTF, les aiguilles sont fusionnées au boîtier** : le rig n'existe que dans le `.blend`. Pour les animer, il faut les séparer depuis le `.blend` riggé (3,9 Mo, Blender 5.2 disponible), ou confier l'animation à la grande horloge. |
-| Décor du couloir (option) | C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)). Téléchargée le 7 octobre (glTF 1k, `monde/01_CORRIDOR/`) : **aiguilles séparées** (`minute_hand`, `houd_hand`), animables telles quelles ; 2,19 m ; 8 582 triangles. |
+| Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard. Téléchargée le 7 octobre (glTF 1k, `monde/00_CORE/`). **Dans le glTF, les aiguilles sont fusionnées au boîtier** : le rig n'existe que dans le `.blend`. **Décision du 7 octobre : la pendule reste un décor fixe au-dessus de la porte**, et l'emballement des aiguilles est confié à la grande horloge du couloir. Le `.blend` riggé (3,9 Mo) n'est pas téléchargé. |
+| Grande horloge du couloir | B et C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)). Téléchargée le 7 octobre (glTF 1k, `monde/01_CORRIDOR/`) : **aiguilles séparées** (`minute_hand`, `houd_hand`), animables telles quelles ; 2,19 m ; 8 582 triangles. |
 | Mur, sol, moulure, applique | C | kit Blender + matériaux ambientCG / Poly Haven (CC0) |
 | Bureau, chaise, lampe, machine à écrire | E | Poly Haven (CC0), sinon Sketchfab CC BY |
 

@@ -67,7 +67,7 @@ police sans licence OFL ou équivalente.
 
 Une seule porte, en noyer, avec poignée, plaque et compteur en laiton.
 - **Compteur à rouleaux** : chiffres crème `#ece4d2` sur fond noir `#0c0b0a`, en IBM Plex Mono, avec un léger relief cylindrique. Le dernier rouleau sait afficher `?` pour « 198? ».
-- **Horloge** : cadran crème, aiguilles en laiton noirci, placée au-dessus du chambranle.
+- **Horloges** : une pendule de cheminée fixe au-dessus du chambranle ; dans le couloir, une grande horloge de parquet, dont les aiguilles s'emballent pendant l'ouverture.
 - **Plaque** : nom du terminal gravé, par exemple « Téléviseur 1950 ».
 
 Chaque porte a une **teinte d'époque**, qui filtre sous la porte puis par
