@@ -1,0 +1,137 @@
+/* Atelier : memes jetons que le terminal (styles.css). */
+.atelier-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(10, 9, 8, 0.88), rgba(10, 9, 8, 0.94)),
+    var(--marble) center top / 1100px repeat,
+    var(--page);
+  color: var(--cream);
+  line-height: 1.6;
+}
+.atelier-masthead,
+.atelier-page main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 36px;
+}
+.atelier-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+.atelier-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--cream);
+  text-decoration: none;
+  font: italic 600 25px "IBM Plex Sans", sans-serif;
+}
+.atelier-brand small {
+  display: block;
+  font: 500 11px "IBM Plex Mono", monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.atelier-masthead nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.atelier-masthead nav a,
+.atelier-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--cream);
+  font: 500 12px "IBM Plex Mono", monospace;
+  text-decoration: none;
+}
+.atelier-masthead nav a:hover,
+.atelier-masthead nav a:focus-visible,
+.atelier-back:hover,
+.atelier-back:focus-visible {
+  border-color: var(--gold);
+}
+.atelier-page h1 {
+  margin: 12px 0 8px;
+  font: 600 30px "IBM Plex Sans", sans-serif;
+}
+.atelier-intro,
+.atelier-brick p {
+  max-width: 62ch;
+  color: var(--muted);
+}
+.atelier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 28px 0 48px;
+  padding: 0;
+  list-style: none;
+}
+.atelier-grid a {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--muted);
+  text-decoration: none;
+}
+.atelier-grid a:hover,
+.atelier-grid a:focus-visible {
+  border-color: var(--gold);
+  background: var(--raised);
+}
+.atelier-grid strong {
+  color: var(--cream);
+  font-size: 18px;
+}
+.atelier-lot,
+.atelier-grid em {
+  font: 500 11px "IBM Plex Mono", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+.atelier-lot {
+  color: var(--gold);
+}
+.atelier-grid em {
+  margin-top: auto;
+  color: var(--faint);
+}
+.atelier-brick {
+  padding: 8px 0 48px;
+}
+.atelier-pending {
+  margin-top: 20px;
+  font: 500 13px "IBM Plex Mono", monospace;
+  color: var(--gold) !important;
+}
+@media (max-width: 600px) {
+  .atelier-masthead,
+  .atelier-page main {
+    padding: 0 16px;
+  }
+  .atelier-masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 16px;
+  }
+  .atelier-page h1 {
+    font-size: 24px;
+  }
+}
