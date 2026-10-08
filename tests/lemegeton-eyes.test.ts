@@ -71,3 +71,42 @@ describe("contrôleur : style Lemegeton", () => {
     controller.stop();
   });
 });
+
+describe("suivi du pointeur", () => {
+  afterEach(() => vi.useRealTimers());
+
+  it("yeux en mosaïque : trois positions, au-delà d'un seuil", () => {
+    const eyes = new EyesController({ style: "zyra" });
+    eyes.follow(0.9, 0);
+    expect(eyes.getSnapshot().state).toMatchObject({ gazeX: 1, gazeY: 0 });
+    eyes.follow(0.1, 0.2);
+    expect(eyes.getSnapshot().state).toMatchObject({ gazeX: 0, gazeY: 0 });
+    eyes.follow(-0.8, 0.9);
+    expect(eyes.getSnapshot().state).toMatchObject({ gazeX: -1, gazeY: 1 });
+  });
+
+  it("le regard autonome attend que le pointeur se taise", async () => {
+    vi.useFakeTimers();
+    // random() = 0 : the autonomous gaze would look left (-1) at 2.2 s.
+    const eyes = new EyesController({ style: "zyra", random: () => 0, now: () => Date.now() });
+    eyes.start();
+    eyes.follow(1, 0);
+    // Async : the blink sequences await their timers.
+    await vi.advanceTimersByTimeAsync(2400);
+    expect(eyes.getSnapshot().state.gazeX).toBe(1);
+    await vi.advanceTimersByTimeAsync(5300);
+    expect(eyes.getSnapshot().state.gazeX).toBe(-1);
+    eyes.stop();
+  });
+
+  it("yeux Lemegeton : le regard glisse vers le pointeur", () => {
+    let now = 0;
+    const eyes = new LemegetonEyes(() => 0.5, now);
+    eyes.lookAt(0.6, 0, now, 2500);
+    for (; now <= 1500; now += 90) eyes.update(now, true, false);
+    const { eyes: cells } = eyes.cells(false);
+    // Both pupils moved right : the picture is no longer mirror-symmetric.
+    const symmetric = cells.every((line) => line.every((m, c) => line[39 - c] === mirror(m)));
+    expect(symmetric).toBe(false);
+  });
+});

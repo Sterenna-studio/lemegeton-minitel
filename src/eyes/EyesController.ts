@@ -51,6 +51,8 @@ export type EyeStyleId = (typeof EYE_STYLES)[number]["id"];
 const isLemegeton = (style: EyeStyleId) => style === "lemegeton" || style === "lemegeton-visage";
 /** Cadence du firmware (EYE_RENDER_MIN_MS) : une image toutes les 90 ms au plus. */
 const LEMEGETON_FRAME_MS = 90;
+/** The pointer keeps the gaze this long before the autonomous gaze resumes. */
+export const FOLLOW_HOLD_MS = 2500;
 
 /** Rendus : mosaique Videotex (formes minitel-face) ou classique lisse (overlay OBS). */
 export const EYE_RENDERS = [
@@ -137,6 +139,8 @@ export class EyesController {
   private lemegeton: LemegetonEyes;
   private ticker: ReturnType<typeof setInterval> | undefined;
   private now: () => number;
+  /** Until then, the gaze belongs to the pointer (follow). */
+  private followUntil = 0;
 
   constructor(options: EyesOptions = {}) {
     this.palette = options.palette ?? "cyan";
@@ -279,6 +283,26 @@ export class EyesController {
     this.update({ gazeX: clamp(x), gazeY: clamp(y) });
   }
 
+  /**
+   * Leger suivi du pointeur : x, y de -1 a 1 sur la fenetre (y vers le bas).
+   * Les yeux en mosaique ne tournent qu'au-dela d'un seuil (regard sur trois
+   * positions) ; les yeux Lemegeton suivent en douceur, a 60 % de leur course.
+   * Une sequence en cours garde la main.
+   */
+  follow(x: number, y: number) {
+    const now = this.now();
+    this.followUntil = now + FOLLOW_HOLD_MS;
+    if (isLemegeton(this.style)) {
+      this.lemegeton.lookAt(x * 0.6, y * 0.45, now, FOLLOW_HOLD_MS);
+      return;
+    }
+    if (this.running) return;
+    const step = (v: number, edge: number) => (Math.abs(v) < edge ? 0 : Math.sign(v));
+    const gazeX = step(x, 0.35);
+    const gazeY = step(y, 0.55);
+    if (gazeX !== this.state.gazeX || gazeY !== this.state.gazeY) this.setGaze(gazeX, gazeY);
+  }
+
   /** Joue une sequence ; une nouvelle sequence interrompt la precedente. */
   async play(name: SequenceName): Promise<void> {
     const token = ++this.sequenceToken;
@@ -379,7 +403,7 @@ export class EyesController {
   private scheduleGaze() {
     this.later(() => {
       if (!this.autonomous) return;
-      if (!this.running) {
+      if (!this.running && this.now() >= this.followUntil) {
         const x = [-1, 0, 0, 1][Math.floor(this.random() * 4)];
         const y = [-1, 0, 0, 0, 1][Math.floor(this.random() * 5)];
         this.setGaze(x, y);

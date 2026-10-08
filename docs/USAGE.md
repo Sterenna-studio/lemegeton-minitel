@@ -230,6 +230,7 @@ Rendu mosaique, a partir du travail deja fait dans **minitel-face** :
 - `src/eyes/EyesController.ts` : le moteur de `FaceRenderer`, avec les sequences et le
   mode autonome (clignements de 1 a 6 s dont 40 % doubles, regard de 2,2 a 5,2 s,
   reactions de 9 a 16 s). Le mode autonome est coupe en mouvement reduit.
+- Suivi de la souris (`EyesController.follow`) : les yeux regardent legerement vers le pointeur, sur trois positions en mosaique (au-dela d'un seuil), en douceur et a 60 % de leur course pour les yeux Lemegeton. Le regard autonome reprend 2,5 s apres le dernier mouvement. Souris seulement (pas au toucher), et coupe en mouvement reduit comme le mode autonome.
 - Palettes reprises des `COLOR_PRESETS` de l'overlay et ramenees aux 8 couleurs
   Videotex (cyan, phosphore, ambre, rouge, nitro, blanc). *Auto* reprend les couleurs
   d'humeur de Zyra.

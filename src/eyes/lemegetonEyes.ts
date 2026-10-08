@@ -162,6 +162,11 @@ export class LemegetonEyes {
     this.gaze.tx = clamp(x, -1, 1);
     this.gaze.ty = clamp(y, -1, 1);
   }
+  /** Looks at a point (the visitor's pointer) and keeps it for holdMs before wandering again. */
+  lookAt(x: number, y: number, now: number, holdMs: number) {
+    this.setGaze(x, y);
+    this.nextGazeAt = Math.max(this.nextGazeAt, now + holdMs);
+  }
   /** Half-closed rest pose (the mesh sleeps, or the Sommaire key). */
   setSleepy(sleepy: boolean, now: number) {
     if (sleepy === this.sleepy) return;
