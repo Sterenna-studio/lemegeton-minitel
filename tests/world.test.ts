@@ -81,7 +81,8 @@ describe("rails", () => {
     expect(travelDuration(a, a)).toBe(MIN_TRAVEL);
     expect([0, 0.5, 1].map(easeInOutCubic)).toEqual([0, 0.5, 1]);
     for (let t = 0; t < 1; t += 0.05) expect(easeInOutCubic(t + 0.05)).toBeGreaterThanOrEqual(easeInOutCubic(t));
-    expect(travelPath(a, b)).toEqual([a.position, [0, 12.8, -16], b.position]);
+    const middle = a.position.map((v, i) => (v + b.position[i]) / 2);
+    expect(travelPath(a, b)).toEqual([a.position, middle, b.position]);
   });
 });
 

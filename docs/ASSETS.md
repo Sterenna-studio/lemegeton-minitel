@@ -121,7 +121,14 @@ KTX2 (Basis Universal), géométrie meshopt. L'application les lit grâce à
 | `mobilier/*.glb` | 0,29 à 0,37 Mo | 0,24 à 0,30 Mo | ~17 → 2 Mo chacun |
 
 Le rendu a été comparé avant et après sur les trois terminaux, y compris en vue
-rapprochée : aucune différence visible. Les `tools/prepare_*.py` produisent des
+rapprochée. Le 8 octobre, cette comparaison est apparue **insuffisante** : elle ne
+montrait pas les reflets. ktx2-encoder marque tous les KTX2 en sRGB par défaut
+(`isSetKTX2SRGBTransferFunc: true`). Les cartes de relief et de matière étaient donc
+lues comme des couleurs : rugosité trop basse, normales faussées, d'où des reflets
+brillants par plaques. On le voit nettement sur la porte du couloir, éclairée de face.
+`optimize_glb.mjs` et `encode_textures.mjs` les marquent désormais linéaires, et tous
+les modèles ont été recompressés depuis les originaux. Après correction, la porte est
+de nouveau mate comme la source, et le Minitel vu de près est identique à l'original. Les `tools/prepare_*.py` produisent des
 GLB non compressés. **Après chaque préparation, relancer la compression** :
 
 ```bash

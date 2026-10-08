@@ -23,7 +23,7 @@ export const bricks: Brick[] = [
     title: "Couloir",
     summary: "Kit modulaire hors du temps, trois portes dans l'ordre chronologique, grande horloge, postes du rail.",
     lot: "C",
-    ready: false,
+    ready: true,
   },
   {
     id: "salle",

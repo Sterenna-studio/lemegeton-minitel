@@ -1,6 +1,7 @@
 # Servi sous https://sterenna.fr/minitel/ (OVH mutualisé, Apache).
 AddType model/gltf-binary .glb
 AddType application/wasm .wasm
+AddType image/ktx2 .ktx2
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE application/javascript text/css model/gltf-binary application/wasm
@@ -16,6 +17,7 @@ AddType application/wasm .wasm
   # range par revision de three (basis/<revision>/) : cache long sans risque.
   ExpiresByType model/gltf-binary "access plus 1 year"
   ExpiresByType application/wasm "access plus 1 year"
+  ExpiresByType image/ktx2 "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType text/html "access plus 0 seconds"

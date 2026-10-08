@@ -420,6 +420,25 @@ Reporté au lot B :
   - le cadran de la grande horloge regarde déjà +z dans le fichier.
 - **Tests** : `tests/browser/door.spec.ts`, 3 tests sur ordinateur et mobile. Un test de mutation confirme qu'un battant qui ne s'ouvre plus fait échouer le premier.
 
+**Lot C — terminé le 8 octobre 2026** : le couloir dans l'atelier, `atelier/?brique=couloir&poste=<poste>`.
+- **Kit en code** (`src/world/three/Corridor.tsx`), à partir des données de `rooms.ts` :
+  - lambris en bois sombre jusqu'à 1 m, papier peint vieilli teinté vert bouteille, parquet à chevrons, plafond en plâtre (couleur unie, sans texture : économie de 0,49 Mo) ;
+  - plinthes, cimaise et corniche ;
+  - quatre appliques en laiton avec leur lumière ;
+  - les trois portes temporelles dans les murs, dans l'ordre chronologique, et la grande horloge au fond.
+  - Les murs sont des bandes entre les portes, fusionnées en un seul maillage par matériau.
+- **Textures** : Poly Haven, CC0, encodées par `tools/encode_textures.mjs`. Couleur en ETC1S 1024 px ; relief et matière en UASTC 512 px, marqués linéaires.
+- **Géométrie corrigée** :
+  - le couloir mesure 1,6 × 2,8 m ;
+  - de face, une porte de 2,46 m ne tenait pas dans le champ depuis le milieu du couloir : le poste face à une porte est désormais contre le mur opposé, à 1,4 m, avec un champ de 60°.
+  - Les postes ont un `fov` ; les emplacements de porte ont une position et une orientation.
+- **Caméra sur rails** (`src/world/three/RailCamera.tsx`) : trajet en courbe entre les postes, avec accélération douce et visée et champ fondus ; saut direct en mouvement réduit. Le lot D la réutilisera.
+- **Atelier** (`src/atelier/CorridorWorkshop.tsx`) : postes, ouverture de la porte au poste qui lui fait face, coût de rendu en direct.
+- **Budget mesuré** à l'entrée du couloir : 40 appels de rendu, 45 000 triangles (cibles : 120 et 150 000). Transfert du couloir et de ses modèles : 3,07 Mo, à la limite de la cible de 3 Mo, sans compter le transcodeur, téléchargé une fois.
+- **Correction de fond** : les cartes de relief et de matière de tous les KTX2 étaient marquées sRGB (voir [ASSETS.md](ASSETS.md#compression-8-octobre-2026)). Tous les modèles ont été recompressés.
+- L'atelier de la porte se recadre sur téléphone, en portrait.
+- **Tests** : `tests/browser/corridor.spec.ts`, 3 tests sur ordinateur et mobile, dont une assertion du budget à l'entrée.
+
 ## 13. Questions ouvertes
 
 Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.

@@ -70,3 +70,16 @@ Derived web assets: monde/pendule.glb (simplified to about a quarter of its
 vertices) and monde/horloge.glb, made by tools/optimize_glb.mjs from the
 official glTF 1k files. Changes: scaled to 8 units per metre, KTX2 textures
 (metal/roughness maps in UASTC), meshopt geometry.
+
+---
+
+Material textures of the corridor, Poly Haven (https://polyhaven.com) :
+Dark Paneled Wood, Decrepit Wallpaper, Herringbone Parquet.
+Sources: https://polyhaven.com/a/dark_paneled_wood,
+https://polyhaven.com/a/decrepit_wallpaper,
+https://polyhaven.com/a/herringbone_parquet
+License: CC0 1.0 (public domain dedication) ; credited for traceability.
+
+Derived web assets: monde/textures/*.ktx2, made by tools/encode_textures.mjs
+from the official 1k maps : colour in KTX2 ETC1S (1024 px), normal and ARM maps
+in KTX2 UASTC (512 px). Tints are applied in code.

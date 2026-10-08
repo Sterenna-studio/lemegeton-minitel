@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { DoorClosed, DoorOpen, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { catalog } from "../demo/catalog";
@@ -15,6 +15,17 @@ import { GrandfatherClock } from "../world/three/GrandfatherClock";
 // Workshop of the temporal door (lot B, docs/MONDE_EXPLORABLE.md §5 and §9) :
 // the door alone, in the corridor's light, with the grandfather clock whose
 // hands race. Play the sequence, scrub it, pick the year, turn the sound on.
+
+/** Portrait screens (phones) : step back so the door and the clock both fit. */
+function FitCamera() {
+  const { camera, size } = useThree();
+  const portrait = size.width / size.height < 1;
+  useEffect(() => {
+    camera.position.set(...((portrait ? [10, 13, 58] : [16, 12, 34]) as [number, number, number]));
+    camera.lookAt(0, 10, 0);
+  }, [camera, portrait]);
+  return null;
+}
 
 const percent = (x: number) => `${Math.round(x * 100)} %`;
 const seconds = (t: number) => `${t.toLocaleString("fr", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} s`;
@@ -112,7 +123,8 @@ export function DoorWorkshop() {
             <planeGeometry args={[80, 60]} />
             <meshStandardMaterial color="#5c4330" roughness={0.85} />
           </mesh>
-          <OrbitControls makeDefault target={[0, 10, 0]} enablePan={false} minDistance={10} maxDistance={70} maxPolarAngle={Math.PI / 2 - 0.05} />
+          <FitCamera />
+          <OrbitControls makeDefault target={[0, 10, 0]} enablePan={false} minDistance={10} maxDistance={80} maxPolarAngle={Math.PI / 2 - 0.05} />
         </Canvas>
       </div>
       <div className="door-controls">

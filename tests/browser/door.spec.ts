@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import sharp from "sharp";
+import { stagePixels as pixels } from "./helpers";
 
 // Workshop of the temporal door (lot B) : atelier/?brique=porte.
 
@@ -14,26 +14,6 @@ async function open(page: Page, query = "") {
   // Models loaded : the canvas shows more than the background.
   await expect.poll(async () => (await pixels(page)).lit, { timeout: 30000 }).toBeGreaterThan(5000);
   return errors;
-}
-
-/**
- * Lit pixels and the share of the era's tint (blue-green), measured on a
- * screenshot of the stage : what the visitor sees. Reading the WebGL buffer
- * directly sometimes returned an empty buffer late in a long run.
- */
-async function pixels(page: Page) {
-  const shot = await page.locator(".door-stage").screenshot();
-  const { data, info } = await sharp(shot).raw().toBuffer({ resolveWithObject: true });
-  let lit = 0;
-  let teal = 0;
-  let hash = 0;
-  for (let i = 0; i < data.length; i += info.channels) {
-    const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
-    if (r + g + b > 60) lit++;
-    if (g > 120 && b > 110 && g > r * 1.15) teal++;
-    hash = (hash + r * 3 + g * 5 + b * 7) % 1000000007;
-  }
-  return { lit, teal, hash };
 }
 
 const state = (page: Page) => page.getByTestId("etat-porte");

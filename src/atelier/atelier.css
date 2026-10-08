@@ -259,3 +259,34 @@
     aspect-ratio: 4 / 5;
   }
 }
+
+/* Atelier du couloir (lot C). */
+.corridor-stations {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.corridor-stations button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--cream);
+  font: 500 13px "IBM Plex Sans", sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+.corridor-stations button:hover,
+.corridor-stations button:focus-visible {
+  border-color: var(--gold);
+}
+.corridor-stations button[aria-current="true"] {
+  border-color: var(--sage);
+  color: var(--sage);
+}
+.corridor-workshop .door-buttons {
+  grid-template-columns: 1fr;
+}

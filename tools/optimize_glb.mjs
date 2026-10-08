@@ -45,6 +45,10 @@ const scale = Number(option("--scale", 1));
 const simplifyRatio = option("--simplify", null);
 const dataUastc = args.includes("--data-uastc");
 
+// ktx2-encoder flags every file as sRGB by default (isSetKTX2SRGBTransferFunc :
+// true) : normal and data maps must say they are linear, otherwise three
+// decodes them as colours (lower roughness, bent normals : shiny patches).
+//
 // Keep every vertex attribute : prune would drop the UV of meshes whose
 // material has no texture, such as the terminal screens, whose image is drawn
 // by a shader at run time.
@@ -114,12 +118,12 @@ if (useKtx2)
     ktx2({ slots: COLOR, isUASTC: false, qualityLevel: 160, isPerceptual: true, isSetKTX2SRGBTransferFunc: true, generateMipmap: true, imageDecoder, enableDebug: false }),
     // Normal maps : UASTC, linear, normal-map tuning, Zstandard.
     // RDO trades a little precision for much better Zstandard compression.
-    ktx2({ slots: NORMAL, isUASTC: true, isNormalMap: true, isPerceptual: false, needSupercompression: true, enableRDO: true, rdoQualityLevel: 2, generateMipmap: true, imageDecoder, enableDebug: false }),
+    ktx2({ slots: NORMAL, isUASTC: true, isNormalMap: true, isPerceptual: false, isSetKTX2SRGBTransferFunc: false, needSupercompression: true, enableRDO: true, rdoQualityLevel: 2, generateMipmap: true, imageDecoder, enableDebug: false }),
     // Other data maps : ETC1S, linear ; UASTC with --data-uastc.
     ktx2(
       dataUastc
-        ? { slots: DATA, isUASTC: true, isPerceptual: false, needSupercompression: true, enableRDO: true, rdoQualityLevel: 2, generateMipmap: true, imageDecoder, enableDebug: false }
-        : { slots: DATA, isUASTC: false, qualityLevel: 160, isPerceptual: false, generateMipmap: true, imageDecoder, enableDebug: false },
+        ? { slots: DATA, isUASTC: true, isPerceptual: false, isSetKTX2SRGBTransferFunc: false, needSupercompression: true, enableRDO: true, rdoQualityLevel: 2, generateMipmap: true, imageDecoder, enableDebug: false }
+        : { slots: DATA, isUASTC: false, qualityLevel: 160, isPerceptual: false, isSetKTX2SRGBTransferFunc: false, generateMipmap: true, imageDecoder, enableDebug: false },
     ),
   );
 await document.transform(prune(keep), ...(useMeshopt ? [meshopt({ encoder: MeshoptEncoder, level: "medium" })] : []));

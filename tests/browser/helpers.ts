@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import sharp from "sharp";
 
 // Shared by the browser specs : read the WebGL canvas of the scene.
 export async function scenePixels(page: Page) {
@@ -67,4 +68,24 @@ export function expectScreenCentered(p: Awaited<ReturnType<typeof scenePixels>>)
   const cy = (p.minY + p.maxY) / 2 / p.height;
   expect(Math.abs(cx - 0.5)).toBeLessThan(0.06);
   expect(Math.abs(cy - 0.5)).toBeLessThan(0.06);
+}
+
+/**
+ * Lit pixels and the share of the era's tint (blue-green), measured on a
+ * screenshot of the stage : what the visitor sees. Reading the WebGL buffer
+ * directly sometimes returned an empty buffer late in a long run.
+ */
+export async function stagePixels(page: Page, selector = ".door-stage") {
+  const shot = await page.locator(selector).screenshot();
+  const { data, info } = await sharp(shot).raw().toBuffer({ resolveWithObject: true });
+  let lit = 0;
+  let teal = 0;
+  let hash = 0;
+  for (let i = 0; i < data.length; i += info.channels) {
+    const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+    if (r + g + b > 60) lit++;
+    if (g > 120 && b > 110 && g > r * 1.15) teal++;
+    hash = (hash + r * 3 + g * 5 + b * 7) % 1000000007;
+  }
+  return { lit, teal, hash };
 }
