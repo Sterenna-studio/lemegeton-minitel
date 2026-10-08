@@ -1,2 +1,2 @@
-# Scripts shell : fins de ligne LF, sinon bash echoue sur les  (Windows).
+# Scripts shell : fins de ligne LF, sinon bash echoue sur les retours chariot (Windows).
 *.sh text eol=lf
