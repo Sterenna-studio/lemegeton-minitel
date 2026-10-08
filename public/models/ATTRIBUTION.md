@@ -42,3 +42,31 @@ Web compression (tools/optimize_glb.mjs): textures re-encoded as KTX2
 (Basis Universal; colour maps up to 1024 px, other maps up to 512 px),
 geometry compressed with meshopt. Keep this attribution and the visible credit
 when distributing the derived model.
+
+---
+
+Door_Wooden_Old -9MB by Mehdi Shahsavan (https://sketchfab.com/ahmagh2e).
+Source: https://sketchfab.com/3d-models/door-wooden-old-9mb-77815b3a55504037aa4641eb9650e9de
+License: Creative Commons Attribution 4.0 International.
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+Derived web asset: monde/porte.glb (placeholder temporal door), made by
+tools/prepare_door.mjs then tools/optimize_glb.mjs. Changes: open duplicate and
+camera removed, scaled to 8 units per metre, frame centred on the origin, nodes
+renamed (cadre, battant, poignee). Web compression: KTX2 textures (colour
+1024 px, other maps 256 px), meshopt geometry. Keep this attribution and the
+visible credit when distributing the derived model.
+
+---
+
+Mantel Clock 01 (modelling and textures Rico Cilliers, rigging Yann Kervran)
+and Vintage Grandfather Clock 01 (modelling and textures James Ray Cock,
+rigging Yann Kervran), Poly Haven.
+Sources: https://polyhaven.com/a/mantel_clock_01,
+https://polyhaven.com/a/vintage_grandfather_clock_01
+License: CC0 1.0 (public domain dedication) ; credited for traceability.
+
+Derived web assets: monde/pendule.glb (simplified to about a quarter of its
+vertices) and monde/horloge.glb, made by tools/optimize_glb.mjs from the
+official glTF 1k files. Changes: scaled to 8 units per metre, KTX2 textures
+(metal/roughness maps in UASTC), meshopt geometry.

@@ -55,6 +55,22 @@ export const terminatelLighting: LightingPreset = {
   },
 };
 
+// Corridor out of time (docs/DIRECTION_ARTISTIQUE.md) : sconces around 2,400 K,
+// pools of light, very low ambient ; the lamp is a sconce flickering softly.
+export const couloirLighting: LightingPreset = {
+  hemisphere: { sky: "#ffb46b", ground: "#120c08", intensity: 0.35 },
+  key: { position: [-6, 24, 18], color: "#ffb46b", intensity: 1.5, shadowExtent: 16 },
+  fill: { position: [10, 12, -6], color: "#c9a56b", intensity: 0.3 },
+  lamp: { position: [-9, 17, 5], color: "#ffb46b", intensity: 90, sway: 0 },
+  environment: {
+    intensity: 0.25,
+    formers: [
+      { form: "rect", intensity: 1.2, color: "#ffcf98", position: [-6, 12, 10], scale: [8, 4, 1] },
+      { form: "ring", intensity: 0.5, color: "#b08d57", position: [0, 20, 0], scale: 4, rotationX: Math.PI / 2 },
+    ],
+  },
+};
+
 // A warm lamp far behind the terminal, slowly breathing like a filament or a
 // flame. The scene renders on demand : the light asks for frames itself, at a
 // modest rate, and stays still when the user prefers reduced motion or when

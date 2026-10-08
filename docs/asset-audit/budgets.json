@@ -120,6 +120,84 @@
     ]
   },
   {
+    "file": "public/models/monde/horloge.glb",
+    "kilobytes": 764,
+    "triangles": 8582,
+    "vertices": 8925,
+    "meshes": 3,
+    "primitives": 4,
+    "materials": 2,
+    "textures": 3,
+    "texture_kilobytes": 654,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/ktx2"
+    ],
+    "gpu_texture_megabytes": 2.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_materials_clearcoat",
+      "KHR_materials_ior",
+      "KHR_materials_specular",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
+  },
+  {
+    "file": "public/models/monde/pendule.glb",
+    "kilobytes": 240,
+    "triangles": 6429,
+    "vertices": 4472,
+    "meshes": 2,
+    "primitives": 2,
+    "materials": 2,
+    "textures": 3,
+    "texture_kilobytes": 170,
+    "largest_texture": [
+      512,
+      512
+    ],
+    "texture_formats": [
+      "image/ktx2"
+    ],
+    "gpu_texture_megabytes": 0.5,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_materials_clearcoat",
+      "KHR_materials_ior",
+      "KHR_materials_specular",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
+  },
+  {
+    "file": "public/models/monde/porte.glb",
+    "kilobytes": 441,
+    "triangles": 5289,
+    "vertices": 4032,
+    "meshes": 4,
+    "primitives": 4,
+    "materials": 2,
+    "textures": 6,
+    "texture_kilobytes": 362,
+    "largest_texture": [
+      1024,
+      1024
+    ],
+    "texture_formats": [
+      "image/ktx2"
+    ],
+    "gpu_texture_megabytes": 3.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
+  },
+  {
     "file": "public/models/television-1950.glb",
     "kilobytes": 323,
     "triangles": 5718,

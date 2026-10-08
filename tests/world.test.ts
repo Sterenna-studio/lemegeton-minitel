@@ -11,7 +11,7 @@ import {
   travelDuration,
   travelPath,
 } from "../src/world/rails";
-import { SEQUENCE_DURATION, PASSAGE_DURATION, counterText, doorSequence } from "../src/world/sequence";
+import { CLOCK_PEAK, SEQUENCE_DURATION, PASSAGE_DURATION, counterText, doorSequence } from "../src/world/sequence";
 import { currentStation, initialState, navigate, type NavEvent, type NavState } from "../src/world/navigation";
 import { CORRIDOR_ENTRY, paramsForStation, stationFromParams } from "../src/world/url";
 import { FADE_DURATION } from "../src/world/rails";
@@ -107,8 +107,10 @@ describe("séquence de la porte temporelle", () => {
 
   it("aiguilles emballées puis calmées, retour à l'envers", () => {
     expect(doorSequence(0, "19??", "1950").clockSpeed).toBe(1);
-    expect(doorSequence(1.1, "19??", "1950").clockSpeed).toBeCloseTo(40, 0);
-    expect(doorSequence(2, "19??", "1950").clockSpeed).toBeCloseTo(1, 5);
+    expect(doorSequence(1.1, "19??", "1950").clockSpeed).toBeCloseTo(CLOCK_PEAK, 0);
+    // Two minute-hand turns a second at the peak : visible.
+    expect((CLOCK_PEAK / 3600) * 1).toBe(2);
+    expect(doorSequence(2, "19??", "1950").clockSpeed).toBeCloseTo(1, 3);
     expect(counterText(doorSequence(SEQUENCE_DURATION, "1950", "19??").counter)).toBe("19??");
   });
 });

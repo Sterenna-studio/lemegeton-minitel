@@ -1,12 +1,13 @@
 import { ArrowLeft, DoorOpen, FileText, Monitor } from "lucide-react";
 import { bricks, findBrick } from "./bricks";
+import { DoorWorkshop } from "./DoorWorkshop";
 
 const base = import.meta.env.BASE_URL;
 
 /**
  * Workshop of the explorable world : each brick is built and checked alone
- * before being assembled (docs/MONDE_EXPLORABLE.md, §9). Lot A only lays out
- * the page ; the 3D views arrive with lots B, C and E.
+ * before being assembled (docs/MONDE_EXPLORABLE.md, §9). The door is ready
+ * (lot B) ; the corridor and the rooms arrive with lots C and E.
  */
 export function AtelierPage() {
   const selected = findBrick(new URLSearchParams(window.location.search).get("brique"));
@@ -36,9 +37,13 @@ export function AtelierPage() {
             </a>
             <h1 id="brique-titre">{selected.title}</h1>
             <p>{selected.summary}</p>
-            <p className="atelier-pending" role="status">
-              {selected.ready ? "Disponible." : `En préparation : lot ${selected.lot}.`}
-            </p>
+            {selected.id === "porte" ? (
+              <DoorWorkshop />
+            ) : (
+              <p className="atelier-pending" role="status">
+                {selected.ready ? "Disponible." : `En préparation : lot ${selected.lot}.`}
+              </p>
+            )}
           </section>
         ) : (
           <>

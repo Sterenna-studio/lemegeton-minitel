@@ -36,10 +36,10 @@ test("atelier : briques du monde et page de chaque brique", async ({ page }) => 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Briques du monde");
   const cards = page.locator(".atelier-grid li");
   await expect(cards).toHaveCount(3);
-  await page.getByRole("link", { name: /Porte temporelle/ }).click();
-  await expect(page).toHaveURL(/\/atelier\/\?brique=porte$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Porte temporelle");
-  await expect(page.getByRole("status")).toHaveText("En préparation : lot B.");
+  await page.getByRole("link", { name: /Couloir/ }).click();
+  await expect(page).toHaveURL(/\/atelier\/\?brique=couloir$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Couloir");
+  await expect(page.getByRole("status")).toHaveText("En préparation : lot C.");
   await page.getByRole("link", { name: "Toutes les briques" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Briques du monde");
   await expect(page.getByRole("link", { name: /Version simple/ })).toHaveAttribute("href", "/simple/");
