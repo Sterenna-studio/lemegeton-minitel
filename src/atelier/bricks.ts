@@ -16,7 +16,7 @@ export const bricks: Brick[] = [
     title: "Porte temporelle",
     summary: "Battant, poignée, compteur d'année, pendule et lumière de l'époque ; séquence d'ouverture et de retour.",
     lot: "B",
-    ready: false,
+    ready: true,
   },
   {
     id: "couloir",

@@ -202,7 +202,7 @@ La séquence d'ouverture dure environ 3 s, sans compter le travelling.
 | --- | --- |
 | 0,0 | La poignée tourne ; un tic-tac démarre. |
 | 0,2 → 1,4 | Le compteur roule de l'année du couloir (« 19?? ») jusqu'à l'année cible. Le tic-tac accélère. |
-| 0,6 → 1,6 | Les aiguilles de la grande horloge du couloir s'emballent ; la pendule au-dessus de la porte reste fixe. |
+| 0,6 → 1,6 | Les aiguilles de la grande horloge du couloir s'emballent : le temps y court jusqu'à 7 200 fois plus vite, soit deux tours de la grande aiguille par seconde. La pendule au-dessus de la porte reste fixe. |
 | 1,2 → 2,0 | La lumière de l'époque filtre et monte en intensité. |
 | 1,6 → 3,0 | Le battant s'ouvre (`openAngle`) ; un souffle se fait entendre. |
 | 3,0 → | Passage : travelling au travers et effet temporel (§7), puis arrivée à `salle:<id>:entree`. |
@@ -401,6 +401,24 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 Reporté au lot B :
 - le chargement KTX2 dans l'application (`KTX2Loader`, transcodeur Basis servi avec le site) : il ne sert qu'à partir du premier GLB compressé affiché ;
 - le réglage fin de la porte pour passer de 0,74 à 0,6 Mo (taille de la texture du cadre), avec vérification visuelle.
+
+**Lot B — terminé le 8 octobre 2026** : la porte temporelle dans l'atelier, `atelier/?brique=porte&porte=<salle>`.
+- **Modèles** (`public/models/monde/`) :
+  - `porte.glb` : préparé par `tools/prepare_door.mjs` (copie fermée, 1 m = 8 unités, nœuds `cadre`, `battant` et `poignee`), puis compressé en couleur 1024 px et autres cartes 256 px. 0,44 Mo, 5 289 triangles, 4 appels de rendu, ~3 Mo sur le GPU.
+  - `pendule.glb` : simplifiée à un quart de ses sommets, 0,25 Mo, 6 429 triangles.
+  - `horloge.glb` : 0,78 Mo, 8 582 triangles.
+- **Rendu** (`src/world/three/`) :
+  - `TemporalDoor` : battant et poignée animés, compteur à rouleaux et plaque dessinés sur canvas (`counter.ts`) et portés par le battant, pendule sur le linteau, mur percé, lumière de l'époque (dégradé additif et spot qui déborde au sol).
+  - `GrandfatherClock` : aiguilles à l'heure locale, qui s'emballent jusqu'à 7 200 × pendant la séquence.
+  - Éclairage `couloirLighting`.
+- **Son** (`src/world/doorSound.ts`) : synthétisé en Web Audio, sans fichier son. Tic-tac qui accélère, souffle à l'ouverture ; coupé par défaut.
+- **Atelier** (`src/atelier/DoorWorkshop.tsx`) : ouvrir, refermer, curseur de temps, choix de la porte (1950, 1982, 198?), son, état lisible et annonce de fin ; ouverture immédiate en mouvement réduit.
+- **Pièges réglés** :
+  - les vitres des horloges sont opaques une fois exportées en glTF (elles sont masquées) ;
+  - le cadran est marqué métal, donc noir sous un éclairage faible (métal atténué) ;
+  - la compression ETC1S de la carte métal/rugosité dessinait un damier sur le cadran (option `--data-uastc`) ;
+  - le cadran de la grande horloge regarde déjà +z dans le fichier.
+- **Tests** : `tests/browser/door.spec.ts`, 3 tests sur ordinateur et mobile. Un test de mutation confirme qu'un battant qui ne s'ouvre plus fait échouer le premier.
 
 ## 13. Questions ouvertes
 

@@ -47,6 +47,9 @@ jobs:
           test -f dist/models/minitel.glb
           test -f dist/models/ATTRIBUTION.md
           test -f dist/models/television-1950.glb
+          test -f dist/models/monde/porte.glb
+          test -f dist/models/monde/pendule.glb
+          test -f dist/models/monde/horloge.glb
           test -f dist/documentation/index.html
           test -f dist/simple/index.html
           test -f dist/atelier/index.html

@@ -135,3 +135,127 @@
     font-size: 24px;
   }
 }
+
+/* Atelier de la porte temporelle (lot B). */
+.atelier-page main:has(.door-workshop) {
+  max-width: 1280px;
+}
+.door-workshop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  margin: 20px 0 48px;
+}
+.door-stage {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0c0b0a;
+}
+.door-stage canvas {
+  display: block;
+}
+.door-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+}
+.door-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+}
+.door-field select,
+.door-field input[type="range"] {
+  width: 100%;
+}
+.door-field select {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--cream);
+  font: inherit;
+}
+.door-field input[type="range"] {
+  accent-color: var(--gold);
+}
+.door-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.door-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--cream);
+  font: 500 13px "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+}
+.door-buttons button:hover:not(:disabled),
+.door-buttons button:focus-visible {
+  border-color: var(--gold);
+}
+.door-buttons button[aria-pressed="true"] {
+  border-color: var(--sage);
+  color: var(--sage);
+}
+.door-buttons button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.door-state {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+}
+.door-state div {
+  padding: 8px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.door-state dt {
+  font: 500 11px "IBM Plex Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.door-state dd {
+  margin: 2px 0 0;
+  font: 500 18px "IBM Plex Mono", monospace;
+  color: var(--cream);
+}
+.door-credits {
+  margin: 0;
+  font-size: 12px;
+  color: var(--faint);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .door-workshop {
+    grid-template-columns: 1fr;
+  }
+  .door-stage {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+}

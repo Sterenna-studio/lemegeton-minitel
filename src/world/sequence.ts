@@ -5,6 +5,8 @@
 export const SEQUENCE_DURATION = 3;
 /** Travel through the open door, after the sequence. */
 export const PASSAGE_DURATION = 1.2;
+/** Peak of clockSpeed : 7,200 times real time, two minute-hand turns a second. */
+export const CLOCK_PEAK = 7200;
 
 export interface Roller {
   from: string;
@@ -18,7 +20,10 @@ export interface DoorState {
   handle: number;
   /** One roller per character of the year. */
   counter: Roller[];
-  /** Speed factor of the grandfather clock's hands (1 = normal time). */
+  /**
+   * How fast time runs on the grandfather clock (1 = real time). Peaks at
+   * 7,200 : the minute hand then makes two turns a second.
+   */
   clockSpeed: number;
   /** Era light filtering through the gap, 0 -> 1. */
   glow: number;
@@ -60,8 +65,8 @@ export function doorSequence(t: number, fromYear: string, toYear: string): DoorS
   return {
     handle: handleIn - handleOut,
     counter,
-    // Hands race up to 40x, then calm down when the leaf opens.
-    clockSpeed: 1 + 39 * Math.sin(Math.PI * spin),
+    // Hands race, then calm down when the leaf opens.
+    clockSpeed: 1 + (CLOCK_PEAK - 1) * Math.sin(Math.PI * spin),
     glow: smooth(span(t, 1.2, 2.0)),
     leaf: smooth(span(t, 1.6, 3.0)),
     tickRate: 1 + 7 * span(t, 0.2, 1.4) * (1 - span(t, 1.6, 2.2)),
