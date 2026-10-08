@@ -133,10 +133,14 @@ mettait pas les `.glb` et `.wasm` en cache (`cf-cache-status: DYNAMIC`). La règ
 cache « Minitel - modeles 3D » (URI Path commence par `/minitel/models/` ou
 `/minitel/basis/`, éligible au cache, TTL de l'origine, soit 7 jours) a été créée
 dans le tableau de bord. Vérifiée : `MISS` au premier appel, `HIT` ensuite. Les
-pages HTML restent hors cache : un déploiement est visible tout de suite. En
-revanche, **un modèle remplacé sous le même nom reste servi jusqu'à 7 jours** (cache
-Cloudflare et navigateurs) : purger son URL (Caching → Configuration → Purge Cache)
-ou changer son nom. `tools/cloudflare_cache_rule.sh` recrée la même règle par l'API.
+pages HTML restent hors cache : un déploiement est visible tout de suite. Les
+fichiers de `public/` sont **versionnés par leur contenu** : `src/assets.ts`
+(`assetUrl`) ajoute `?v=<empreinte>`, calculée par `vite.config.ts`. Le transcodeur
+est rangé dans `basis/<révision de three>/`. Un modèle ou une image remplacé change
+donc d'adresse, sans purge à faire. Le cache peut être long : un an (`public/.htaccess`).
+Après le remplacement d'un fichier en développement, relancer le serveur (les
+empreintes sont calculées au démarrage). `tools/cloudflare_cache_rule.sh` recrée la
+même règle par l'API.
 
 Piège corrigé pendant ce travail : par défaut, `prune` de glTF Transform supprime
 les UV des meshes dont le matériau n'a pas de texture. C'est le cas des écrans,

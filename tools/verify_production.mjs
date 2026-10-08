@@ -67,7 +67,7 @@ try {
       if (message.type() === "error") errors.push(message.text());
     });
     const asset = page.waitForResponse((response) =>
-      response.url().endsWith("/models/minitel.glb"),
+      /\/models\/minitel\.glb(\?v=\w+)?$/.test(response.url()),
     );
     await page.goto(`http://127.0.0.1:${port}/`);
     const response = await asset;

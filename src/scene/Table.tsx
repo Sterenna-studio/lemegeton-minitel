@@ -2,8 +2,9 @@ import { useEffect, useMemo } from "react";
 import { Mesh, MeshStandardMaterial } from "three";
 import type { Furniture } from "./furniture";
 import { useModel } from "./loaders";
+import { assetUrl } from "../assets";
 
-const url = (file: string) => `${import.meta.env.BASE_URL}models/mobilier/${file}`;
+const url = (file: string) => assetUrl(`models/mobilier/${file}`);
 
 /** Piece de mobilier sous le terminal ; son plateau est a y = 0. */
 export function Table({ piece }: { piece: Furniture & { file: string } }) {
