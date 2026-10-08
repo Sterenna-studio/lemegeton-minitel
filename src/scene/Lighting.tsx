@@ -85,12 +85,15 @@ export const couloirInterieurLighting: LightingPreset = {
 
 // Rooms of the world (lot E, docs/DIRECTION_ARTISTIQUE.md). Positions are in
 // the terminal's frame (base at the origin), like terminatelLighting.
-// 1950 living room : warm standing lamp (~2,700 K), soft daylight fill.
+// 1950 living room : warm standing lamp (~2,700 K), soft daylight fill from
+// the window on the left. The lamp is the shade of the floor lamp
+// (src/world/three/rooms/Salon1950.tsx), 12.4 above the floor : 7.6 above
+// the television, which stands on its 4.8 cabinet.
 export const salonLighting: LightingPreset = {
   hemisphere: { sky: "#ffe2bd", ground: "#3a2a1a", intensity: 1.1 },
-  key: { position: [-6, 9, 6], color: "#ffc98a", intensity: 2.2, shadowExtent: 10 },
-  fill: { position: [6, 5, -2], color: "#e8dcc8", intensity: 0.8 },
-  lamp: { position: [-8, 6, -4], color: "#ffb46b", intensity: 110, sway: 0 },
+  key: { position: [-6, 9, 6], color: "#ffc98a", intensity: 2.2, shadowExtent: 12 },
+  fill: { position: [-12, 6, -3], color: "#e8eef0", intensity: 0.8 },
+  lamp: { position: [-12.5, 7.6, -15], color: "#ffb46b", intensity: 220, sway: 0 },
   environment: {
     intensity: 0.45,
     formers: [
@@ -99,12 +102,13 @@ export const salonLighting: LightingPreset = {
     ],
   },
 };
-// 1982 office : neutral fluorescent ceiling light (3,500-4,000 K) and a warm desk lamp.
+// 1982 office : neutral fluorescent ceiling light (3,500-4,000 K) from above,
+// daylight through the blinds behind on the left
+// (src/world/three/rooms/Bureau1982.tsx).
 export const bureauLighting: LightingPreset = {
   hemisphere: { sky: "#eef0ea", ground: "#3b3a36", intensity: 1.2 },
-  key: { position: [0, 12, 4], color: "#f2f1e8", intensity: 2.4, shadowExtent: 10 },
-  fill: { position: [5, 4, -4], color: "#e8e2c8", intensity: 0.9 },
-  lamp: { position: [5, 4, 2], color: "#ffcf98", intensity: 60, sway: 0 },
+  key: { position: [0, 12, 4], color: "#f2f1e8", intensity: 2.4, shadowExtent: 12 },
+  fill: { position: [-5, 6, -12], color: "#e4ebf0", intensity: 0.9 },
   environment: {
     intensity: 0.5,
     formers: [

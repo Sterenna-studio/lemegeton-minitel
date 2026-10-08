@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import sharp from "sharp";
 import { stagePixels } from "./helpers";
 
 // The explorable world on its rails (lot D) : /parcours/.
@@ -98,3 +99,40 @@ test("salle : devant le terminal, le 3615 et les réglages comme dans la version
   await expect(console3615).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+// Share of lit pixels above the 3615 console : the room itself.
+async function roomLit(page: Page) {
+  const box = (await page.getByTestId("monde").boundingBox())!;
+  const shot = await page.screenshot({ clip: { x: box.x, y: box.y, width: box.width, height: box.height * 0.5 } });
+  const { data, info } = await sharp(shot).raw().toBuffer({ resolveWithObject: true });
+  let lit = 0;
+  for (let i = 0; i < data.length; i += info.channels) if (data[i] + data[i + 1] + data[i + 2] > 60) lit++;
+  return lit / (info.width * info.height);
+}
+const cost = async (page: Page) => {
+  const canvas = page.locator('[data-testid="monde"] canvas');
+  return { calls: Number(await canvas.getAttribute("data-calls")), triangles: Number(await canvas.getAttribute("data-triangles")) };
+};
+
+for (const [room, label] of [
+  ["televiseur-1950", "Televiseur 1950"],
+  ["minitel-1", "Minitel 1"],
+  ["terminatel-255", "Terminatel 255"],
+]) {
+  test(`salle ${room} : décor rendu dès l'arrivée, budget d'une salle`, async ({ page }) => {
+    for (const poste of ["entree", "terminal"]) {
+      const errors = await open(page, `?salle=${room}${poste === "terminal" ? "&poste=terminal" : ""}`);
+      const place = poste === "terminal" ? label : `Entrée — ${label}`;
+      await expect(status(page)).toHaveText(new RegExp(`^${place}\\.`));
+      // Rendered on demand : the room shows without moving the pointer (a view
+      // left black reads 0 ; the marble room is dark by design).
+      await expect.poll(() => roomLit(page), { timeout: 20000 }).toBeGreaterThan(0.08);
+      // Budget of docs/MONDE_EXPLORABLE.md §8 : a whole room <= 150 calls, 300 k triangles.
+      await expect.poll(async () => (await cost(page)).calls, { timeout: 10000 }).toBeGreaterThan(0);
+      const { calls, triangles } = await cost(page);
+      expect(calls).toBeLessThanOrEqual(150);
+      expect(triangles).toBeLessThanOrEqual(300000);
+      expect(errors).toEqual([]);
+    }
+  });
+}

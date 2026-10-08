@@ -1,15 +1,8 @@
 import { useEffect, useMemo } from "react";
-import {
-  BoxGeometry,
-  BufferGeometry,
-  Color,
-  Float32BufferAttribute,
-  MeshStandardMaterial,
-  type CompressedTexture,
-} from "three";
+import { BoxGeometry, BufferGeometry, MeshStandardMaterial } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useKtx2Textures } from "../../scene/loaders";
-import { assetUrl } from "../../assets";
+import { TILE, material, quad, textureSet } from "./kit";
 import { doorSequence, type DoorState } from "../sequence";
 import type { Corridor as CorridorData, DoorSlot, Vec3 } from "../types";
 import { TemporalDoor } from "./TemporalDoor";
@@ -23,35 +16,10 @@ import { GrandfatherClock } from "./GrandfatherClock";
 
 /** Frame of the door model (tools/prepare_door.mjs), in units. */
 export const DOOR_FRAME = { width: 10.13, height: 19.68 };
-const WAINSCOT = 8;
-/** Size of one texture tile, in units (1 m). */
-const TILE = 8;
-
-const texture = (name: string, kind: string) => assetUrl(`models/monde/textures/${name}_${kind}.ktx2`);
-
-/**
- * A rectangle of wall : origin, direction along the wall (u), up (v), normal.
- * UVs are world units divided by TILE, so the pattern runs on across strips.
- */
-function quad(origin: Vec3, u: Vec3, normal: Vec3, u0: number, u1: number, v0: number, v1: number) {
-  const at = (a: number, b: number): Vec3 => [origin[0] + u[0] * a, origin[1] + b, origin[2] + u[2] * a];
-  const corners = [at(u0, v0), at(u1, v0), at(u1, v1), at(u0, v1)];
-  const geometry = new BufferGeometry();
-  geometry.setAttribute("position", new Float32BufferAttribute(corners.flat(), 3));
-  geometry.setAttribute("normal", new Float32BufferAttribute(Array(4).fill(normal).flat(), 3));
-  geometry.setAttribute(
-    "uv",
-    new Float32BufferAttribute([u0, v0, u1, v0, u1, v1, u0, v1].map((value) => value / TILE), 2),
-  );
-  // Front face towards the normal : the winding (0, 1, 2) faces u × up, that is
-  // (-u.z, 0, u.x) ; flip it when the wall faces the other way.
-  const facing = -u[2] * normal[0] + u[0] * normal[2];
-  geometry.setIndex(facing > 0 ? [0, 1, 2, 0, 2, 3] : [0, 2, 1, 0, 3, 2]);
-  return geometry;
-}
+export const WAINSCOT = 8;
 
 /** Spans of a wall left free by the doors, between `from` and `to` (along u). */
-function freeSpans(from: number, to: number, doors: number[]): [number, number][] {
+export function freeSpans(from: number, to: number, doors: number[]): [number, number][] {
   const half = DOOR_FRAME.width / 2;
   const cuts = [...doors].sort((a, b) => a - b).map((d) => [d - half, d + half] as const);
   const spans: [number, number][] = [];
@@ -62,20 +30,6 @@ function freeSpans(from: number, to: number, doors: number[]): [number, number][
   }
   if (start < to) spans.push([start, to]);
   return spans;
-}
-
-function material(maps: CompressedTexture[], color: string, extra: Partial<MeshStandardMaterial> = {}) {
-  const [map, normalMap, arm] = maps;
-  return new MeshStandardMaterial({
-    map,
-    normalMap,
-    aoMap: arm,
-    roughnessMap: arm,
-    metalnessMap: arm,
-    color: new Color(color),
-    metalness: 0,
-    ...extra,
-  });
 }
 
 export function Corridor({
@@ -91,11 +45,7 @@ export function Corridor({
   /** Click on a door (the world decides what it means). */
   onDoor?: (slot: DoorSlot) => void;
 }) {
-  const textures = useKtx2Textures(
-    ["dark_paneled_wood", "decrepit_wallpaper", "herringbone_parquet"].flatMap((name) =>
-      ["couleur", "relief", "matiere"].map((kind) => texture(name, kind)),
-    ),
-  );
+  const textures = useKtx2Textures(["dark_paneled_wood", "decrepit_wallpaper", "herringbone_parquet"].flatMap(textureSet));
   const { width, height, start, end } = data.bounds;
   const built = useMemo(() => {
     const half = width / 2;
@@ -234,7 +184,7 @@ function FloorUv({ length, width, material }: { length: number; width: number; m
 }
 
 const closed = new Map<string, DoorState>();
-function closedState(from: string, to: string): DoorState {
+export function closedState(from: string, to: string): DoorState {
   const key = `${from}>${to}`;
   if (!closed.has(key)) closed.set(key, doorSequence(0, from, to));
   return closed.get(key)!;

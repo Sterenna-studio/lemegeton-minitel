@@ -1,5 +1,5 @@
-import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState, type KeyboardEvent } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ArrowLeft, DoorOpen, FileText, Footprints, Monitor, Volume2, VolumeX } from "lucide-react";
 import { catalog, findEntry } from "../demo/catalog";
 import { findFurniture } from "../scene/furniture";
@@ -11,21 +11,23 @@ import { TerminalRoom } from "./three/TerminalRoom";
 import { TerminalStation } from "./TerminalStation";
 import { Lighting, couloirInterieurLighting } from "../scene/Lighting";
 import { supportsWebGL } from "../scene/Scene";
+import { RenderWhenReady } from "../scene/RenderWhenReady";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { setUrlParams } from "../hooks/urlParams";
-import { buildWorld, findStation } from "./rooms";
+import { buildWorld, findStation, roomOfStation } from "./rooms";
 import { areNeighbours, linksFrom, targetOf, type Link } from "./rails";
 import { initialState, navigate, type NavEvent, type NavState } from "./navigation";
 import { paramsForStation, stationFromParams } from "./url";
-import { viewOf } from "./pose";
+import { PORTRAIT_ASPECT, viewOf } from "./pose";
 import { DoorSound } from "./doorSound";
 import { Corridor } from "./three/Corridor";
 import { NavCamera } from "./three/NavCamera";
 import type { DoorSlot, World } from "./types";
+import "./world.css";
 
 // The explorable world on its rails (lot D, docs/MONDE_EXPLORABLE.md §4) :
-// stations, travels, temporal doors, rooms (provisional until lot E), the
-// address of the page and the browser history, keyboard, pointer and touch.
+// stations, travels, temporal doors, the rooms of lot E, the address of the
+// page and the browser history, keyboard, pointer and touch.
 
 function labelOf(world: World, link: Link): string {
   if (link.kind === "porte") return `Ouvrir la porte ${link.door.door.year}`;
@@ -33,11 +35,53 @@ function labelOf(world: World, link: Link): string {
   return `Aller : ${findStation(world, targetOf(world, link))?.label ?? ""}`;
 }
 
-export function WorldApp() {
-  // Each room places its terminal ; the terminal station is its default view.
-  const world = useMemo(() => buildWorld(catalog.map((entry) => ({ ...entry, terminalView: terminalLayout(entry).view }))), []);
+/**
+ * Cost of the last frame (draw calls, triangles, shadow passes included) on the
+ * canvas : data-calls and data-triangles, read by the budget tests
+ * (docs/MONDE_EXPLORABLE.md §8).
+ */
+function RenderCost() {
+  const gl = useThree((state) => state.gl);
+  useFrame(() => {
+    const data = gl.domElement.dataset;
+    const { calls, triangles } = gl.info.render;
+    if (data.calls !== String(calls)) data.calls = String(calls);
+    if (data.triangles !== String(triangles)) data.triangles = String(triangles);
+  });
+  return null;
+}
+
+/** The stage is narrow (a phone held upright) : same threshold as src/scene/Camera.tsx. */
+function useNarrow(stage: RefObject<HTMLDivElement | null>): boolean {
+  const [narrow, setNarrow] = useState(() => window.innerWidth / window.innerHeight < PORTRAIT_ASPECT);
+  useEffect(() => {
+    const element = stage.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([item]) => {
+      const { width, height } = item.contentRect;
+      if (height > 0) setNarrow(width / height < PORTRAIT_ASPECT);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [stage]);
+  return narrow;
+}
+
+/**
+ * onSimple : back to the simple mode of the site (src/SiteModes.tsx), with the
+ * terminal of the room one is in ; without it (the /parcours/ preview), a link.
+ */
+export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = {}) {
   const experience = useTerminalExperience();
   const [piece, setPiece] = useState(() => findFurniture(urlParam("table")));
+  const stage = useRef<HTMLDivElement>(null);
+  const narrow = useNarrow(stage);
+  // Each room places its terminal ; the terminal station is the orbit camera's
+  // default view for this furniture and this screen, so the handover is seamless.
+  const world = useMemo(
+    () => buildWorld(catalog.map((entry) => ({ ...entry, terminalView: terminalLayout(entry, piece, narrow).view }))),
+    [piece, narrow],
+  );
   const [command] = useState<CameraCommand>({ id: 0, kind: "reset" });
   const reducedMotion = useReducedMotion();
   const options = useRef({ reducedMotion });
@@ -121,6 +165,16 @@ export function WorldApp() {
     },
     [world],
   );
+  // A click on the door of a room : out to the corridor from its entry, or
+  // back to the entry first.
+  const onExit = useCallback(() => {
+    const current = latest.current;
+    if (current.mode !== "poste") return;
+    const here = roomOfStation(world, current.station);
+    if (!here) return;
+    if (current.station === here.entry) dispatch({ type: "SORTIE" });
+    else dispatch({ type: "ALLER", to: here.entry });
+  }, [world]);
   // Keyboard : arrows move between the actions, Escape goes back.
   const bar = useRef<HTMLDivElement>(null);
   function onKeyDown(event: KeyboardEvent) {
@@ -150,7 +204,7 @@ export function WorldApp() {
   const station = reached ? findStation(world, reached) : undefined;
   const room = world.rooms.find((r) => r.id === view.place);
   const entry = room ? findEntry(room.terminal) : undefined;
-  const layout = entry ? terminalLayout(entry, piece) : undefined;
+  const layout = entry ? terminalLayout(entry, piece, narrow) : undefined;
   const atTerminal = !!room && reached === room.terminalStation;
   atTerminalRef.current = atTerminal;
   const announce = station ? `${station.label}. ${links.length} déplacement${links.length > 1 ? "s" : ""} possible${links.length > 1 ? "s" : ""}.` : "";
@@ -159,14 +213,20 @@ export function WorldApp() {
   return (
     <main className="world">
       <header className="world-masthead">
-        <a className="world-brand" href={`${base}parcours/`}>
+        <a className="world-brand" href={onSimple ? `${base}?mode=3d` : `${base}parcours/`}>
           <Monitor size={22} />
           <span>
-            Minitel<small>parcours · aperçu</small>
+            Minitel<small>{onSimple ? "mode 3D+" : "parcours · aperçu"}</small>
           </span>
         </a>
         <nav aria-label="Autres pages">
-          <a href={`${base}simple/`}>Version simple</a>
+          {onSimple ? (
+            <button type="button" className="mode-switch" onClick={() => onSimple(room?.terminal)}>
+              <Monitor size={14} /> Mode simple
+            </button>
+          ) : (
+            <a href={`${base}simple/`}>Version simple</a>
+          )}
           <a href={`${base}atelier/`}>Atelier</a>
           <a href={`${base}documentation/`}>
             <FileText size={14} /> Documentation
@@ -184,7 +244,7 @@ export function WorldApp() {
         </nav>
       </header>
       {webgl ? (
-        <div className="world-stage" data-testid="monde">
+        <div className="world-stage" data-testid="monde" ref={stage}>
           <Canvas
             frameloop="demand"
             shadows
@@ -194,6 +254,7 @@ export function WorldApp() {
             aria-label={`Vue 3D : ${station?.label ?? "en déplacement"}`}
           >
             <color attach="background" args={["#0c0b0a"]} />
+            <RenderCost />
             <fog attach="fog" args={["#0c0b0a", 70, 190]} />
             <Suspense fallback={null}>
               {view.place === "couloir" ? (
@@ -215,6 +276,8 @@ export function WorldApp() {
                     entry={entry}
                     piece={piece}
                     lift={layout.lift}
+                    stand={layout.stand}
+                    onExit={onExit}
                     screenSource={experience.source}
                     effects={experience.effects}
                     onKey={experience.sendKey}
@@ -222,6 +285,7 @@ export function WorldApp() {
                   />
                 )
               )}
+              <RenderWhenReady key={view.place} />
             </Suspense>
             {atTerminal && layout ? (
               <Camera command={command} framing={layout.framing} target={layout.target} />
