@@ -3,6 +3,7 @@ import type { MaterialFinish } from "../minitel/MinitelModel";
 import type { ModelProfile } from "../minitel/types";
 import { suppliedProfile, televisionProfile } from "../minitel/profiles";
 import { marbleTexture } from "./marble";
+import { assetUrl } from "../assets";
 
 export interface ModelCredit {
   title: string;
@@ -59,7 +60,6 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
   material.needsUpdate = true;
 };
 
-const base = import.meta.env.BASE_URL;
 
 export const catalog: ModelEntry[] = [
   {
@@ -69,7 +69,7 @@ export const catalog: ModelEntry[] = [
     title: "Terminatel 255",
     subtitle: "Finition marbre noir · interpretation",
     tagline: "TELIC ALCATEL / MARBRE NOIR",
-    file: `${base}models/minitel.glb`,
+    file: assetUrl("models/minitel.glb"),
     profile: suppliedProfile,
     finish: terminatelFinish,
     onTable: true,
@@ -82,7 +82,7 @@ export const catalog: ModelEntry[] = [
     title: "Minitel 1",
     subtitle: "Alcatel · collection numerique",
     tagline: "FRANCE / 1982",
-    file: `${base}models/minitel.glb`,
+    file: assetUrl("models/minitel.glb"),
     profile: suppliedProfile,
     onTable: true,
     credit: okotaru,
@@ -94,7 +94,7 @@ export const catalog: ModelEntry[] = [
     title: "Televiseur 1950",
     subtitle: "Meuble a pieds compas · ecran Videotex",
     tagline: "TUBE CATHODIQUE / 1950",
-    file: `${base}models/television-1950.glb`,
+    file: assetUrl("models/television-1950.glb"),
     profile: televisionProfile,
     onTable: false,
     credit: {

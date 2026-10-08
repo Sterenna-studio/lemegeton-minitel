@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { assetUrl } from "../assets";
 import { ArrowLeft, ArrowUpRight, Monitor } from "lucide-react";
 import { catalog } from "../demo/catalog";
 import { modelDocs, projectDocs, sources, views, type Fact, type ModelDoc } from "./content";
@@ -22,7 +23,7 @@ function Facts({ items }: { items: Fact[] }) {
 function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
   const [view, setView] = useState<string>(views[0].id);
   const entry = catalog.find((item) => item.id === doc.id);
-  const image = (id: string) => `${base}documentation/vues/${doc.id}-${id}.jpg`;
+  const image = (id: string) => assetUrl(`documentation/vues/${doc.id}-${id}.jpg`);
   const current = views.find((item) => item.id === view) ?? views[0];
   return (
     <section className="model-doc" id={doc.id} aria-labelledby={`${doc.id}-title`}>

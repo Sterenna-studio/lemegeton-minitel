@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from "react";
 import type { ModelEntry } from "../demo/catalog";
+import { assetUrl } from "../assets";
 
-const base = import.meta.env.BASE_URL;
 
 /**
  * Inventory cards : one per model, a cut-out miniature over its material. The
@@ -41,7 +41,7 @@ export function ModelInventory({
             onClick={() => onSelect(entry.id)}
           >
             <span className="inventory-back" aria-hidden="true" />
-            <img src={`${base}inventaire/${entry.id}.png`} alt="" draggable={false} />
+            <img src={assetUrl(`inventaire/${entry.id}.png`)} alt="" draggable={false} />
             <span className="inventory-caption">{entry.label}</span>
           </button>
         );

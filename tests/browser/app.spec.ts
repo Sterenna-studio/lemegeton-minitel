@@ -299,7 +299,7 @@ test("page documentation : fiches, vues et liens", async ({ page }) => {
   await section.getByRole("button", { name: "Dos" }).click();
   await expect(section.locator(".viewer > img")).toHaveAttribute(
     "src",
-    /televiseur-1950-dos\.jpg$/,
+    /televiseur-1950-dos\.jpg(\?v=\w+)?$/,
   );
   await expect(section.getByRole("link", { name: /Ouvrir dans le terminal 3D/ })).toHaveAttribute(
     "href",

@@ -25,9 +25,9 @@ export const views = [
 ] as const;
 
 const minitelAsset: Fact[] = [
-  { label: "Fichier", value: "models/minitel.glb · 3,6 Mo" },
+  { label: "Fichier", value: "models/minitel.glb · 0,86 Mo (KTX2 + meshopt)" },
   { label: "Geometrie", value: "71 meshes · 21 943 triangles" },
-  { label: "Textures", value: "11 images d'origine (32 a 1024 px)" },
+  { label: "Textures", value: "11 images d'origine (32 a 1024 px), compressees en KTX2" },
   { label: "Modele source", value: "Minitel 1982-France, okotaru · CC BY 4.0" },
   { label: "Preparation", value: "tools/prepare_model.py : orientation, echelle, ecran extrait" },
   { label: "Presentation", value: "pose sur une table d'appoint (Wood Drawer & Tables Set, brandon_grey · CC BY 4.0)" },
@@ -86,9 +86,9 @@ export const modelDocs: ModelDoc[] = [
       { label: "Meuble", value: "bois, deux grilles de haut-parleur, pieds compas" },
     ],
     asset: [
-      { label: "Fichier", value: "models/television-1950.glb · 1,6 Mo" },
+      { label: "Fichier", value: "models/television-1950.glb · 0,32 Mo (KTX2 + meshopt)" },
       { label: "Geometrie", value: "5 meshes · 5 718 triangles" },
-      { label: "Textures", value: "4 images d'origine (variante 1k)" },
+      { label: "Textures", value: "4 images d'origine (variante 1k), compressees en KTX2" },
       { label: "Modele source", value: "1950's Retro Television, Huuxloc · CC BY 4.0" },
       { label: "Preparation", value: "tools/prepare_television.py : echelle, noms, ecran Minitel_Screen" },
     ],
