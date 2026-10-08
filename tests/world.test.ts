@@ -15,6 +15,8 @@ import { CLOCK_PEAK, SEQUENCE_DURATION, PASSAGE_DURATION, counterText, doorSeque
 import { currentStation, initialState, navigate, type NavEvent, type NavState } from "../src/world/navigation";
 import { CORRIDOR_ENTRY, paramsForStation, stationFromParams } from "../src/world/url";
 import { FADE_DURATION } from "../src/world/rails";
+import { viewOf, placeOf } from "../src/world/pose";
+import { catmullRom } from "../src/world/curve";
 
 const world = buildWorld(catalog);
 const tv = "salle:televiseur-1950";
@@ -182,5 +184,63 @@ describe("adresse de la page", () => {
       for (const [name, value] of Object.entries(paramsForStation(station.id))) if (value !== null) params.set(name, value);
       expect(stationFromParams(world, params), station.id).toBe(station.id);
     }
+  });
+});
+
+
+describe("vue : ce que montre chaque état de navigation", () => {
+  it("à un poste : la caméra du poste, sans fondu", () => {
+    const view = viewOf(world, initialState("couloir:porte-minitel-1"));
+    const station = findStation(world, "couloir:porte-minitel-1")!;
+    expect(view).toMatchObject({ place: "couloir", position: station.position, lookAt: station.lookAt, fov: 60, fade: 0 });
+  });
+
+  it("trajet : départ, arrivée, et la courbe passe par ses points", () => {
+    const start = initialState(CORRIDOR_ENTRY);
+    const moving = navigate(world, start, { type: "ALLER", to: "couloir:porte-televiseur-1950" });
+    const a = findStation(world, CORRIDOR_ENTRY)!;
+    const b = findStation(world, "couloir:porte-televiseur-1950")!;
+    expect(viewOf(world, moving).position).toEqual(a.position);
+    if (moving.mode !== "trajet") throw new Error("trajet attendu");
+    const end = viewOf(world, { ...moving, t: moving.duration });
+    end.position.forEach((v, i) => expect(v).toBeCloseTo(b.position[i], 6));
+    const points = travelPath(a, b);
+    catmullRom(points, 0.5).forEach((v, i) => expect(v).toBeCloseTo(points[1][i], 6));
+  });
+
+  it("porte : ouverture sur place, passage vers le seuil puis noir, retour par le couloir", () => {
+    let state = navigate(world, initialState("couloir:porte-minitel-1"), { type: "PORTE" });
+    expect(viewOf(world, state).door?.state.leaf).toBe(0);
+    state = navigate(world, state, { type: "AVANCER", dt: SEQUENCE_DURATION });
+    const passageStart = viewOf(world, state);
+    expect(passageStart.door?.state.leaf).toBe(1);
+    expect(passageStart.fade).toBe(0);
+    const passageEnd = viewOf(world, { ...state, t: PASSAGE_DURATION } as typeof state);
+    expect(passageEnd.fade).toBe(1);
+    // The camera went towards the wall of the door (right side, x > 0).
+    expect(passageEnd.position[0]).toBeGreaterThan(passageStart.position[0]);
+    state = navigate(world, state, { type: "AVANCER", dt: PASSAGE_DURATION });
+    expect(placeOf(world, (state as { station: string }).station)).toBe("minitel-1");
+    // Back : fade out in the room, then the door closes, seen from the corridor.
+    const back = navigate(world, state, { type: "SORTIE" });
+    expect(viewOf(world, back).place).toBe("minitel-1");
+    const late = viewOf(world, { ...back, t: 2.8 } as typeof back);
+    expect(late.place).toBe("couloir");
+    expect(late.door?.state.leaf).toBeLessThan(0.1);
+  });
+
+  it("précédent depuis l'entrée d'une salle : la porte se rejoue", () => {
+    const inRoom = run(initialState("couloir:porte-minitel-1"), [{ type: "PORTE" }]);
+    const back = navigate(world, inRoom, { type: "PRECEDENT" });
+    expect(back).toMatchObject({ mode: "retour", back: true });
+    expect(run(back, [])).toMatchObject({ mode: "poste", station: "couloir:porte-minitel-1", history: [] });
+  });
+
+  it("fondu : noir au milieu, change de lieu à mi-chemin", () => {
+    const fade = navigate(world, initialState(CORRIDOR_ENTRY), { type: "SAUT", to: "salle:minitel-1:terminal" });
+    if (fade.mode !== "fondu") throw new Error("fondu attendu");
+    expect(viewOf(world, { ...fade, t: FADE_DURATION * 0.49 }).place).toBe("couloir");
+    expect(viewOf(world, { ...fade, t: FADE_DURATION * 0.51 }).place).toBe("minitel-1");
+    expect(viewOf(world, { ...fade, t: FADE_DURATION / 2 }).fade).toBeCloseTo(1, 6);
   });
 });

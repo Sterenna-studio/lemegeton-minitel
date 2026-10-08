@@ -11,7 +11,7 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import { useKtx2Textures } from "../../scene/loaders";
 import { assetUrl } from "../../assets";
 import { doorSequence, type DoorState } from "../sequence";
-import type { Corridor as CorridorData, Vec3 } from "../types";
+import type { Corridor as CorridorData, DoorSlot, Vec3 } from "../types";
 import { TemporalDoor } from "./TemporalDoor";
 import { GrandfatherClock } from "./GrandfatherClock";
 
@@ -82,11 +82,14 @@ export function Corridor({
   data,
   doorStates,
   clockSpeed,
+  onDoor,
 }: {
   data: CorridorData;
   /** State of each door, by door id (closed when absent). */
   doorStates: Record<string, DoorState>;
   clockSpeed: number;
+  /** Click on a door (the world decides what it means). */
+  onDoor?: (slot: DoorSlot) => void;
 }) {
   const textures = useKtx2Textures(
     ["dark_paneled_wood", "decrepit_wallpaper", "herringbone_parquet"].flatMap((name) =>
@@ -201,7 +204,18 @@ export function Corridor({
         </group>
       ))}
       {data.doors.map((slot) => (
-        <group key={slot.door.id} position={slot.position} rotation-y={slot.rotationY}>
+        <group
+          key={slot.door.id}
+          position={slot.position}
+          rotation-y={slot.rotationY}
+          onClick={
+            onDoor &&
+            ((event) => {
+              event.stopPropagation();
+              onDoor(slot);
+            })
+          }
+        >
           <TemporalDoor door={slot.door} state={doorStates[slot.door.id] ?? closedState(data.year, slot.door.year)} wall={false} />
         </group>
       ))}

@@ -66,6 +66,7 @@ export default defineConfig({
         simple: "simple/index.html",
         documentation: "documentation/index.html",
         atelier: "atelier/index.html",
+        parcours: "parcours/index.html",
       },
     },
   },

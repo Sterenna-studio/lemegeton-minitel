@@ -39,7 +39,8 @@ est affiche automatiquement et reste navigable.
 - `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et, plus tard, par le poste terminal des salles.
 - `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
 - `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
-- `src/atelier/` : page `atelier/` des briques du monde.
+- `src/atelier/` : page `atelier/` des briques du monde (porte, couloir).
+- `src/world/WorldApp.tsx` : le monde sur rails, servi sur `/parcours/` jusqu'a la bascule de l'accueil (lot F). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes.
 - `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.

@@ -47,6 +47,11 @@ export class DoorSound {
     this.leafWasOpening = opening;
   }
 
+  /** Nothing moves : the next opening starts afresh. */
+  idle() {
+    this.leafWasOpening = false;
+  }
+
   private burst(start: number, duration: number, filter: BiquadFilterNode, peak: number) {
     const ctx = this.ctx!;
     const source = ctx.createBufferSource();
