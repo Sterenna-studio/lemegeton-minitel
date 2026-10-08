@@ -14,7 +14,7 @@ import {
   Shape,
   Vector3,
 } from "three";
-import { useModel } from "../../scene/loaders";
+import { useModels } from "../../scene/loaders";
 import { assetUrl } from "../../assets";
 import type { DoorState } from "../sequence";
 import type { TemporalDoor as Door } from "../types";
@@ -90,8 +90,7 @@ export function TemporalDoor({
   /** Its own wall around the frame (workshop) ; the corridor has its walls. */
   wall?: boolean;
 }) {
-  const model = useModel(assetUrl("models/monde/porte.glb"));
-  const mantel = useModel(assetUrl("models/monde/pendule.glb"));
+  const [model, mantel] = useModels([assetUrl("models/monde/porte.glb"), assetUrl("models/monde/pendule.glb")]);
   const prepared = useMemo(() => {
     const scene = model.scene.clone(true);
     scene.traverse((object) => {

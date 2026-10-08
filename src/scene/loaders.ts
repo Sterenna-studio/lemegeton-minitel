@@ -25,6 +25,20 @@ export function useModel(url: string) {
   return useGLTF(url, true, true, (loader) => loader.setKTX2Loader(ktx2Loader(gl) as never));
 }
 
+/**
+ * Several models fetched in parallel. Two useModel calls in a row would load
+ * one after the other : the first suspends before the second even starts.
+ */
+export function useModels(urls: string[]) {
+  const gl = useThree((state) => state.gl);
+  return useGLTF(urls, true, true, (loader) => loader.setKTX2Loader(ktx2Loader(gl) as never));
+}
+
+/** Starts loading models ahead of their use (same cache as useModel). */
+export function preloadModels(gl: WebGLRenderer, urls: string[]) {
+  for (const url of urls) useGLTF.preload(url, true, true, (loader) => loader.setKTX2Loader(ktx2Loader(gl) as never));
+}
+
 // Standalone KTX2 textures (tools/encode_textures.mjs) through the same shared
 // loader, cached and suspending like any R3F loader.
 class Ktx2TextureLoader extends Loader<CompressedTexture> {

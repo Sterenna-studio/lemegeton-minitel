@@ -135,3 +135,15 @@
     justify-content: center;
   }
 }
+/* While the models of a place load (slow network) : a word instead of black. */
+.world-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  margin: 0;
+  place-items: center;
+  color: var(--cream);
+  font: 500 13px "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}

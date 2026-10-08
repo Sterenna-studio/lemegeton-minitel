@@ -12,6 +12,8 @@ import { TerminalStation } from "./TerminalStation";
 import { Lighting, couloirInterieurLighting } from "../scene/Lighting";
 import { supportsWebGL } from "../scene/Scene";
 import { RenderWhenReady } from "../scene/RenderWhenReady";
+import { preloadModels } from "../scene/loaders";
+import { assetUrl } from "../assets";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { setUrlParams } from "../hooks/urlParams";
 import { buildWorld, findStation, roomOfStation } from "./rooms";
@@ -48,6 +50,18 @@ function RenderCost() {
     if (data.calls !== String(calls)) data.calls = String(calls);
     if (data.triangles !== String(triangles)) data.triangles = String(triangles);
   });
+  return null;
+}
+
+/**
+ * The models shared by every place (door, mantel clock, grandfather clock)
+ * start loading together as soon as the world opens : no waterfall.
+ */
+function PreloadWorld() {
+  const gl = useThree((state) => state.gl);
+  useEffect(() => {
+    preloadModels(gl, ["porte", "pendule", "horloge"].map((name) => assetUrl(`models/monde/${name}.glb`)));
+  }, [gl]);
   return null;
 }
 
@@ -96,6 +110,9 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
   const sound = useMemo(() => new DoorSound(), []);
   useEffect(() => () => sound.dispose(), [sound]);
   const view = viewOf(world, state);
+  // The place whose models are loaded : until then, a word rather than black.
+  const [ready, setReady] = useState<string | null>(null);
+  const onPlaceReady = useCallback(() => setReady(view.place), [view.place]);
   const moving = state.mode !== "poste";
 
   // Time runs while moving.
@@ -255,6 +272,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
           >
             <color attach="background" args={["#0c0b0a"]} />
             <RenderCost />
+            <PreloadWorld />
             <fog attach="fog" args={["#0c0b0a", 70, 190]} />
             <Suspense fallback={null}>
               {view.place === "couloir" ? (
@@ -285,7 +303,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
                   />
                 )
               )}
-              <RenderWhenReady key={view.place} />
+              <RenderWhenReady key={view.place} onReady={onPlaceReady} />
             </Suspense>
             {atTerminal && layout ? (
               <Camera command={command} framing={layout.framing} target={layout.target} />
@@ -294,6 +312,11 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             )}
           </Canvas>
           <div className="world-fade" style={{ opacity: view.fade }} aria-hidden="true" />
+          {ready !== view.place && (
+            <p className="world-loading" aria-live="polite">
+              Chargement…
+            </p>
+          )}
           {atTerminal && entry && (
             <TerminalStation
               experience={experience}
