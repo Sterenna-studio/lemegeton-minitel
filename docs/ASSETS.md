@@ -207,6 +207,18 @@ En résumé :
 - provenance consignée dans `docs/asset-audit/visuels.json` ;
 - conditions de l'outil employé vérifiées.
 
+### Décor des salles (lot E, 8 octobre 2026)
+
+Le décor des trois salles est **construit en code**, sans aucun fichier à
+télécharger ni licence à créditer (`src/world/three/rooms/`) :
+- meubles, cadres, fenêtres, horloges, plantes et cordons faits de boîtes, cylindres, tours et tubes fusionnés (une géométrie par matériau) ;
+- matières du salon reprises des textures Poly Haven du couloir (CC0, déjà servies) : lambris, papier peint, parquet à chevrons. Leurs copies ne changent que la répétition, l'image GPU est partagée ;
+- tapis, tableau abstrait, ciel des fenêtres, calendrier d'octobre 1982, tableau de liège, moquette, dalles de plafond, cadrans et plaque gravée dessinés sur canvas (`textures.ts`), sans personne réelle ni marque imitée ;
+- marbre de la salle du Terminatel : le marbre procédural de la finition (`src/demo/marble.ts`).
+
+Des modèles CC0 (Poly Haven) pourront remplacer les meubles plus tard, en passant
+par la chaîne ci-dessous.
+
 ### Chaîne de préparation
 
 1. Relever la licence, l'auteur, l'URL source et la date de téléchargement.

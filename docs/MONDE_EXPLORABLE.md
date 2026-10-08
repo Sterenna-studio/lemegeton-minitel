@@ -13,7 +13,7 @@ direction artistique est décrite à part, dans
 
 ## 1. Décisions
 
-Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
+Toutes ont été prises par l'utilisateur, du 6 au 8 octobre 2026.
 
 | Sujet | Décision |
 | --- | --- |
@@ -22,29 +22,31 @@ Toutes ont été prises par l'utilisateur, le 6 ou le 7 octobre 2026.
 | Portes | **Temporelles** : un seul modèle, paramétré par l'année, la teinte de l'époque et la plaque, avec une séquence d'ouverture. |
 | Salles | **Une par terminal du catalogue**. Il y en a trois pour commencer : Téléviseur 1950, Minitel 1, Terminatel 255. |
 | Ambiances | Salon des années 50 ; bureau des années 80 ; pour le Terminatel, la DA actuelle (marbre noir, laiton, lumière ambrée). |
-| Page d'arrivée | Sans paramètre, on arrive à l'**entrée du couloir** (7 octobre). |
+| Modes du site | Le monde est un **mode** du site, « **3D+** ». Par défaut, `/minitel/` charge la **version simple** (terminal et table) ; un bouton **Mode 3D+** dans l'en-tête bascule vers le monde, **Mode simple** revient (8 octobre). Voir §3. |
+| Page d'arrivée | En mode 3D+, sans autre paramètre, on arrive à l'**entrée du couloir** (7 octobre). |
 | Son | **Coupé par défaut**, avec un bouton pour l'activer (7 octobre). |
 | Panneau 3615, yeux, réglages | Affichés **seulement au poste `terminal`**, devant le terminal (7 octobre). |
 | Téléphone de référence | **iPhone 11** : le site doit y rester fluide (7 octobre). |
 | Modèles de la porte et de l'horloge | **Provisoirement des modèles gratuits** trouvés en ligne (§10) ; notre propre modèle viendra plus tard (7 octobre). |
-| Version simple (éco) | La version actuelle est **conservée telle quelle** comme version simple : terminal seul, cartes d'inventaire, 3615, yeux, réglages, mobilier (7 octobre). Voir §3. |
+| Version simple (éco) | La version actuelle est **conservée telle quelle** comme version simple : terminal seul, cartes d'inventaire, 3615, yeux, réglages, mobilier (7 octobre). C'est le mode par défaut (8 octobre). |
 | Date du Terminatel | Le compteur de sa porte affiche **« 198? »**, faute de source publique. |
 | Ambiance générale | Rétro mystérieux, années 1920 à 1960 : bois sombre, laiton, cuir, verre, vieux papier, mécanique, lumière chaude. |
 
 ## 2. Parcours visé
 
-1. Le visiteur arrive à l'entrée du couloir.
+1. Depuis la version simple, le visiteur passe en mode 3D+ et arrive à l'entrée du couloir.
 2. Il avance de poste en poste. Les portes sont rangées dans l'ordre chronologique : 1950, 1982, puis 198?.
 3. Devant une porte, il voit le compteur, la plaque et la lumière de l'époque, puis il active la porte.
 4. La séquence temporelle se joue (§5), suivie d'un travelling à travers la porte.
 5. Il arrive à l'entrée de la salle, puis va au poste d'inspection devant le terminal. Là, il retrouve **l'expérience actuelle** : orbite, vues, 3615, yeux de Lemegeton, réglages, mobilier.
-6. La porte de sortie de la salle le ramène au couloir, avec la séquence jouée à l'envers.
+6. La porte de sortie de la salle (ou « Sortir vers le couloir ») le ramène au couloir, avec la séquence jouée à l'envers.
+7. « Mode simple » le ramène à la version simple, sur le terminal de la salle où il se trouvait.
 
 Les cartes d'inventaire servent de raccourci : elles mènent directement à une salle,
 avec un fondu.
 
-Une **version simple** reste disponible pour qui veut le terminal sans le couloir,
-ou pour un appareil modeste (§3).
+La **version simple** reste le mode par défaut, pour qui veut le terminal sans le
+couloir ou pour un appareil modeste (§3).
 
 ## 3. Architecture
 
@@ -122,29 +124,29 @@ interface DoorSlot { segment: number; side: "gauche" | "droite" | "fond"; door: 
 interface Corridor { id: string; segments: string[]; stations: Station[]; hotspots: Record<string, Hotspot[]>; doors: DoorSlot[] }
 ```
 
-### Deux versions du site
+### Deux modes du site
 
-Décision du 7 octobre 2026 : l'expérience actuelle est conservée **telle quelle**
-comme version simple, ou éco. Elle comprend le terminal seul, les cartes
-d'inventaire, le 3615, les yeux, les réglages et le mobilier.
+Décisions du 7 et du 8 octobre 2026 : l'expérience actuelle est conservée **telle
+quelle** comme version simple (terminal seul, cartes d'inventaire, 3615, yeux,
+réglages, mobilier), et c'est elle qui s'ouvre par défaut. Le monde explorable est
+un **mode** de la même page, « 3D+ », choisi par un bouton.
 
-| Adresse | Contenu | À partir de |
-| --- | --- | --- |
-| `/minitel/` | monde explorable : arrivée dans le couloir | lot F ; d'ici là, la version actuelle |
-| `/minitel/simple/` | version simple : l'`App` actuelle, inchangée | lot A |
-| `/minitel/documentation/` | documentation | inchangé |
-| `/minitel/atelier/` | atelier des briques (§9) | lot A |
+| Adresse | Contenu |
+| --- | --- |
+| `/minitel/` | version simple (mode par défaut) |
+| `/minitel/?mode=3d` | mode 3D+ : le monde, arrivée dans le couloir ; `&salle=` et `&poste=` comme au §4 |
+| `/minitel/simple/` | version simple seule (même page, ancienne adresse conservée) |
+| `/minitel/parcours/` | le monde seul, aperçu de développement (lot D) |
+| `/minitel/documentation/` | documentation |
+| `/minitel/atelier/` | atelier des briques (§9) |
 
-- **Mise en œuvre** : `simple/index.html` est une entrée Vite de plus, qui monte l'`App` actuelle. Jusqu'au lot F, `index.html` monte aussi `App`. Au lot F, `index.html` passe à `WorldApp`. La version simple n'importe rien de `src/world/` : son poids reste celui d'aujourd'hui.
-- **Partage** : le poste `terminal` du monde réutilise les composants de la version simple (terminal, panneau 3615, yeux, réglages, mobilier). Le lot A extrait ces panneaux d'`App.tsx` en composants, sans changer le rendu de la version simple.
-- **Passerelles** : le monde affiche un lien « Version simple » dans l'en-tête. La version simple affiche « Entrer dans le couloir ». Le choix tient dans l'adresse, qu'on peut mettre en favori : rien n'est stocké.
-- **Suggestion automatique**, sans bascule forcée. En arrivant sur `/minitel/`, un bandeau propose la version simple dans quatre cas :
-  - le mode économie de données est actif (`navigator.connection.saveData`) ;
-  - l'appareil a peu de mémoire (`navigator.deviceMemory` < 4, sous Chrome seulement) ;
-  - le couloir n'a pas pu se charger ;
-  - le rendu reste sous 20 images/s pendant 5 s.
-
-  Un iPhone 11 ne doit déclencher aucun de ces cas.
+- **Mise en œuvre** (`src/SiteModes.tsx`, `src/siteMode.ts`) : `index.html` monte `SiteModes`, qui affiche l'`App` ou, avec `?mode=3d`, `WorldApp`. Le code du monde est un **chunk chargé à la demande** (`React.lazy`) : en version simple, rien de `src/world/` n'est téléchargé.
+- **Bascule** : un bouton **Mode 3D+** dans l'en-tête de la version simple, **Mode simple** dans celui du monde. Chaque bascule ajoute une entrée d'historique : le bouton Retour du navigateur repasse d'un mode à l'autre.
+  - Vers 3D+ : les réglages propres à la version simple (`modele`, `ecran`, `yeux`…) sont retirés, on arrive dans le couloir.
+  - Vers la version simple : `salle` et `poste` sont retirés ; depuis une salle, `?modele=` reprend son terminal.
+  - Le mobilier (`?table=`) est commun aux deux modes.
+- **Partage** : le poste `terminal` du monde réutilise les composants de la version simple (terminal, panneau 3615, yeux, réglages, mobilier).
+- **Suggestion automatique** de la version simple (économie de données, peu de mémoire, rendu lent) : sans objet tant que la version simple est le mode par défaut.
 - **Captures** : `tools/capture_views.mjs` et les miniatures d'inventaire (`?capture=1`) visent la version simple.
 
 `rooms.ts` **dérive** les salles du catalogue : ajouter une `ModelEntry` ajoute
@@ -215,7 +217,7 @@ fondu de 0,4 s mène à la salle.
 
 | Salle | Terminal (catalogue) | Porte | Ambiance | Mobilier |
 | --- | --- | --- | --- | --- |
-| `televiseur-1950` | Téléviseur 1950 (Huuxloc, CC BY 4.0) | 1950 | salon des années 50 | au sol (`onTable: false`) ou meuble télé à trouver |
+| `televiseur-1950` | Téléviseur 1950 (Huuxloc, CC BY 4.0) | 1950 | salon des années 50 | meuble télé en teck construit en code (`STAND_TOP`, 60 cm) |
 | `minitel-1` | Minitel 1 (okotaru, CC BY 4.0) | 1982 | bureau des années 80 | tables actuelles (brandon_grey, CC BY 4.0) |
 | `terminatel-255` | Terminatel 255 (finition marbre procédurale) | 198? | DA actuelle : marbre noir, laiton, lumière ambrée | tables actuelles |
 
@@ -348,7 +350,7 @@ Le prototype a besoin de 10 éléments. Les sources sont à choisir au lot conce
 | Horloge de porte | B | **provisoire** : « Mantel Clock 01 » de Poly Haven (Rico Cilliers, rig de Yann Kervran), CC0, pendule de cheminée en bois ([Poly Haven](https://polyhaven.com/a/mantel_clock_01)) ; modèle maison plus tard. Téléchargée le 7 octobre (glTF 1k, `monde/00_CORE/`). **Dans le glTF, les aiguilles sont fusionnées au boîtier** : le rig n'existe que dans le `.blend`. **Décision du 7 octobre : la pendule reste un décor fixe au-dessus de la porte**, et l'emballement des aiguilles est confié à la grande horloge du couloir. Le `.blend` riggé (3,9 Mo) n'est pas téléchargé. |
 | Grande horloge du couloir | B et C | « Vintage Grandfather Clock 01 » de Poly Haven, CC0, horloge de parquet ([Poly Haven](https://polyhaven.com/a/vintage_grandfather_clock_01)). Téléchargée le 7 octobre (glTF 1k, `monde/01_CORRIDOR/`) : **aiguilles séparées** (`minute_hand`, `houd_hand`), animables telles quelles ; 2,19 m ; 8 582 triangles. |
 | Mur, sol, moulure, applique | C | kit Blender + matériaux ambientCG / Poly Haven (CC0) |
-| Bureau, chaise, lampe, machine à écrire | E | Poly Haven (CC0), sinon Sketchfab CC BY |
+| Décor des salles | E | **construit en code** (`src/world/three/rooms/`) sur les textures du couloir et des textures dessinées sur canvas : aucun téléchargement. Des modèles CC0 pourront remplacer les meubles plus tard. |
 
 Échelle de référence, pour 1 m = 8 unités :
 - porte de 0,9 × 2,1 m, soit 7,2 × 16,8 ;
@@ -384,7 +386,7 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 | **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté, vérifié sur iPhone 11 |
 | **D. Rails et navigation** | `RailCamera`, points d'intérêt DOM, parallaxe, clavier, toucher, URL et historique, fondus ; salles provisoires (boîtes) | parcours complet au clavier ; Retour du navigateur ; `?salle=` et `?poste=` |
 | **E. Salles** | `terminatel-255` (scène actuelle dans une pièce), puis `minitel-1` (bureau 80s), puis `televiseur-1950` (salon 50s) ; poste `inspect` = caméra actuelle | non-régression au poste `terminal` ; budget « salle » respecté ; ambiances conformes à la DA |
-| **F. Intégration** | `/minitel/` passe au monde ; passerelles et suggestion de la version simple ; tests actuels sur `/simple/` ; inventaire en raccourci, compatibilité `?modele=`, docs (USAGE, ASSETS, ATTRIBUTION), contrôle du déploiement, page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
+| **F. Intégration** | ~~`/minitel/` passe au monde~~ : remplacé le 8 octobre par les **modes** (§3), livrés avec le lot E ; restent l'inventaire en raccourci vers les salles, les docs (ATTRIBUTION), le contrôle du déploiement, la page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
 | **G. Objets interactifs** (plus tard) | horloge de jeu, machine à écrire, téléphone, radio, objets mystérieux | à cadrer au moment venu |
 
 ### Avancement
@@ -456,11 +458,38 @@ Reporté au lot B :
   - bouton Son, coupé par défaut ;
   - repli vers la version simple sans WebGL.
 - **`NavCamera`** : applique la vue, avec une parallaxe bornée à la souris (±3°, ±2°), désactivée en mouvement réduit et au toucher. Le rendu se fait à la demande.
-- **`RoomPlaceholder`** : salle provisoire teintée par époque, remplacée au lot E.
+- **`RoomPlaceholder`** : salle provisoire teintée par époque, remplacée au lot E et supprimée.
 - **Tests** :
   - unitaires : 46, dont les vues de chaque état ;
   - `tests/browser/parcours.spec.ts` : parcours complet au clavier seul, bouton Retour du navigateur, arrivée directe et ancien lien `?modele=`, clic sur une porte, mouvement réduit.
   - Test de mutation : sans entrée d'historique, le test du bouton Retour échoue.
+
+**Lot E — terminé le 8 octobre 2026** : les trois salles et les deux modes du site.
+- **Modes** (décision du 8 octobre, §3) : la version simple reste l'accueil ; **Mode 3D+** ouvre le monde (`?mode=3d`), chargé à la demande ; **Mode simple** revient, sur le terminal de la salle quittée. L'accueil simple pèse ce qu'il pesait (+13 ko de JS, la bascule et le code partagé avec le monde).
+- **Salles** (`src/world/three/rooms/`), construites en code, sans téléchargement (voir [ASSETS.md](ASSETS.md#décor-des-salles-lot-e-8-octobre-2026)) :
+  - `RoomShell` : 4 × 5 m, 2,8 m sous plafond ; murs en deux bandes sous et sur la cimaise, plinthes, corniche ; **porte de sortie** (le modèle de la porte temporelle, fermé, au compteur de la salle) dans le mur derrière le visiteur, qui ramène au couloir au clic ;
+  - **salon 1950** : lambris clair, papier peint chaud, parquet à chevrons ; meuble télé en teck sur pieds compas (le téléviseur de 45 cm y est posé à 60 cm, `STAND_TOP`) ; deux fauteuils cocktail moutarde et canard tournés vers l'écran ; tapis à boomerangs ; buffet, vase céladon et livres ; tableau abstrait ; horloge soleil ; lampadaire (sa lumière est celle de `salonLighting`) ; fenêtre sur jardin et rideaux ; fougère ;
+  - **bureau 1982** : murs grège avec soubassement lavable et baguette alu, moquette aiguilletée gris-bleu, faux plafond et deux pavés de néons ; stores vénitiens sur la ville ; classeur à quatre tiroirs ; fauteuil pivotant ; tableau de liège ; calendrier d'octobre 1982 ; horloge de bureau ; yucca ;
+  - **Terminatel 255** : marbre noir procédural, sol noir poli, moulures et appliques en laiton, plaque gravée, poteaux et cordons rouges autour du terminal (le devant reste dégagé pour la caméra).
+- **Poste terminal** : il reprend la vue par défaut de la version simple pour le mobilier choisi et la forme de l'écran (large ou étroite) : le passage à la caméra orbitale ne saute pas.
+- **Portrait** : sous un rapport de 1,2, le champ des postes s'élargit pour garder la largeur de la vue (`fittedFov`, plafonné à 100°) ; le poste terminal garde le cadrage de la version simple (`fit` = 0).
+- **Rendu à la demande** : `RenderWhenReady` demande une image quand les modèles d'une frontière Suspense sont prêts. Avant, une salle ouverte par son adresse restait noire jusqu'au premier mouvement de la souris (la version simple en profite aussi).
+- **Budget mesuré** (`data-calls`, `data-triangles` sur le canevas, ombres comprises), cible 150 appels et 300 k triangles :
+
+  | Salle | Entrée | Terminal |
+  | --- | --- | --- |
+  | Salon 1950 | 42 appels, 13 k triangles | 31, 8 k |
+  | Bureau 1982 | 103, 36 k | 94, 33 k |
+  | Terminatel 255 | 88, 36 k | 81, 33 k |
+
+  Aucun fichier nouveau : les salles réutilisent les textures du couloir et la porte, déjà en cache.
+- **Tests** :
+  - unitaires : 58, dont le champ en portrait, la pose du terminal (meuble, table, sol ; large ou étroite) et les adresses des modes ;
+  - `tests/browser/modes.spec.ts` : bascule aller et retour, bouton Retour du navigateur, retour depuis une salle ;
+  - `parcours.spec.ts` : pour chaque salle, entrée et terminal rendus sans toucher la souris, et budget.
+  - 62 tests navigateur sur ordinateur et mobile.
+
+Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer les meubles en code si l'on veut plus de détail.
 
 ## 13. Questions ouvertes
 

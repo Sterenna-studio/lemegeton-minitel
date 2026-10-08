@@ -35,8 +35,10 @@ npm run dev          # http://127.0.0.1:5174
 npm run build        # contrôle des types puis bundle dans dist/
 ```
 
-Aperçu du monde explorable (couloir, portes temporelles, salles provisoires) sur
-`/parcours/`, et chaque brique seule dans `/atelier/`.
+Le site a deux modes. Par défaut, la **version simple** : un terminal sur sa table.
+Le bouton **Mode 3D+** de l'en-tête ouvre le **monde explorable** (`/?mode=3d`) :
+couloir, portes temporelles, une salle d'époque par terminal. **Mode simple**
+revient. Le monde seul reste sur `/parcours/`, et chaque brique dans `/atelier/`.
 
 Node 22.12+ ou 24. Rotation, toucher et zoom pilotent la caméra. Un double-clic sur
 l'écran fait la mise au point : l'écran passe de face, remplit la vue, et la caméra
@@ -105,9 +107,10 @@ src/
   hooks/        # abonnement au terminal, mouvement réduit, paramètres d'URL
   demo/         # pages 3615 Lemegéton, seul module narratif ; catalogue des terminaux
   terminal/     # expérience du terminal (3615, yeux, effets) et ses panneaux, réutilisables
-  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé)
+  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé) ; three/ : couloir, portes, salles
   atelier/      # page atelier : chaque brique du monde vue seule
-  App.tsx       # version simple : le terminal seul
+  App.tsx       # version simple : le terminal seul (mode par défaut)
+  SiteModes.tsx # bascule entre la version simple et le mode 3D+ (monde chargé à la demande)
 
 simple/, atelier/, documentation/   # entrées Vite des autres pages
 
@@ -126,7 +129,7 @@ docs/           # cadrage, guide, préparation du modèle, rapports de vérifica
 - [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
 - [Cadrage du projet](docs/3D_WEB_PROJECT.md).
 - [Audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md) : bilan des trois dépôts, vérifications, points ouverts.
-- [Monde explorable](docs/MONDE_EXPLORABLE.md) (à venir, [issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails ; la version actuelle restera disponible en version simple. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails, en mode 3D+ ; la version simple reste le mode par défaut. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
 
 ## Personnage Lemegéton (`lemegeton/`)
 

@@ -809,6 +809,20 @@ svg {
   border-color: var(--gold);
   color: var(--gold);
 }
+/* Switch between the simple mode and the 3D+ mode (src/SiteModes.tsx). */
+button.mode-switch {
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+.mode-loading {
+  display: grid;
+  min-height: 100vh;
+  margin: 0;
+  place-items: center;
+  color: var(--cream);
+  font: 500 13px "IBM Plex Mono", monospace;
+}
 
 /* Lampe chaude au loin : halo qui respire, accorde a la lumiere 3D (Lighting.tsx). */
 .experience::before {

@@ -36,11 +36,13 @@ est affiche automatiquement et reste navigable.
 - `src/hooks/` : abonnement React au terminal et preference de mouvement reduit.
 - `src/scene/` : lumiere, ombres, camera tactile, suivi de contexte WebGL et fallback d'erreur.
 - `src/components/AccessibleTerminal.tsx` : contenu textuel et actions DOM synchronises.
-- `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et, plus tard, par le poste terminal des salles.
+- `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et par le poste terminal des salles.
 - `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
-- `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
+- `src/SiteModes.tsx` : les deux modes du site. Par defaut la version simple ; `?mode=3d` (bouton **Mode 3D+** de l'en-tete) charge le monde a la demande, **Mode simple** revient, sur le terminal de la salle ou l'on etait. Logique d'adresse pure dans `src/siteMode.ts`.
+- `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), mode par defaut de `/` et de `/simple/`.
 - `src/atelier/` : page `atelier/` des briques du monde (porte, couloir).
-- `src/world/WorldApp.tsx` : le monde sur rails, servi sur `/parcours/` jusqu'a la bascule de l'accueil (lot F). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes.
+- `src/world/WorldApp.tsx` : le monde sur rails, mode 3D+ de l'accueil (`/?mode=3d`), et seul sur `/parcours/` (apercu). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes. Sur un ecran etroit (telephone tenu droit), le champ s'elargit pour garder la largeur de la vue (`fittedFov`, `src/world/pose.ts`).
+- `src/world/three/rooms/` : les salles du lot E, construites en code (aucun fichier a telecharger) : `RoomShell` (murs, sol, plafond, moulures, porte de sortie vers le couloir), `Salon1950`, `Bureau1982`, `TerminatelHall`, textures dessinees sur canvas (`textures.ts`).
 - `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.
