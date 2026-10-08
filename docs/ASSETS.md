@@ -79,7 +79,7 @@ n'entre dans le rendu.
 | Cyber Djinn, dark_igorek (CC BY 4.0) | 104 Mo et 200 000 triangles ; style cyberpunk contraire au cadrage |
 | `white_mesh.glb` | ni auteur, ni licence, ni provenance |
 | Robot Lemegeton (Meshy, `Rusty Retrobot.glb`) | 30 Mo et 1,35 million de triangles ; rig non validé ; conditions Meshy à confirmer |
-| Cults : Minitel 1 NFZ 300 | piste de recherche, non téléchargée |
+| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, `lemegeton/02_SOURCES_3D/minitel-1-nfz-300-…zip` | Licence « Cults PU » (usage privé) et « No IA » : redistribution interdite, ce qui exclut un dépôt et un site publics ; usage avec des outils d'IA interdit. Déposé par l'utilisateur le 8 octobre 2026, gardé en local uniquement et non traité. Le contenu est un scan brut, en deux coques sans couleurs ni textures. |
 
 ## Organisation
 

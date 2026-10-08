@@ -13,7 +13,8 @@ async function open(page: Page, query = "") {
   await expect.poll(async () => (await stagePixels(page, '[data-testid="monde"]')).lit, { timeout: 30000 }).toBeGreaterThan(5000);
   return errors;
 }
-const status = (page: Page) => page.getByRole("status");
+// The world's announcement (the terminal has its own status region).
+const status = (page: Page) => page.getByTestId("annonce");
 const actions = (page: Page) => page.getByRole("toolbar", { name: "Déplacements" });
 
 test("parcours au clavier seul : couloir → porte → salle → retour", async ({ page }, testInfo) => {
@@ -70,11 +71,30 @@ test("parcours : mouvement réduit, des fondus brefs ; pas de défilement horizo
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open(page, "?poste=porte-televiseur-1950");
   await actions(page).getByRole("button", { name: "Ouvrir la porte 1950" }).click();
-  // A 0.4 s fade instead of the 4.2 s sequence and passage.
-  await expect(status(page)).toHaveText(/^Entrée — Televiseur 1950\./, { timeout: 1500 });
+  // A 0.4 s fade instead of the 4.2 s sequence and passage (the room still
+  // loads its terminal : allow for it).
+  await expect(status(page)).toHaveText(/^Entrée — Televiseur 1950\./, { timeout: 4000 });
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBe(true);
   const sound = page.getByRole("button", { name: /Son/ });
   await expect(sound).toHaveAttribute("aria-pressed", "false");
+});
+
+test("salle : devant le terminal, le 3615 et les réglages comme dans la version simple", async ({ page }) => {
+  const errors = await open(page, "?salle=terminatel-255&poste=terminal");
+  await expect(status(page)).toHaveText(/^Terminatel 255\./);
+  const console3615 = page.locator(".world-terminal .console");
+  await expect(console3615).toBeVisible();
+  await console3615.getByRole("button", { name: /Archives/ }).click();
+  await expect(page.getByRole("status").filter({ hasText: "ARCHIVES" })).toBeAttached();
+  // Settings : furniture under the desk terminal.
+  await console3615.getByRole("button", { name: "Reglages CRT" }).click();
+  await page.getByLabel("Mobilier").selectOption("table-basse");
+  await expect(page).toHaveURL(/table=table-basse/);
+  // Leave the terminal : back to the entry of the room, the console goes.
+  await actions(page).getByRole("button", { name: /Aller : Entrée/ }).click();
+  await expect(status(page)).toHaveText(/^Entrée — Terminatel 255\./, { timeout: 6000 });
+  await expect(console3615).toHaveCount(0);
+  expect(errors).toEqual([]);
 });

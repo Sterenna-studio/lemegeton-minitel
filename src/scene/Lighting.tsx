@@ -83,6 +83,37 @@ export const couloirInterieurLighting: LightingPreset = {
   },
 };
 
+// Rooms of the world (lot E, docs/DIRECTION_ARTISTIQUE.md). Positions are in
+// the terminal's frame (base at the origin), like terminatelLighting.
+// 1950 living room : warm standing lamp (~2,700 K), soft daylight fill.
+export const salonLighting: LightingPreset = {
+  hemisphere: { sky: "#ffe2bd", ground: "#3a2a1a", intensity: 1.1 },
+  key: { position: [-6, 9, 6], color: "#ffc98a", intensity: 2.2, shadowExtent: 10 },
+  fill: { position: [6, 5, -2], color: "#e8dcc8", intensity: 0.8 },
+  lamp: { position: [-8, 6, -4], color: "#ffb46b", intensity: 110, sway: 0 },
+  environment: {
+    intensity: 0.45,
+    formers: [
+      { form: "rect", intensity: 1.4, color: "#ffe2bd", position: [-3, 4, 4], scale: [6, 3, 1] },
+      { form: "rect", intensity: 0.7, color: "#e8dcc8", position: [4, 3, -3], scale: [4, 4, 1] },
+    ],
+  },
+};
+// 1982 office : neutral fluorescent ceiling light (3,500-4,000 K) and a warm desk lamp.
+export const bureauLighting: LightingPreset = {
+  hemisphere: { sky: "#eef0ea", ground: "#3b3a36", intensity: 1.2 },
+  key: { position: [0, 12, 4], color: "#f2f1e8", intensity: 2.4, shadowExtent: 10 },
+  fill: { position: [5, 4, -4], color: "#e8e2c8", intensity: 0.9 },
+  lamp: { position: [5, 4, 2], color: "#ffcf98", intensity: 60, sway: 0 },
+  environment: {
+    intensity: 0.5,
+    formers: [
+      { form: "rect", intensity: 1.6, color: "#f2f1e8", position: [0, 8, 2], scale: [8, 2, 1], rotationX: Math.PI / 2 },
+      { form: "rect", intensity: 0.6, color: "#e8e2c8", position: [4, 3, -3], scale: [4, 4, 1] },
+    ],
+  },
+};
+
 // A warm lamp far behind the terminal, slowly breathing like a filament or a
 // flame. The scene renders on demand : the light asks for frames itself, at a
 // modest rate, and stays still when the user prefers reduced motion or when

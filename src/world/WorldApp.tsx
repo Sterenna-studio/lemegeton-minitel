@@ -1,7 +1,14 @@
 import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState, type KeyboardEvent } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ArrowLeft, DoorOpen, FileText, Footprints, Monitor, Volume2, VolumeX } from "lucide-react";
-import { catalog } from "../demo/catalog";
+import { catalog, findEntry } from "../demo/catalog";
+import { findFurniture } from "../scene/furniture";
+import { Camera, type CameraCommand } from "../scene/Camera";
+import { setUrlParam, urlParam } from "../hooks/urlParams";
+import { useTerminalExperience } from "../terminal/useTerminalExperience";
+import { terminalLayout } from "./terminalView";
+import { TerminalRoom } from "./three/TerminalRoom";
+import { TerminalStation } from "./TerminalStation";
 import { Lighting, couloirInterieurLighting } from "../scene/Lighting";
 import { supportsWebGL } from "../scene/Scene";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -14,7 +21,6 @@ import { viewOf } from "./pose";
 import { DoorSound } from "./doorSound";
 import { Corridor } from "./three/Corridor";
 import { NavCamera } from "./three/NavCamera";
-import { RoomPlaceholder } from "./three/RoomPlaceholder";
 import type { DoorSlot, World } from "./types";
 
 // The explorable world on its rails (lot D, docs/MONDE_EXPLORABLE.md §4) :
@@ -28,7 +34,11 @@ function labelOf(world: World, link: Link): string {
 }
 
 export function WorldApp() {
-  const world = useMemo(() => buildWorld(catalog), []);
+  // Each room places its terminal ; the terminal station is its default view.
+  const world = useMemo(() => buildWorld(catalog.map((entry) => ({ ...entry, terminalView: terminalLayout(entry).view }))), []);
+  const experience = useTerminalExperience();
+  const [piece, setPiece] = useState(() => findFurniture(urlParam("table")));
+  const [command] = useState<CameraCommand>({ id: 0, kind: "reset" });
   const reducedMotion = useReducedMotion();
   const options = useRef({ reducedMotion });
   options.current.reducedMotion = reducedMotion;
@@ -50,7 +60,8 @@ export function WorldApp() {
     let frame = 0;
     let last = performance.now();
     const step = (now: number) => {
-      dispatch({ type: "AVANCER", dt: Math.min(0.1, (now - last) / 1000) });
+      // Slow frames (a room loading its models) still follow the clock, up to 0.25 s a frame.
+      dispatch({ type: "AVANCER", dt: Math.min(0.25, (now - last) / 1000) });
       last = now;
       frame = requestAnimationFrame(step);
     };
@@ -121,8 +132,12 @@ export function WorldApp() {
       buttons[(index + step + buttons.length) % buttons.length].focus();
     }
   }
+  // In front of a terminal, Escape and Backspace belong to the terminal
+  // (Sommaire, Correction) : leave with the « Revenir » action instead.
+  const atTerminalRef = useRef(false);
   useEffect(() => {
     const key = (event: globalThis.KeyboardEvent) => {
+      if (atTerminalRef.current) return;
       if (event.key === "Escape" || (event.key === "Backspace" && !(event.target instanceof HTMLInputElement))) {
         event.preventDefault();
         dispatch({ type: "PRECEDENT" });
@@ -134,6 +149,10 @@ export function WorldApp() {
 
   const station = reached ? findStation(world, reached) : undefined;
   const room = world.rooms.find((r) => r.id === view.place);
+  const entry = room ? findEntry(room.terminal) : undefined;
+  const layout = entry ? terminalLayout(entry, piece) : undefined;
+  const atTerminal = !!room && reached === room.terminalStation;
+  atTerminalRef.current = atTerminal;
   const announce = station ? `${station.label}. ${links.length} déplacement${links.length > 1 ? "s" : ""} possible${links.length > 1 ? "s" : ""}.` : "";
   const base = import.meta.env.BASE_URL;
 
@@ -168,6 +187,7 @@ export function WorldApp() {
         <div className="world-stage" data-testid="monde">
           <Canvas
             frameloop="demand"
+            shadows
             dpr={[1, 1.5]}
             camera={{ fov: view.fov, near: 0.1, far: 400, position: view.position }}
             gl={{ antialias: true, preserveDrawingBuffer: import.meta.env.DEV }}
@@ -187,12 +207,46 @@ export function WorldApp() {
                   />
                 </>
               ) : (
-                room && <RoomPlaceholder room={room} />
+                room &&
+                entry &&
+                layout && (
+                  <TerminalRoom
+                    room={room}
+                    entry={entry}
+                    piece={piece}
+                    lift={layout.lift}
+                    screenSource={experience.source}
+                    effects={experience.effects}
+                    onKey={experience.sendKey}
+                    paused={false}
+                  />
+                )
               )}
             </Suspense>
-            <NavCamera view={view} parallax={!moving && !reducedMotion} />
+            {atTerminal && layout ? (
+              <Camera command={command} framing={layout.framing} target={layout.target} />
+            ) : (
+              <NavCamera view={view} parallax={!moving && !reducedMotion} />
+            )}
           </Canvas>
           <div className="world-fade" style={{ opacity: view.fade }} aria-hidden="true" />
+          {atTerminal && entry && (
+            <TerminalStation
+              experience={experience}
+              furnitureChoice={
+                entry.onTable
+                  ? {
+                      selected: piece.id,
+                      onChoose: (id) => {
+                        const next = findFurniture(id);
+                        setPiece(next);
+                        setUrlParam("table", next.id === "table-tiroir" ? null : next.id);
+                      },
+                    }
+                  : undefined
+              }
+            />
+          )}
         </div>
       ) : (
         <p className="world-fallback" role="status">
@@ -212,7 +266,7 @@ export function WorldApp() {
         ))}
         {moving && <span className="world-moving">En déplacement…</span>}
       </div>
-      <p className="sr-only" role="status" aria-live="polite">
+      <p className="sr-only" role="status" aria-live="polite" data-testid="annonce">
         {announce}
       </p>
     </main>
