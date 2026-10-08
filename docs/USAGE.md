@@ -214,6 +214,17 @@ Rendu mosaique, a partir du travail deja fait dans **minitel-face** :
 - `src/eyes/libEyes.ts`, style *Barres* : portage de `LibEyes`, qui transpose deja
   Web-Eye-Animation (CyberAgentAILab, MIT), la librairie des yeux de l'overlay.
   On y trouve les formes par humeur et les sequences (`blink`, `joy`, `look_around`, `fall_asleep`...).
+- `src/eyes/lemegetonEyes.ts`, styles *Lemegeton (yeux)* et *Lemegeton (visage)* :
+  portage de `LemegetonEyes.h`, les yeux du firmware `Minitel_Clavicula` (le Minitel
+  physique branche a la mesh Sigil). Deux ovales pleins avec pupille, animes en continu
+  par les timelines de Web-Eye-Animation (CyberAgentAILab, MIT) : dix emotions, retour
+  au neutre apres 1,2 s, clignements et regard autonomes. Le style *visage* ajoute la
+  tete ronde bleue du firmware. *Auto* prend la couleur de l'emotion, comme sur le
+  terminal, et la rangee 22 affiche l'humeur. Une image toutes les 90 ms au plus, la
+  cadence du firmware ; taille jusqu'a x1,2. Touches du firmware : `0`-`9` emotions
+  (0 joie ... 9 excitation), Envoi joie, Guide surprise, Annulation colere, Correction
+  fatigue, Suite clin d'oeil, Repetition regard au hasard, Sommaire endormissement,
+  Retour neutre. URL : `?ecran=yeux&yeux=lemegeton` ou `yeux=lemegeton-visage`.
 - `src/eyes/EyesController.ts` : le moteur de `FaceRenderer`, avec les sequences et le
   mode autonome (clignements de 1 a 6 s dont 40 % doubles, regard de 2,2 a 5,2 s,
   reactions de 9 a 16 s). Le mode autonome est coupe en mouvement reduit.

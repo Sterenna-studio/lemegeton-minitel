@@ -14,6 +14,14 @@ import {
   type SequenceStep,
 } from "./libEyes";
 import { buildZyraEyes } from "./libZyraEyes";
+import {
+  EMOTIONS,
+  EMOTION_COLORS,
+  EMOTION_LABELS,
+  LEMEGETON_MAX_SCALE,
+  LemegetonEyes,
+  lemegetonRows,
+} from "./lemegetonEyes";
 import { maxScale, scaleRows, sextantBounds, type SextantBox } from "../videotex/scale";
 
 /** Palettes de l'overlay OBS (nitro-clicker COLOR_PRESETS) ramenees aux 8 couleurs Videotex. */
@@ -28,12 +36,21 @@ export const EYE_PALETTES = [
 ] as const satisfies readonly { id: string; label: string; color: VideotexColor | "AUTO" }[];
 export type EyePaletteId = (typeof EYE_PALETTES)[number]["id"];
 
-/** Formes reprises de minitel-face : capsules Zyra Eyes ou yeux LibEyes. */
+/**
+ * Formes : capsules Zyra Eyes et yeux LibEyes (minitel-face), ovales
+ * Lemegeton du firmware Minitel_Clavicula (terminal de la mesh Sigil), seuls
+ * ou sur une tete ronde.
+ */
 export const EYE_STYLES = [
   { id: "zyra", label: "Zyra (capsule)" },
   { id: "libeyes", label: "Barres (LibEyes)" },
+  { id: "lemegeton", label: "Lemegeton (yeux)" },
+  { id: "lemegeton-visage", label: "Lemegeton (visage)" },
 ] as const;
 export type EyeStyleId = (typeof EYE_STYLES)[number]["id"];
+const isLemegeton = (style: EyeStyleId) => style === "lemegeton" || style === "lemegeton-visage";
+/** Cadence du firmware (EYE_RENDER_MIN_MS) : une image toutes les 90 ms au plus. */
+const LEMEGETON_FRAME_MS = 90;
 
 /** Rendus : mosaique Videotex (formes minitel-face) ou classique lisse (overlay OBS). */
 export const EYE_RENDERS = [
@@ -60,6 +77,7 @@ function reference(style: EyeStyleId): SextantBox {
 }
 /** Plus grande taille qui tient dans l'ecran pour ce style, arrondie au dixieme inferieur. */
 export function maxEyeScale(style: EyeStyleId): number {
+  if (isLemegeton(style)) return LEMEGETON_MAX_SCALE;
   return Math.floor(maxScale(reference(style), LAST_EYE_ROW) * 10) / 10;
 }
 
@@ -92,6 +110,8 @@ export interface EyesOptions {
   palette?: EyePaletteId;
   style?: EyeStyleId;
   random?: () => number;
+  /** Horloge en ms (tests). */
+  now?: () => number;
 }
 
 const AUTO = {
@@ -113,6 +133,10 @@ export class EyesController {
   private sequenceToken = 0;
   private running = false;
   private autonomous = false;
+  /** Yeux du firmware Minitel_Clavicula : anime en continu, a son propre rythme. */
+  private lemegeton: LemegetonEyes;
+  private ticker: ReturnType<typeof setInterval> | undefined;
+  private now: () => number;
 
   constructor(options: EyesOptions = {}) {
     this.palette = options.palette ?? "cyan";
@@ -120,6 +144,8 @@ export class EyesController {
     this.render = options.render ?? "mosaique";
     this.scale = this.clampScale(options.scale ?? 1);
     this.random = options.random ?? Math.random;
+    this.now = options.now ?? (() => performance.now());
+    this.lemegeton = new LemegetonEyes(this.random, this.now());
     this.snapshot = this.build();
   }
 
@@ -132,6 +158,7 @@ export class EyesController {
   private build(): EyesSnapshot {
     const color = EYE_PALETTES.find((p) => p.id === this.palette)?.color ?? "CYAN";
     const frame = createScreen("YEUX DE LEMEGETON", "LEMEGETON");
+    if (isLemegeton(this.style)) return this.buildLemegeton(frame, color);
     const rows =
       this.style === "zyra"
         ? buildZyraEyes(this.state, color)
@@ -154,6 +181,59 @@ export class EyesController {
       moodLabel: MOOD_LABELS[mood],
     };
   }
+  private buildLemegeton(frame: TerminalFrame, color: VideotexColor | "AUTO"): EyesSnapshot {
+    const emotion = this.lemegeton.currentEmotion;
+    // Auto : la couleur portee par l'emotion, comme sur le Minitel physique.
+    const eyeColor = color === "AUTO" ? (emotion ? EMOTION_COLORS[emotion] : "BLANC") : color;
+    paintRows(frame, lemegetonRows(this.lemegeton.cells(this.style === "lemegeton-visage", this.scale), eyeColor));
+    const label = emotion ? EMOTION_LABELS[emotion] : this.lemegeton.isSleepy ? "SOMMEIL" : "NEUTRE";
+    const line = `HUMEUR : ${label}`;
+    text(frame, Math.floor((40 - line.length) / 2), 22, line, 4);
+    return {
+      frame,
+      state: { ...this.state },
+      palette: this.palette,
+      style: this.style,
+      render: this.render,
+      scale: this.scale,
+      maxScale: this.maxScale(),
+      moodLabel: label,
+    };
+  }
+  /** Fait avancer les yeux Lemegeton tant qu'ils sont affiches ou animes. */
+  private pump() {
+    if (this.ticker || !isLemegeton(this.style)) return;
+    this.ticker = setInterval(() => {
+      this.lemegeton.update(this.now(), this.autonomous, this.style === "lemegeton-visage");
+      this.emit();
+      if (!this.autonomous && !this.lemegeton.busy) this.halt();
+    }, LEMEGETON_FRAME_MS);
+  }
+  private halt() {
+    if (this.ticker) clearInterval(this.ticker);
+    this.ticker = undefined;
+  }
+  /** Touches du firmware Minitel_Clavicula : 0-9 emotions, Envoi joie, Suite clin d'oeil. */
+  private lemegetonKey(name: string): boolean {
+    const now = this.now();
+    const digit = /^[0-9]$/.test(name) ? Number(name) : -1;
+    if (digit >= 0) this.lemegeton.play(EMOTIONS[digit], now);
+    else if (name === "Envoi") this.lemegeton.play("joy", now);
+    else if (name === "Guide") this.lemegeton.play("surprise", now);
+    else if (name === "Annulation") this.lemegeton.play("anger", now);
+    else if (name === "Correction") this.lemegeton.play("sleepy", now);
+    else if (name === "Suite") this.lemegeton.blink(false, now);
+    else if (name === "Repetition") this.lemegeton.setGaze(this.random() * 2 - 1, this.random() * 1.2 - 0.6);
+    else if (name === "Sommaire") this.lemegeton.setSleepy(true, now);
+    else if (name === "Retour") {
+      this.lemegeton.setSleepy(false, now);
+      this.lemegeton.neutral(now);
+    } else return false;
+    this.pump();
+    this.emit();
+    return true;
+  }
+
   private emit() {
     this.snapshot = this.build();
     this.listeners.forEach((listener) => listener());
@@ -170,6 +250,8 @@ export class EyesController {
   setStyle(style: EyeStyleId) {
     this.style = style;
     this.scale = this.clampScale(this.scale);
+    if (!isLemegeton(style)) this.halt();
+    else if (this.autonomous) this.pump();
     this.emit();
   }
   private maxScale() {
@@ -224,6 +306,7 @@ export class EyesController {
   key(key: string): boolean {
     const name =
       { Enter: "Envoi", Escape: "Sommaire", Backspace: "Correction", Delete: "Annulation" }[key] ?? key;
+    if (isLemegeton(this.style)) return this.lemegetonKey(name);
     switch (name) {
       case "Envoi":
         this.setMood("happy");
@@ -258,6 +341,7 @@ export class EyesController {
   start() {
     if (this.autonomous) return;
     this.autonomous = true;
+    this.pump();
     this.scheduleBlink();
     this.scheduleGaze();
     this.scheduleReaction();
@@ -268,6 +352,7 @@ export class EyesController {
     this.running = false;
     this.timers.forEach((timer) => clearTimeout(timer));
     this.timers.clear();
+    if (!this.lemegeton.busy) this.halt();
   }
 
   private wait(ms: number) {

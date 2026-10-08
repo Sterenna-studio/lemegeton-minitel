@@ -161,7 +161,8 @@ La page suit la direction artistique du Terminatel 255 (voir
 
 L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
 (Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
-nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face.
+nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face, ou
+ceux du firmware `Minitel_Clavicula` qui branche le Minitel physique à Sigil.
 Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
 humeur. Deux rendus sont proposés : la mosaïque Vidéotex, ou un rendu classique lisse
 comme l'overlay. La taille se règle au curseur. Dans tous les cas, l'écran est bombé
@@ -180,4 +181,6 @@ Modèle 3D « Minitel 1982-France » par okotaru
 ([Sketchfab](https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf)),
 sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), adapté :
 voir [ATTRIBUTION.md](public/models/ATTRIBUTION.md). Polices IBM Plex sous
-licence SIL OFL 1.1 ([public/licenses/](public/licenses/)).
+licence SIL OFL 1.1 ([public/licenses/](public/licenses/)). Animations des yeux
+d'après [Web-Eye-Animation](https://github.com/CyberAgentAILab/web-eye-animation)
+(CyberAgent AI Lab, licence MIT).
