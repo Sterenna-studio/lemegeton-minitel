@@ -2,9 +2,11 @@ import { useEffect, useMemo } from "react";
 import {
   Box3,
   BoxHelper,
+  Matrix3,
   CanvasTexture,
   Mesh,
   MeshStandardMaterial,
+  Object3D,
   PlaneGeometry,
   Sprite,
   SpriteMaterial,
@@ -12,7 +14,7 @@ import {
   type Material,
 } from "three";
 import type { ThreeEvent } from "@react-three/fiber";
-import type { ModelInfo, ModelProfile, ScreenSource } from "./types";
+import type { ModelInfo, ModelProfile, ScreenFocus, ScreenSource } from "./types";
 import type { CrtEffects } from "../videotex/renderer";
 import { MinitelScreen } from "./MinitelScreen";
 import { useModel } from "../scene/loaders";
@@ -44,6 +46,28 @@ interface Props {
   selectedName?: string;
   /** Stops the screen updates while the terminal is out of view. */
   paused?: boolean;
+  /** Orientation and size of the screen, once the model is prepared. */
+  onScreen?: (screen: ScreenFocus) => void;
+  /** Double-click (or double tap) on the glass. */
+  onScreenDoubleClick?: () => void;
+}
+/**
+ * Where the glass faces and how big it is, in the frame of the model : mean of
+ * the screen normals (the glass is bulged), turned towards +z (the side the
+ * default views look from), and the extent of its bounding box.
+ */
+function screenFocusOf(scene: Object3D, screen: Mesh): ScreenFocus {
+  scene.updateMatrixWorld(true);
+  const normals = screen.geometry.getAttribute("normal");
+  const normal = new Vector3();
+  if (normals)
+    for (let i = 0; i < normals.count; i++) normal.add(new Vector3().fromBufferAttribute(normals, i));
+  normal.applyMatrix3(new Matrix3().getNormalMatrix(screen.matrixWorld));
+  if (normal.lengthSq() < 1e-8) normal.set(0, 0, 1);
+  normal.normalize();
+  if (normal.z < 0) normal.negate();
+  const size = new Box3().setFromObject(screen).getSize(new Vector3());
+  return { normal: normal.toArray() as [number, number, number], width: size.x, height: size.y };
 }
 export function MinitelModel({
   model,
@@ -57,6 +81,8 @@ export function MinitelModel({
   debug,
   selectedName,
   paused = false,
+  onScreen,
+  onScreenDoubleClick,
 }: Props) {
   const gltf = useModel(model);
   const prepared = useMemo(() => {
@@ -165,6 +191,9 @@ export function MinitelModel({
   useEffect(() => {
     onInfo?.(prepared.info);
   }, [prepared, onInfo]);
+  useEffect(() => {
+    onScreen?.(screenFocusOf(prepared.scene, prepared.screen));
+  }, [prepared, onScreen]);
   useEffect(
     () => () => {
       prepared.materials.forEach((m) => m.dispose());
@@ -248,7 +277,15 @@ export function MinitelModel({
   }
   return (
     <>
-      <primitive object={prepared.scene} onClick={select} />
+      <primitive
+        object={prepared.scene}
+        onClick={select}
+        onDoubleClick={(event: ThreeEvent<MouseEvent>) => {
+          if (event.object !== prepared.screen) return;
+          event.stopPropagation();
+          onScreenDoubleClick?.();
+        }}
+      />
       {prepared.fallback && <primitive object={prepared.fallback} />}
       <MinitelScreen
         source={screenSource}
