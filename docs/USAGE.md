@@ -20,7 +20,10 @@ de verifier ce build. Ne pas ouvrir `index.html` directement depuis le disque.
 Les polices et textures sont locales : aucun CDN n'est requis pour le rendu.
 
 Le modele est fourni : aucune coque procedurale ne remplace l'asset original.
-Rotation/toucher et zoom agissent sur la camera. Les touches du modele, le
+Rotation/toucher et zoom agissent sur la camera. Double-clic sur l'ecran : mise au
+point (ecran de face sur 80 % de la vue, camera verrouillee, cartes masquees) ;
+second double-clic ou bouton "Quitter la mise au point" : retour a la vue d'avant.
+Les touches du modele, le
 clavier physique, le clavier virtuel et les commandes DOM pilotent le meme terminal.
 Le bouton de lecture donne acces au contenu hors WebGL ; sans WebGL, ce mode
 est affiche automatiquement et reste navigable.
@@ -37,7 +40,7 @@ est affiche automatiquement et reste navigable.
 - `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
 - `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
 - `src/atelier/` : page `atelier/` des briques du monde.
-- `public/models/minitel.glb` : copie preparee pour le Web, environ 3,6 Mo et 22 000 triangles.
+- `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.
 Pas de moteur physique, de serveur applicatif ni de postprocessing lourd.
@@ -164,7 +167,15 @@ Pour ajouter un modele :
   `src/scene/framing.ts`, et le televiseur garde le cadrage `floor`.
 - **Camera** : elle vise toujours le centre de l'ecran du modele (`screenCenter` du
   `ModelProfile`, ou a defaut `screenFallback.position`). Les vues trois quarts, face,
-  profil et dos sont des decalages depuis ce point.
+  profil et dos sont des decalages depuis ce point. Zoom maximal : `minDistance` de
+  3 unites sur table, 2,6 au sol (rapproche le 8 octobre 2026 ; l'ecran occupe
+  alors environ 80 % de la hauteur).
+- **Mise au point** : `MinitelModel` calcule l'orientation et la taille de l'ecran
+  (`onScreen`, moyenne des normales du verre bombe) et signale le double-clic sur le
+  verre (`onScreenDoubleClick`). La commande camera `focus` place la camera sur la
+  normale, a `focusDistance` (l'ecran remplit `FOCUS_FILL` de la vue, en largeur ou
+  en hauteur selon le format), en 0,7 s (immediat en mouvement reduit), sans orbite
+  ni zoom ; `unfocus` revient a la position d'avant.
 - **Inventaire** : les cartes du bas (`src/components/ModelInventory.tsx`) forment
   un groupe radio, au clic comme aux fleches. L'effet 3D est purement CSS (perspective,
   transformations) et se fige avec `prefers-reduced-motion`. Les miniatures detourees

@@ -1034,3 +1034,22 @@ html:has(.experience.transparent) body,
   font-weight: 500;
   color: var(--gold);
 }
+
+/* Mise au point sur l'ecran (double-clic) : les cartes et la legende
+   s'effacent pour laisser l'ecran entier. visibility les retire aussi de la
+   navigation au clavier ; le fondu est coupe en mouvement reduit (regle
+   globale plus haut). */
+.scene .inventory,
+.scene .scene-caption {
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0s;
+}
+.scene.focused .inventory,
+.scene.focused .scene-caption {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}

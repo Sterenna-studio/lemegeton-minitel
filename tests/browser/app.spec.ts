@@ -22,8 +22,12 @@ test("lecture Canvas apres changement de visibilite avec frame stable", async ({
       root.render(react.createElement(component.AccessibleTerminal, {frame, visible: false, onKey: () => {}}));
       await new Promise(resolve => setTimeout(resolve, 60));
       root.render(react.createElement(component.AccessibleTerminal, {frame, visible: true, onKey: () => {}}));
-      await new Promise(resolve => setTimeout(resolve, 60));
-      return host.querySelector("canvas")?.getContext("2d")?.getImageData(0, 0, 1, 1).data[3] ?? 0;
+      // The canvas must repaint once visible again, even with an unchanged
+      // frame. Poll (up to 2 s) rather than a fixed delay : on a cold dev
+      // server the main thread is still busy compiling the app's modules.
+      const alpha = () => host.querySelector("canvas")?.getContext("2d")?.getImageData(0, 0, 1, 1).data[3] ?? 0;
+      for (let i = 0; i < 40 && alpha() !== 255; i++) await new Promise(resolve => setTimeout(resolve, 50));
+      return alpha();
     } finally {root.unmount(); host.remove();}
   });
   expect(alpha).toBe(255);

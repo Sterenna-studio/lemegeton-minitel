@@ -3,6 +3,7 @@ import {
   Box,
   Crosshair,
   FileText,
+  Focus,
   Monitor,
   RotateCcw,
   X,
@@ -19,7 +20,7 @@ import { Tool } from "./components/Tool";
 import { AccessibleTerminal } from "./components/AccessibleTerminal";
 import { marbleDataUrl } from "./demo/marble";
 import { MinitelAttachment } from "./minitel/MinitelAttachment";
-import type { ModelInfo, Vec3 } from "./minitel/types";
+import type { ModelInfo, ScreenFocus, Vec3 } from "./minitel/types";
 import type { CameraCommand } from "./scene/Camera";
 import type { DebugSettings } from "./minitel/MinitelModel";
 import { hasUrlParam, setUrlParam, setUrlParams, urlParam } from "./hooks/urlParams";
@@ -113,6 +114,8 @@ export default function App() {
     const next = findEntry(id);
     setEntry(next);
     setError("");
+    // Another terminal : leave the focus view of the previous one.
+    setCommand((current) => (current.kind === "focus" ? { id: current.id + 1, kind: "reset" } : current));
     setUrlParams({ modele: next.id, model: null });
   }
   useEffect(() => {
@@ -130,6 +133,20 @@ export default function App() {
   function cameraCommand(kind: CameraCommand["kind"]) {
     setCommand((current) => ({ id: current.id + 1, kind }));
   }
+  // Focus view : double-click on the glass (or the camera tool) brings the
+  // screen in front, filling the view, and locks the camera ; again to leave.
+  const [screen, setScreen] = useState<ScreenFocus>();
+  const onScreen = useCallback((value: ScreenFocus) => setScreen(value), []);
+  const focused = command.kind === "focus";
+  const toggleFocus = useCallback(() => {
+    setCommand((current) =>
+      current.kind === "focus"
+        ? { id: current.id + 1, kind: "unfocus" }
+        : screen
+          ? { id: current.id + 1, kind: "focus", screen }
+          : current,
+    );
+  }, [screen]);
   const fallback = !webgl || !!error;
   const inspecting = import.meta.env.DEV && debug;
   return (
@@ -158,7 +175,7 @@ export default function App() {
           <span className="service-state">LIAISON ETABLIE</span>
         </div>
       </header>
-      <div className="scene" data-testid="scene">
+      <div className={focused ? "scene focused" : "scene"} data-testid="scene">
         {!fallback && (
           <Scene
             model={model}
@@ -171,6 +188,8 @@ export default function App() {
             onError={onError}
             onInfo={onInfo}
             onKey={sendKey}
+            onScreen={onScreen}
+            onScreenDoubleClick={toggleFocus}
             debug={inspecting ? inspection : undefined}
             selectedName={inspecting ? info?.selected : undefined}
             onCamera={inspecting ? onCamera : undefined}
@@ -207,6 +226,13 @@ export default function App() {
           </Tool>
           <Tool label="Recentrer" onClick={() => cameraCommand("reset")}>
             <RotateCcw size={19} />
+          </Tool>
+          <Tool
+            label={focused ? "Quitter la mise au point" : "Mise au point sur l'ecran"}
+            onClick={toggleFocus}
+            active={focused}
+          >
+            <Focus size={19} />
           </Tool>
           <span />
           <Tool label="Zoomer" onClick={() => cameraCommand("zoomIn")}>

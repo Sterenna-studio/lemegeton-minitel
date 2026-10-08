@@ -34,6 +34,14 @@ export interface ModelProfile {
   anchors: Record<string, Anchor>;
   keys: Record<string, string>;
 }
+/** Orientation and size of the screen in the scene, for the focus view. */
+export interface ScreenFocus {
+  /** Unit vector pointing out of the glass, towards the viewer. */
+  normal: Vec3;
+  /** World extent of the screen, in units. */
+  width: number;
+  height: number;
+}
 export interface ModelInfo {
   meshes: { name: string; vertices: number }[];
   triangles: number;

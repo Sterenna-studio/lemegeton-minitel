@@ -50,6 +50,9 @@ jobs:
           test -f dist/documentation/index.html
           test -f dist/simple/index.html
           test -f dist/atelier/index.html
+          # Transcodeur Basis : sans lui, les textures KTX2 des modeles ne se chargent pas.
+          test -f dist/basis/basis_transcoder.js
+          test -f dist/basis/basis_transcoder.wasm
           # Les photos de reference (annonce eBay) ne doivent jamais etre publiees.
           ! find dist -iname '*.webp' | grep -q .
           grep -q '/minitel/assets/' dist/index.html
