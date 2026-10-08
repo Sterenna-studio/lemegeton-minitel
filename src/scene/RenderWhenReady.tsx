@@ -6,12 +6,13 @@ import { useThree } from "@react-three/fiber";
 // view stays black until the pointer moves. Placed last inside a boundary, this
 // mounts once its siblings are ready and asks for two frames (the environment
 // map renders on the first one).
-export function RenderWhenReady() {
+export function RenderWhenReady({ onReady }: { onReady?: () => void } = {}) {
   const invalidate = useThree((state) => state.invalidate);
   useEffect(() => {
     invalidate();
+    onReady?.();
     const frame = requestAnimationFrame(() => invalidate());
     return () => cancelAnimationFrame(frame);
-  }, [invalidate]);
+  }, [invalidate, onReady]);
   return null;
 }

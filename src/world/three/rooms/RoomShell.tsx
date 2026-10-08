@@ -1,9 +1,10 @@
-import { useEffect, useMemo, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, type ReactNode } from "react";
 import type { BufferGeometry, Material } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { boxes, quad, type BoxSpec } from "../kit";
 import { DOOR_FRAME, closedState, freeSpans } from "../Corridor";
 import { TemporalDoor } from "../TemporalDoor";
+import { RenderWhenReady } from "../../../scene/RenderWhenReady";
 import { CORRIDOR_YEAR } from "../../rooms";
 import type { Vec3 } from "../../types";
 
@@ -119,7 +120,11 @@ export function RoomShell({
           })
         }
       >
-        <TemporalDoor door={door} state={closedState(year, CORRIDOR_YEAR)} wall={false} />
+        {/* Its own boundary : the room shows without waiting for the door model. */}
+        <Suspense fallback={null}>
+          <TemporalDoor door={door} state={closedState(year, CORRIDOR_YEAR)} wall={false} />
+          <RenderWhenReady />
+        </Suspense>
       </group>
       {children}
     </group>

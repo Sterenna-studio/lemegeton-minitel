@@ -474,6 +474,7 @@ Reporté au lot B :
 - **Poste terminal** : il reprend la vue par défaut de la version simple pour le mobilier choisi et la forme de l'écran (large ou étroite) : le passage à la caméra orbitale ne saute pas.
 - **Portrait** : sous un rapport de 1,2, le champ des postes s'élargit pour garder la largeur de la vue (`fittedFov`, plafonné à 100°) ; le poste terminal garde le cadrage de la version simple (`fit` = 0).
 - **Rendu à la demande** : `RenderWhenReady` demande une image quand les modèles d'une frontière Suspense sont prêts. Avant, une salle ouverte par son adresse restait noire jusqu'au premier mouvement de la souris (la version simple en profite aussi).
+- **Chargement** : la porte, la pendule et l'horloge partent ensemble dès l'ouverture du monde (`preloadModels`, `useModels`), au lieu de se suivre ; une salle s'affiche sans attendre sa porte de sortie, et « Chargement… » remplace l'écran noir le temps que les modèles arrivent. Constaté en ligne le 8 octobre : le téléviseur avait mis 36 s, et la salle restait noire jusqu'à la fin de la file.
 - **Budget mesuré** (`data-calls`, `data-triangles` sur le canevas, ombres comprises), cible 150 appels et 300 k triangles :
 
   | Salle | Entrée | Terminal |
