@@ -39,11 +39,17 @@ export interface DoorSlot {
   /** Corridor station facing the door. */
   approach: string;
   side: "gauche" | "droite";
+  /** Bottom centre of the frame, in the wall. */
+  position: Vec3;
+  /** Turn of the door around y : the door model faces +z. */
+  rotationY: number;
 }
 
 export interface Corridor {
   /** Year shown by the counters while in the corridor (out of time). */
   year: string;
+  /** Inner volume : x from -width/2 to width/2, y from 0 to height, z from start down to end. */
+  bounds: { width: number; height: number; start: number; end: number };
   stations: Station[];
   doors: DoorSlot[];
 }

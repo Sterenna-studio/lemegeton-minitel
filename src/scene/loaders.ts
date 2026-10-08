@@ -1,6 +1,6 @@
-import { useThree } from "@react-three/fiber";
+import { useLoader, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
-import { REVISION, type WebGLRenderer } from "three";
+import { Loader, REVISION, RepeatWrapping, type CompressedTexture, type WebGLRenderer } from "three";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 
 // Every model goes through here : GLB optimised by tools/optimize_glb.mjs carry
@@ -23,4 +23,28 @@ export function useModel(url: string) {
   // drei bundles the GLTFLoader of three-stdlib ; it only calls load() on the
   // KTX2 loader, which three's own loader provides.
   return useGLTF(url, true, true, (loader) => loader.setKTX2Loader(ktx2Loader(gl) as never));
+}
+
+// Standalone KTX2 textures (tools/encode_textures.mjs) through the same shared
+// loader, cached and suspending like any R3F loader.
+class Ktx2TextureLoader extends Loader<CompressedTexture> {
+  renderer?: WebGLRenderer;
+  load(
+    url: string,
+    onLoad: (texture: CompressedTexture) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (error: unknown) => void,
+  ) {
+    ktx2Loader(this.renderer!).load(url, onLoad as never, onProgress, onError);
+  }
+}
+
+/** KTX2 textures that tile (walls, floors). */
+export function useKtx2Textures(urls: string[]): CompressedTexture[] {
+  const gl = useThree((state) => state.gl);
+  const textures = useLoader(Ktx2TextureLoader, urls, (loader) => {
+    (loader as Ktx2TextureLoader).renderer = gl;
+  }) as CompressedTexture[];
+  for (const texture of textures) texture.wrapS = texture.wrapT = RepeatWrapping;
+  return textures;
 }

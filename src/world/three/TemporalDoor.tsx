@@ -80,7 +80,16 @@ function Wall({ frame, color = "#24302a" }: { frame: Box3; color?: string }) {
   );
 }
 
-export function TemporalDoor({ door, state }: { door: Door; state: DoorState }) {
+export function TemporalDoor({
+  door,
+  state,
+  wall = true,
+}: {
+  door: Door;
+  state: DoorState;
+  /** Its own wall around the frame (workshop) ; the corridor has its walls. */
+  wall?: boolean;
+}) {
   const model = useModel(assetUrl("models/monde/porte.glb"));
   const mantel = useModel(assetUrl("models/monde/pendule.glb"));
   const prepared = useMemo(() => {
@@ -200,7 +209,7 @@ export function TemporalDoor({ door, state }: { door: Door; state: DoorState }) 
     <group>
       <primitive object={prepared.scene} />
       <primitive object={prepared.mantel} />
-      <Wall frame={frame} />
+      {wall && <Wall frame={frame} />}
       {/* Light of the era, behind the opening : a glowing panel and a spot
           spilling through the door onto the floor. */}
       <mesh position={[centre.x, frame.max.y / 2, frame.min.z - 0.6]} material={glowMaterial}>

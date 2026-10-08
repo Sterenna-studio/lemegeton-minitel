@@ -50,6 +50,7 @@ jobs:
           test -f dist/models/monde/porte.glb
           test -f dist/models/monde/pendule.glb
           test -f dist/models/monde/horloge.glb
+          test -f dist/models/monde/textures/dark_paneled_wood_couleur.ktx2
           test -f dist/documentation/index.html
           test -f dist/simple/index.html
           test -f dist/atelier/index.html

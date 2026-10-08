@@ -71,6 +71,18 @@ export const couloirLighting: LightingPreset = {
   },
 };
 
+// Inside the corridor the sconces light the place (src/world/three/Corridor.tsx) :
+// only a dim warm ambience here, no shadow-casting light, no distant lamp.
+export const couloirInterieurLighting: LightingPreset = {
+  hemisphere: { sky: "#ffb46b", ground: "#2a1d12", intensity: 1.1 },
+  key: { position: [0, 20, 10], color: "#ffcf98", intensity: 0.45 },
+  fill: { position: [0, 10, -40], color: "#c9a56b", intensity: 0.15 },
+  environment: {
+    intensity: 0.35,
+    formers: [{ form: "rect", intensity: 1, color: "#ffcf98", position: [0, 14, 0], scale: [6, 3, 1] }],
+  },
+};
+
 // A warm lamp far behind the terminal, slowly breathing like a filament or a
 // flame. The scene renders on demand : the light asks for frames itself, at a
 // modest rate, and stays still when the user prefers reduced motion or when
