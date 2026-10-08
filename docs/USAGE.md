@@ -215,7 +215,7 @@ Rendu mosaique, a partir du travail deja fait dans **minitel-face** :
   Web-Eye-Animation (CyberAgentAILab, MIT), la librairie des yeux de l'overlay.
   On y trouve les formes par humeur et les sequences (`blink`, `joy`, `look_around`, `fall_asleep`...).
 - `src/eyes/lemegetonEyes.ts`, styles *Lemegeton (yeux)* et *Lemegeton (visage)* :
-  portage de `LemegetonEyes.h`, les yeux du firmware `Minitel_Clavicula` (le Minitel
+  portage de `LemegetonEyes.h`, les yeux du firmware `Minitel_Sigil` (le Minitel
   physique branche a la mesh Sigil). Deux ovales pleins avec pupille, animes en continu
   par les timelines de Web-Eye-Animation (CyberAgentAILab, MIT) : dix emotions, retour
   au neutre apres 1,2 s, clignements et regard autonomes. Le style *visage* ajoute la

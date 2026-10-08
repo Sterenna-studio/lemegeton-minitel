@@ -162,7 +162,7 @@ La page suit la direction artistique du Terminatel 255 (voir
 L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
 (Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
 nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face, ou
-ceux du firmware `Minitel_Clavicula` qui branche le Minitel physique à Sigil.
+ceux du firmware `Minitel_Sigil` qui branche le Minitel physique à Sigil.
 Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
 humeur. Deux rendus sont proposés : la mosaïque Vidéotex, ou un rendu classique lisse
 comme l'overlay. La taille se règle au curseur. Dans tous les cas, l'écran est bombé

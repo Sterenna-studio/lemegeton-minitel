@@ -38,7 +38,7 @@ export type EyePaletteId = (typeof EYE_PALETTES)[number]["id"];
 
 /**
  * Formes : capsules Zyra Eyes et yeux LibEyes (minitel-face), ovales
- * Lemegeton du firmware Minitel_Clavicula (terminal de la mesh Sigil), seuls
+ * Lemegeton du firmware Minitel_Sigil (terminal de la mesh Sigil), seuls
  * ou sur une tete ronde.
  */
 export const EYE_STYLES = [
@@ -133,7 +133,7 @@ export class EyesController {
   private sequenceToken = 0;
   private running = false;
   private autonomous = false;
-  /** Yeux du firmware Minitel_Clavicula : anime en continu, a son propre rythme. */
+  /** Yeux du firmware Minitel_Sigil : anime en continu, a son propre rythme. */
   private lemegeton: LemegetonEyes;
   private ticker: ReturnType<typeof setInterval> | undefined;
   private now: () => number;
@@ -213,7 +213,7 @@ export class EyesController {
     if (this.ticker) clearInterval(this.ticker);
     this.ticker = undefined;
   }
-  /** Touches du firmware Minitel_Clavicula : 0-9 emotions, Envoi joie, Suite clin d'oeil. */
+  /** Touches du firmware Minitel_Sigil : 0-9 emotions, Envoi joie, Suite clin d'oeil. */
   private lemegetonKey(name: string): boolean {
     const now = this.now();
     const digit = /^[0-9]$/.test(name) ? Number(name) : -1;

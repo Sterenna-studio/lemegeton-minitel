@@ -1,6 +1,6 @@
 import type { RowPatch, VideotexColor } from "../videotex/mosaic";
 
-// Lemegeton's eyes as drawn by the Minitel_Clavicula firmware (LemegetonEyes.h,
+// Lemegeton's eyes as drawn by the Minitel_Sigil firmware (LemegetonEyes.h,
 // the Minitel terminal of the Sigil mesh) : a port of web-eye-animation (MIT,
 // CyberAgentAILab), the eye library of nitro-clicker/lemegeton.html. Two oval
 // eyes, ten emotions played as short timelines, autonomous blinks and a

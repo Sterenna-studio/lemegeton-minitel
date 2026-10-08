@@ -8,7 +8,7 @@ const mirror = (m: number) =>
   ((m & 1) << 1) | ((m & 2) >> 1) | ((m & 4) << 1) | ((m & 8) >> 1) | ((m & 16) << 1) | ((m & 32) >> 1);
 const lit = (cells: number[][]) => cells.flat().filter((m) => m !== 0).length;
 
-describe("yeux Lemegeton (firmware Minitel_Clavicula)", () => {
+describe("yeux Lemegeton (firmware Minitel_Sigil)", () => {
   it("conversion mosaïque ↔ G1 sur les 64 motifs", () => {
     for (let m = 0; m < 64; m++) {
       const byte = mosaicToG1(m);
