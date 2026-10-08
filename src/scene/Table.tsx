@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from "react";
-import { useGLTF } from "@react-three/drei";
 import { Mesh, MeshStandardMaterial } from "three";
-import { furniture, type Furniture } from "./furniture";
+import type { Furniture } from "./furniture";
+import { useModel } from "./loaders";
 
 const url = (file: string) => `${import.meta.env.BASE_URL}models/mobilier/${file}`;
 
 /** Piece de mobilier sous le terminal ; son plateau est a y = 0. */
 export function Table({ piece }: { piece: Furniture & { file: string } }) {
-  const { scene } = useGLTF(url(piece.file));
+  const { scene } = useModel(url(piece.file));
   const table = useMemo(() => scene.clone(true), [scene]);
   useEffect(() => {
     const materials: MeshStandardMaterial[] = [];
@@ -25,6 +25,3 @@ export function Table({ piece }: { piece: Furniture & { file: string } }) {
   }, [table]);
   return <primitive object={table} position={[0, -piece.top, piece.offsetZ]} />;
 }
-
-// The default piece is preloaded ; the others load when chosen.
-useGLTF.preload(url(furniture[0].file!));

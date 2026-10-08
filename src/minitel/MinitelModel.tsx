@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import { useGLTF } from "@react-three/drei";
 import {
   Box3,
   BoxHelper,
@@ -16,6 +15,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import type { ModelInfo, ModelProfile, ScreenSource } from "./types";
 import type { CrtEffects } from "../videotex/renderer";
 import { MinitelScreen } from "./MinitelScreen";
+import { useModel } from "../scene/loaders";
 import { bulgedScreenGeometry } from "./bulge";
 /** Role of a mesh, as seen by a finish. */
 export type MeshRole = "body" | "key";
@@ -58,7 +58,7 @@ export function MinitelModel({
   selectedName,
   paused = false,
 }: Props) {
-  const gltf = useGLTF(model);
+  const gltf = useModel(model);
   const prepared = useMemo(() => {
     const scene = gltf.scene.clone(true);
     const materials: Material[] = [];

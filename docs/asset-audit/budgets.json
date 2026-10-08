@@ -1,126 +1,147 @@
 [
   {
     "file": "public/models/minitel.glb",
-    "kilobytes": 3556,
+    "kilobytes": 862,
     "triangles": 21943,
     "vertices": 18931,
     "meshes": 71,
     "primitives": 71,
-    "materials": 71,
+    "materials": 14,
     "textures": 11,
-    "texture_kilobytes": 2767,
+    "texture_kilobytes": 501,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg",
-      "image/png"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 24.0,
-    "extensions": []
+    "gpu_texture_megabytes": 6.0,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
   },
   {
     "file": "public/models/mobilier/chevet-haut.glb",
-    "kilobytes": 359,
+    "kilobytes": 298,
     "triangles": 4312,
     "vertices": 2967,
     "meshes": 1,
     "primitives": 1,
     "materials": 1,
     "textures": 3,
-    "texture_kilobytes": 216,
+    "texture_kilobytes": 245,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 16.8,
-    "extensions": []
+    "gpu_texture_megabytes": 2.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
   },
   {
     "file": "public/models/mobilier/meuble-niche.glb",
-    "kilobytes": 279,
+    "kilobytes": 237,
     "triangles": 2354,
     "vertices": 1887,
     "meshes": 1,
     "primitives": 1,
     "materials": 1,
     "textures": 3,
-    "texture_kilobytes": 190,
+    "texture_kilobytes": 203,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 16.8,
-    "extensions": []
+    "gpu_texture_megabytes": 2.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
   },
   {
     "file": "public/models/mobilier/table-basse.glb",
-    "kilobytes": 322,
+    "kilobytes": 272,
     "triangles": 3272,
     "vertices": 2163,
     "meshes": 1,
     "primitives": 1,
     "materials": 1,
     "textures": 3,
-    "texture_kilobytes": 217,
+    "texture_kilobytes": 232,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 16.8,
-    "extensions": []
+    "gpu_texture_megabytes": 2.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
   },
   {
     "file": "public/models/mobilier/table-tiroir.glb",
-    "kilobytes": 327,
+    "kilobytes": 286,
     "triangles": 3148,
     "vertices": 2308,
     "meshes": 1,
     "primitives": 1,
     "materials": 1,
     "textures": 3,
-    "texture_kilobytes": 217,
+    "texture_kilobytes": 244,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 16.8,
-    "extensions": []
+    "gpu_texture_megabytes": 2.1,
+    "extensions": [
+      "EXT_meshopt_compression",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
+    ]
   },
   {
     "file": "public/models/television-1950.glb",
-    "kilobytes": 1558,
+    "kilobytes": 323,
     "triangles": 5718,
     "vertices": 6901,
     "meshes": 5,
     "primitives": 5,
     "materials": 5,
     "textures": 4,
-    "texture_kilobytes": 1303,
+    "texture_kilobytes": 237,
     "largest_texture": [
       1024,
       1024
     ],
     "texture_formats": [
-      "image/jpeg",
-      "image/png"
+      "image/ktx2"
     ],
-    "gpu_texture_megabytes": 12.1,
+    "gpu_texture_megabytes": 2.0,
     "extensions": [
-      "KHR_materials_specular"
+      "EXT_meshopt_compression",
+      "KHR_materials_specular",
+      "KHR_mesh_quantization",
+      "KHR_texture_basisu"
     ]
   }
 ]

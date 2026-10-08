@@ -37,7 +37,7 @@ est affiche automatiquement et reste navigable.
 - `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
 - `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
 - `src/atelier/` : page `atelier/` des briques du monde.
-- `public/models/minitel.glb` : copie preparee pour le Web, environ 3,6 Mo et 22 000 triangles.
+- `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.
 Pas de moteur physique, de serveur applicatif ni de postprocessing lourd.

@@ -18,7 +18,7 @@ L'application propose trois entrées (`src/demo/catalog.ts`), construites sur de
 | Auteur | okotaru (https://sketchfab.com/loaferspore) |
 | Source | https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf |
 | Licence | CC BY 4.0 : usage commercial et redistribution autorisés, crédit obligatoire |
-| Fichier | `public/models/minitel.glb` (3,6 Mo) |
+| Fichier | `public/models/minitel.glb` (0,86 Mo compressé ; 3,6 Mo avant compression) |
 | Modifications | rotation, échelle, origine au sol, écran extrait en `Minitel_Screen` |
 | Attribution | `public/models/ATTRIBUTION.md`, à distribuer avec le modèle |
 
@@ -43,7 +43,7 @@ reproduction du Terminatel.
 | Auteur | Huuxloc (https://sketchfab.com/rjh41) |
 | Source | https://sketchfab.com/3d-models/1950s-retro-television-640b18f7fcbb489eb47bda1927e5b653 |
 | Licence | CC BY 4.0 (dans `asset.extras` du GLB d'origine) |
-| Fichier | `public/models/television-1950.glb` (1,6 Mo, 5 meshes, textures 1k) |
+| Fichier | `public/models/television-1950.glb` (0,32 Mo compressé ; 1,6 Mo avant ; 5 meshes, textures 1k) |
 | Modifications | échelle (2,4 unités de haut), origine au sol, noms de meshes, écran `Minitel_Screen` avec UV planes (`tools/prepare_television.py`) |
 
 ### Mobilier : Wood Drawer & Tables Set
@@ -54,7 +54,7 @@ reproduction du Terminatel.
 | Auteur | brandon_grey (https://sketchfab.com/brandondmc10) |
 | Source | https://sketchfab.com/3d-models/wood-drawer-tables-set-958db224ef514b2eabd69ac0a4e59ca0 |
 | Licence | CC BY 4.0 (dans `asset.extras` du GLB d'origine) |
-| Fichiers | `public/models/mobilier/*.glb` : quatre pièces de 286 à 367 Ko chacune, contre 10,4 Mo pour le lot |
+| Fichiers | `public/models/mobilier/*.glb` : quatre pièces de 237 à 298 Ko chacune une fois compressées (286 à 367 Ko avant), contre 10,4 Mo pour le lot |
 | Modifications | pièces exportées séparément, centrées, mises à 8 unités par mètre, textures en JPEG (`tools/prepare_table.py`, mesures dans `docs/asset-audit/mobilier.json`) |
 
 Le Minitel et le Terminatel sont posés sur la pièce choisie (Réglages CRT > Mobilier,
@@ -106,6 +106,32 @@ Le modèle doit idéalement fournir :
 Tout modèle tiers doit conserver sa licence et sa provenance dans la documentation du dépôt.
 
 Ne pas intégrer automatiquement un asset tiers dans une distribution finale sans vérifier ses conditions d'utilisation.
+
+## Compression (8 octobre 2026)
+
+Tous les modèles publiés sont compressés par `tools/optimize_glb.mjs` : textures en
+KTX2 (Basis Universal), géométrie meshopt. L'application les lit grâce à
+`src/scene/loaders.ts` (`useModel`, `KTX2Loader` et transcodeur Basis servi dans
+`basis/`).
+
+| Modèle | Avant | Après | Textures GPU (estimation) |
+| --- | --- | --- | --- |
+| `minitel.glb` | 3,6 Mo | 0,86 Mo | ~24 → 6 Mo |
+| `television-1950.glb` | 1,6 Mo | 0,32 Mo | ~12 → 2 Mo |
+| `mobilier/*.glb` | 0,29 à 0,37 Mo | 0,24 à 0,30 Mo | ~17 → 2 Mo chacun |
+
+Le rendu a été comparé avant et après sur les trois terminaux, y compris en vue
+rapprochée : aucune différence visible. Les `tools/prepare_*.py` produisent des
+GLB non compressés. **Après chaque préparation, relancer la compression** :
+
+```bash
+node tools/optimize_glb.mjs public/models/minitel.glb public/models/minitel.glb
+```
+
+Piège corrigé pendant ce travail : par défaut, `prune` de glTF Transform supprime
+les UV des meshes dont le matériau n'a pas de texture. C'est le cas des écrans,
+dessinés par un shader, qui apparaissaient alors vides. Le script garde désormais
+tous les attributs (`keepAttributes`).
 
 ## Préparation Web
 

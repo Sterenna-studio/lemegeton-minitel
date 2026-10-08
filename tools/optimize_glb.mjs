@@ -9,6 +9,7 @@
 //     --secondary <px>  taille max des autres cartes (défaut 512)
 //     --drop <a,b>      nœuds à retirer avec leurs enfants (par nom)
 //     --no-ktx2         garde les textures en PNG/JPEG (redimensionnées)
+//     --no-meshopt      garde la géométrie en flottants, non compressée
 //
 // Côté application, un GLB optimisé demande KTX2Loader (KHR_texture_basisu)
 // et le décodeur meshopt (EXT_meshopt_compression) au chargement.
@@ -27,13 +28,19 @@ const option = (name, fallback) => {
 };
 const [input, output] = args.filter((arg, i) => !arg.startsWith("--") && !args[i - 1]?.match(/^--(max|secondary|drop)$/));
 if (!input || !output) {
-  console.error("usage : node tools/optimize_glb.mjs <entrée> <sortie.glb> [--max 1024] [--secondary 512] [--drop a,b] [--no-ktx2]");
+  console.error("usage : node tools/optimize_glb.mjs <entrée> <sortie.glb> [--max 1024] [--secondary 512] [--drop a,b] [--no-ktx2] [--no-meshopt]");
   process.exit(1);
 }
 const max = Number(option("--max", 1024));
 const secondary = Number(option("--secondary", 512));
 const drop = (option("--drop", "") || "").split(",").filter(Boolean);
 const useKtx2 = !args.includes("--no-ktx2");
+const useMeshopt = !args.includes("--no-meshopt");
+
+// Keep every vertex attribute : prune would drop the UV of meshes whose
+// material has no texture, such as the terminal screens, whose image is drawn
+// by a shader at run time.
+const keep = { keepAttributes: true };
 
 const COLOR = /baseColor|emissive/;
 const NORMAL = /normal/;
@@ -71,7 +78,7 @@ const before = {
 };
 
 await document.transform(
-  prune(),
+  prune(keep),
   dedup(),
   // Same format, smaller : colour maps up to --max, the others up to --secondary.
   textureCompress({ encoder: sharp, resize: [max, max], slots: COLOR }),
@@ -87,7 +94,7 @@ if (useKtx2)
     // Other data maps : ETC1S, linear.
     ktx2({ slots: DATA, isUASTC: false, qualityLevel: 160, isPerceptual: false, generateMipmap: true, imageDecoder, enableDebug: false }),
   );
-await document.transform(prune(), meshopt({ encoder: MeshoptEncoder, level: "medium" }));
+await document.transform(prune(keep), ...(useMeshopt ? [meshopt({ encoder: MeshoptEncoder, level: "medium" })] : []));
 await io.write(output, document);
 
 const after = statSync(output).size;

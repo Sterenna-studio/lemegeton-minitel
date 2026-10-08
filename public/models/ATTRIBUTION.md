@@ -7,7 +7,10 @@ License URL: https://creativecommons.org/licenses/by/4.0/
 
 Author, title, source and license are recorded in the supplied original GLB metadata.
 Derived web asset: minitel.glb. Changes: orientation, centering, presentation
-scale, separate CRT faces and replacement screen UVs. Original textures retained.
+scale, separate CRT faces and replacement screen UVs.
+Web compression (tools/optimize_glb.mjs): textures re-encoded as KTX2
+(Basis Universal; colour maps up to 1024 px, other maps up to 512 px),
+geometry compressed with meshopt.
 Keep this attribution and the visible credit when distributing the derived model.
 
 ---
@@ -19,8 +22,10 @@ License URL: https://creativecommons.org/licenses/by/4.0/
 
 Derived web asset: television-1950.glb (from the 1k-texture variant), made by
 tools/prepare_television.py. Changes: centering, presentation scale (2.4 units
-high), mesh names, screen material replaced and planar screen UVs. Original
-textures retained. Keep this attribution and the visible credit when
+high), mesh names, screen material replaced and planar screen UVs.
+Web compression (tools/optimize_glb.mjs): textures re-encoded as KTX2
+(Basis Universal; colour maps up to 1024 px, other maps up to 512 px),
+geometry compressed with meshopt. Keep this attribution and the visible credit when
 distributing the derived model.
 
 ---
@@ -32,5 +37,8 @@ License URL: https://creativecommons.org/licenses/by/4.0/
 
 Derived web assets: mobilier/table-tiroir.glb, chevet-haut.glb, meuble-niche.glb
 and table-basse.glb, made by tools/prepare_table.py. Changes: each piece exported
-alone, centred, scaled to 8 units per metre, and its textures re-encoded as JPEG. Keep this attribution and the visible credit
+alone, centred, scaled to 8 units per metre.
+Web compression (tools/optimize_glb.mjs): textures re-encoded as KTX2
+(Basis Universal; colour maps up to 1024 px, other maps up to 512 px),
+geometry compressed with meshopt. Keep this attribution and the visible credit
 when distributing the derived model.
