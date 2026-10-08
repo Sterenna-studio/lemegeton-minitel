@@ -35,6 +35,9 @@ npm run dev          # http://127.0.0.1:5174
 npm run build        # contrôle des types puis bundle dans dist/
 ```
 
+Aperçu du monde explorable (couloir, portes temporelles, salles provisoires) sur
+`/parcours/`, et chaque brique seule dans `/atelier/`.
+
 Node 22.12+ ou 24. Rotation, toucher et zoom pilotent la caméra. Un double-clic sur
 l'écran fait la mise au point : l'écran passe de face, remplit la vue, et la caméra
 se verrouille ; un second double-clic revient à la vue d'avant (bouton équivalent

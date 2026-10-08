@@ -54,6 +54,7 @@ jobs:
           test -f dist/documentation/index.html
           test -f dist/simple/index.html
           test -f dist/atelier/index.html
+          test -f dist/parcours/index.html
           # Transcodeur Basis : sans lui, les textures KTX2 des modeles ne se chargent pas.
           ls dist/basis/*/basis_transcoder.js
           ls dist/basis/*/basis_transcoder.wasm

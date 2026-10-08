@@ -22,6 +22,9 @@ export function AtelierPage() {
           </span>
         </a>
         <nav aria-label="Autres pages">
+          <a href={`${base}parcours/`}>
+            <DoorOpen size={14} /> Parcours
+          </a>
           <a href={`${base}simple/`}>
             <Monitor size={14} /> Version simple
           </a>

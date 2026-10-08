@@ -1,4 +1,4 @@
-import { FADE_DURATION, areNeighbours, linksFrom, requireStation, travelDuration } from "./rails";
+import { FADE_DURATION, areNeighbours, linksFrom, requireStation, targetOf, travelDuration } from "./rails";
 import { findStation } from "./rooms";
 import { PASSAGE_DURATION, SEQUENCE_DURATION } from "./sequence";
 import type { DoorSlot, World } from "./types";
@@ -13,9 +13,9 @@ interface Base {
 export type NavState =
   | (Base & { mode: "poste"; station: string })
   | (Base & { mode: "trajet"; from: string; to: string; t: number; duration: number; back: boolean })
-  | (Base & { mode: "ouverture"; from: string; door: DoorSlot; t: number })
-  | (Base & { mode: "passage"; from: string; door: DoorSlot; t: number })
-  | (Base & { mode: "retour"; from: string; door: DoorSlot; t: number })
+  | (Base & { mode: "ouverture"; from: string; door: DoorSlot; t: number; back: boolean })
+  | (Base & { mode: "passage"; from: string; door: DoorSlot; t: number; back: boolean })
+  | (Base & { mode: "retour"; from: string; door: DoorSlot; t: number; back: boolean })
   | (Base & { mode: "fondu"; from: string; to: string; t: number; back: boolean });
 
 export type NavEvent =
@@ -89,11 +89,11 @@ export function navigate(world: World, state: NavState, event: NavEvent, options
       case "fondu":
         return arrive(state, state.to, state.from, state.back);
       case "ouverture":
-        return { mode: "passage", from: state.from, door: state.door, t: 0, history: state.history };
+        return { mode: "passage", from: state.from, door: state.door, t: 0, back: state.back, history: state.history };
       case "passage":
-        return arrive(state, entryOf(world, state.door), state.from, false);
+        return arrive(state, entryOf(world, state.door), state.from, state.back);
       case "retour":
-        return arrive(state, state.door.approach, state.from, false);
+        return arrive(state, state.door.approach, state.from, state.back);
     }
   }
   // Commands are ignored while moving.
@@ -108,19 +108,27 @@ export function navigate(world: World, state: NavState, event: NavEvent, options
       const link = links.find((l) => l.kind === "porte");
       if (!link || link.kind !== "porte") return state;
       if (options.reducedMotion) return fade(state, entryOf(world, link.door));
-      return { mode: "ouverture", from: state.station, door: link.door, t: 0, history: state.history };
+      return { mode: "ouverture", from: state.station, door: link.door, t: 0, back: false, history: state.history };
     }
     case "SORTIE": {
       const link = links.find((l) => l.kind === "sortie");
       if (!link || link.kind !== "sortie") return state;
       if (options.reducedMotion) return fade(state, link.door.approach);
-      return { mode: "retour", from: state.station, door: link.door, t: 0, history: state.history };
+      return { mode: "retour", from: state.station, door: link.door, t: 0, back: false, history: state.history };
     }
     case "SAUT":
       return findStation(world, event.to) && event.to !== state.station ? fade(state, event.to) : state;
     case "PRECEDENT": {
       const previous = state.history[state.history.length - 1];
       if (!previous) return state;
+      // Back through a door : the door sequence plays, not a walk through the wall.
+      const link = links.find((l) => l.kind !== "aller" && targetOf(world, l) === previous);
+      if (link && !options.reducedMotion) {
+        if (link.kind === "sortie")
+          return { mode: "retour", from: state.station, door: link.door, t: 0, back: true, history: state.history };
+        if (link.kind === "porte")
+          return { mode: "ouverture", from: state.station, door: link.door, t: 0, back: true, history: state.history };
+      }
       return areNeighbours(world, state.station, previous)
         ? go(world, state, previous, options, true)
         : fade(state, previous, true);

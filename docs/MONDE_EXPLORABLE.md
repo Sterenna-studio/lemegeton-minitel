@@ -439,6 +439,29 @@ Reporté au lot B :
 - L'atelier de la porte se recadre sur téléphone, en portrait.
 - **Tests** : `tests/browser/corridor.spec.ts`, 3 tests sur ordinateur et mobile, dont une assertion du budget à l'entrée.
 
+**Lot D — terminé le 8 octobre 2026** : le monde sur ses rails, en aperçu sur `/minitel/parcours/`. L'accueil ne bascule qu'au lot F. Le nom `monde/` est déjà pris par le dossier des sources.
+- **`src/world/pose.ts`** (pur, testé) donne pour chaque état de navigation le lieu, la caméra (position, visée, champ), le fondu au noir et la porte en mouvement :
+  - trajet en courbe de Catmull-Rom (`curve.ts`) ;
+  - ouverture sur place ;
+  - passage vers le seuil, puis lumière et noir ;
+  - retour : fondu dans la salle, puis la porte se referme vue du couloir ;
+  - fondu au noir à mi-parcours.
+- **Réducteur** : « Revenir » depuis l'entrée d'une salle rejoue la porte (retour ou ouverture), et non un trajet à travers le mur (`back` sur les états de porte).
+- **`src/world/WorldApp.tsx`** :
+  - le temps avance pendant les déplacements ;
+  - l'adresse est remplacée au premier poste, puis chaque poste atteint ajoute une entrée d'historique. `popstate` rejoue le chemin : revenir, aller vers un voisin, ou sauter en fondu ;
+  - les actions sont de vrais boutons, dans une barre d'outils accessible ; les flèches passent de l'une à l'autre, `Échap` et `Retour arrière` reviennent ;
+  - un clic sur une porte l'ouvre depuis son poste, ou mène jusqu'à elle ;
+  - l'arrivée est annoncée (`aria-live`) ;
+  - bouton Son, coupé par défaut ;
+  - repli vers la version simple sans WebGL.
+- **`NavCamera`** : applique la vue, avec une parallaxe bornée à la souris (±3°, ±2°), désactivée en mouvement réduit et au toucher. Le rendu se fait à la demande.
+- **`RoomPlaceholder`** : salle provisoire teintée par époque, remplacée au lot E.
+- **Tests** :
+  - unitaires : 46, dont les vues de chaque état ;
+  - `tests/browser/parcours.spec.ts` : parcours complet au clavier seul, bouton Retour du navigateur, arrivée directe et ancien lien `?modele=`, clic sur une porte, mouvement réduit.
+  - Test de mutation : sans entrée d'historique, le test du bouton Retour échoue.
+
 ## 13. Questions ouvertes
 
 Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
