@@ -35,8 +35,10 @@ npm run dev          # http://127.0.0.1:5174
 npm run build        # contrôle des types puis bundle dans dist/
 ```
 
-Aperçu du monde explorable (couloir, portes temporelles, salles provisoires) sur
-`/parcours/`, et chaque brique seule dans `/atelier/`.
+Le site a deux modes. Par défaut, la **version simple** : un terminal sur sa table.
+Le bouton **Mode 3D+** de l'en-tête ouvre le **monde explorable** (`/?mode=3d`) :
+couloir, portes temporelles, une salle d'époque par terminal. **Mode simple**
+revient. Le monde seul reste sur `/parcours/`, et chaque brique dans `/atelier/`.
 
 Node 22.12+ ou 24. Rotation, toucher et zoom pilotent la caméra. Un double-clic sur
 l'écran fait la mise au point : l'écran passe de face, remplit la vue, et la caméra
@@ -105,9 +107,10 @@ src/
   hooks/        # abonnement au terminal, mouvement réduit, paramètres d'URL
   demo/         # pages 3615 Lemegéton, seul module narratif ; catalogue des terminaux
   terminal/     # expérience du terminal (3615, yeux, effets) et ses panneaux, réutilisables
-  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé)
+  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé) ; three/ : couloir, portes, salles
   atelier/      # page atelier : chaque brique du monde vue seule
-  App.tsx       # version simple : le terminal seul
+  App.tsx       # version simple : le terminal seul (mode par défaut)
+  SiteModes.tsx # bascule entre la version simple et le mode 3D+ (monde chargé à la demande)
 
 simple/, atelier/, documentation/   # entrées Vite des autres pages
 
@@ -126,7 +129,7 @@ docs/           # cadrage, guide, préparation du modèle, rapports de vérifica
 - [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
 - [Cadrage du projet](docs/3D_WEB_PROJECT.md).
 - [Audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md) : bilan des trois dépôts, vérifications, points ouverts.
-- [Monde explorable](docs/MONDE_EXPLORABLE.md) (à venir, [issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails ; la version actuelle restera disponible en version simple. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails, en mode 3D+ ; la version simple reste le mode par défaut. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
 
 ## Personnage Lemegéton (`lemegeton/`)
 
@@ -161,7 +164,8 @@ La page suit la direction artistique du Terminatel 255 (voir
 
 L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
 (Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
-nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face.
+nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face, ou
+ceux du firmware `Minitel_Sigil` qui branche le Minitel physique à Sigil.
 Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
 humeur. Deux rendus sont proposés : la mosaïque Vidéotex, ou un rendu classique lisse
 comme l'overlay. La taille se règle au curseur. Dans tous les cas, l'écran est bombé
@@ -180,4 +184,6 @@ Modèle 3D « Minitel 1982-France » par okotaru
 ([Sketchfab](https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf)),
 sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), adapté :
 voir [ATTRIBUTION.md](public/models/ATTRIBUTION.md). Polices IBM Plex sous
-licence SIL OFL 1.1 ([public/licenses/](public/licenses/)).
+licence SIL OFL 1.1 ([public/licenses/](public/licenses/)). Animations des yeux
+d'après [Web-Eye-Animation](https://github.com/CyberAgentAILab/web-eye-animation)
+(CyberAgent AI Lab, licence MIT).

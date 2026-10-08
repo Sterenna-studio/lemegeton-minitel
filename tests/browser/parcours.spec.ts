@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import sharp from "sharp";
 import { stagePixels } from "./helpers";
 
 // The explorable world on its rails (lot D) : /parcours/.
@@ -13,7 +14,8 @@ async function open(page: Page, query = "") {
   await expect.poll(async () => (await stagePixels(page, '[data-testid="monde"]')).lit, { timeout: 30000 }).toBeGreaterThan(5000);
   return errors;
 }
-const status = (page: Page) => page.getByRole("status");
+// The world's announcement (the terminal has its own status region).
+const status = (page: Page) => page.getByTestId("annonce");
 const actions = (page: Page) => page.getByRole("toolbar", { name: "Déplacements" });
 
 test("parcours au clavier seul : couloir → porte → salle → retour", async ({ page }, testInfo) => {
@@ -70,11 +72,67 @@ test("parcours : mouvement réduit, des fondus brefs ; pas de défilement horizo
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open(page, "?poste=porte-televiseur-1950");
   await actions(page).getByRole("button", { name: "Ouvrir la porte 1950" }).click();
-  // A 0.4 s fade instead of the 4.2 s sequence and passage.
-  await expect(status(page)).toHaveText(/^Entrée — Televiseur 1950\./, { timeout: 1500 });
+  // A 0.4 s fade instead of the 4.2 s sequence and passage (the room still
+  // loads its terminal : allow for it).
+  await expect(status(page)).toHaveText(/^Entrée — Televiseur 1950\./, { timeout: 4000 });
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBe(true);
   const sound = page.getByRole("button", { name: /Son/ });
   await expect(sound).toHaveAttribute("aria-pressed", "false");
 });
+
+test("salle : devant le terminal, le 3615 et les réglages comme dans la version simple", async ({ page }) => {
+  const errors = await open(page, "?salle=terminatel-255&poste=terminal");
+  await expect(status(page)).toHaveText(/^Terminatel 255\./);
+  const console3615 = page.locator(".world-terminal .console");
+  await expect(console3615).toBeVisible();
+  await console3615.getByRole("button", { name: /Archives/ }).click();
+  await expect(page.getByRole("status").filter({ hasText: "ARCHIVES" })).toBeAttached();
+  // Settings : furniture under the desk terminal.
+  await console3615.getByRole("button", { name: "Reglages CRT" }).click();
+  await page.getByLabel("Mobilier").selectOption("table-basse");
+  await expect(page).toHaveURL(/table=table-basse/);
+  // Leave the terminal : back to the entry of the room, the console goes.
+  await actions(page).getByRole("button", { name: /Aller : Entrée/ }).click();
+  await expect(status(page)).toHaveText(/^Entrée — Terminatel 255\./, { timeout: 6000 });
+  await expect(console3615).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+// Share of lit pixels above the 3615 console : the room itself.
+async function roomLit(page: Page) {
+  const box = (await page.getByTestId("monde").boundingBox())!;
+  const shot = await page.screenshot({ clip: { x: box.x, y: box.y, width: box.width, height: box.height * 0.5 } });
+  const { data, info } = await sharp(shot).raw().toBuffer({ resolveWithObject: true });
+  let lit = 0;
+  for (let i = 0; i < data.length; i += info.channels) if (data[i] + data[i + 1] + data[i + 2] > 60) lit++;
+  return lit / (info.width * info.height);
+}
+const cost = async (page: Page) => {
+  const canvas = page.locator('[data-testid="monde"] canvas');
+  return { calls: Number(await canvas.getAttribute("data-calls")), triangles: Number(await canvas.getAttribute("data-triangles")) };
+};
+
+for (const [room, label] of [
+  ["televiseur-1950", "Televiseur 1950"],
+  ["minitel-1", "Minitel 1"],
+  ["terminatel-255", "Terminatel 255"],
+]) {
+  test(`salle ${room} : décor rendu dès l'arrivée, budget d'une salle`, async ({ page }) => {
+    for (const poste of ["entree", "terminal"]) {
+      const errors = await open(page, `?salle=${room}${poste === "terminal" ? "&poste=terminal" : ""}`);
+      const place = poste === "terminal" ? label : `Entrée — ${label}`;
+      await expect(status(page)).toHaveText(new RegExp(`^${place}\\.`));
+      // Rendered on demand : the room shows without moving the pointer (a view
+      // left black reads 0 ; the marble room is dark by design).
+      await expect.poll(() => roomLit(page), { timeout: 20000 }).toBeGreaterThan(0.08);
+      // Budget of docs/MONDE_EXPLORABLE.md §8 : a whole room <= 150 calls, 300 k triangles.
+      await expect.poll(async () => (await cost(page)).calls, { timeout: 10000 }).toBeGreaterThan(0);
+      const { calls, triangles } = await cost(page);
+      expect(calls).toBeLessThanOrEqual(150);
+      expect(triangles).toBeLessThanOrEqual(300000);
+      expect(errors).toEqual([]);
+    }
+  });
+}

@@ -36,11 +36,13 @@ est affiche automatiquement et reste navigable.
 - `src/hooks/` : abonnement React au terminal et preference de mouvement reduit.
 - `src/scene/` : lumiere, ombres, camera tactile, suivi de contexte WebGL et fallback d'erreur.
 - `src/components/AccessibleTerminal.tsx` : contenu textuel et actions DOM synchronises.
-- `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et, plus tard, par le poste terminal des salles.
+- `src/terminal/` : experience du terminal (`useTerminalExperience` : 3615, yeux, effets CRT, touches) et ses panneaux (reglages, console, clavier, inspection), reutilises par la version simple et par le poste terminal des salles.
 - `src/world/` : monde explorable, sans 3D : salles derivees du catalogue, rails, reducteur de navigation, sequence de la porte temporelle, URL. Voir [MONDE_EXPLORABLE.md](MONDE_EXPLORABLE.md).
-- `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), servie sur `/` et `/simple/`.
+- `src/SiteModes.tsx` : les deux modes du site. Par defaut la version simple ; `?mode=3d` (bouton **Mode 3D+** de l'en-tete) charge le monde a la demande, **Mode simple** revient, sur le terminal de la salle ou l'on etait. Logique d'adresse pure dans `src/siteMode.ts`.
+- `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), mode par defaut de `/` et de `/simple/`.
 - `src/atelier/` : page `atelier/` des briques du monde (porte, couloir).
-- `src/world/WorldApp.tsx` : le monde sur rails, servi sur `/parcours/` jusqu'a la bascule de l'accueil (lot F). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes.
+- `src/world/WorldApp.tsx` : le monde sur rails, mode 3D+ de l'accueil (`/?mode=3d`), et seul sur `/parcours/` (apercu). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes. Sur un ecran etroit (telephone tenu droit), le champ s'elargit pour garder la largeur de la vue (`fittedFov`, `src/world/pose.ts`).
+- `src/world/three/rooms/` : les salles du lot E, construites en code (aucun fichier a telecharger) : `RoomShell` (murs, sol, plafond, moulures, porte de sortie vers le couloir), `Salon1950`, `Bureau1982`, `TerminatelHall`, textures dessinees sur canvas (`textures.ts`).
 - `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 
 Stack : React, TypeScript strict, Vite, Three.js, React Three Fiber et drei.
@@ -214,9 +216,21 @@ Rendu mosaique, a partir du travail deja fait dans **minitel-face** :
 - `src/eyes/libEyes.ts`, style *Barres* : portage de `LibEyes`, qui transpose deja
   Web-Eye-Animation (CyberAgentAILab, MIT), la librairie des yeux de l'overlay.
   On y trouve les formes par humeur et les sequences (`blink`, `joy`, `look_around`, `fall_asleep`...).
+- `src/eyes/lemegetonEyes.ts`, styles *Lemegeton (yeux)* et *Lemegeton (visage)* :
+  portage de `LemegetonEyes.h`, les yeux du firmware `Minitel_Sigil` (le Minitel
+  physique branche a la mesh Sigil). Deux ovales pleins avec pupille, animes en continu
+  par les timelines de Web-Eye-Animation (CyberAgentAILab, MIT) : dix emotions, retour
+  au neutre apres 1,2 s, clignements et regard autonomes. Le style *visage* ajoute la
+  tete ronde bleue du firmware. *Auto* prend la couleur de l'emotion, comme sur le
+  terminal, et la rangee 22 affiche l'humeur. Une image toutes les 90 ms au plus, la
+  cadence du firmware ; taille jusqu'a x1,2. Touches du firmware : `0`-`9` emotions
+  (0 joie ... 9 excitation), Envoi joie, Guide surprise, Annulation colere, Correction
+  fatigue, Suite clin d'oeil, Repetition regard au hasard, Sommaire endormissement,
+  Retour neutre. URL : `?ecran=yeux&yeux=lemegeton` ou `yeux=lemegeton-visage`.
 - `src/eyes/EyesController.ts` : le moteur de `FaceRenderer`, avec les sequences et le
   mode autonome (clignements de 1 a 6 s dont 40 % doubles, regard de 2,2 a 5,2 s,
   reactions de 9 a 16 s). Le mode autonome est coupe en mouvement reduit.
+- Suivi de la souris (`EyesController.follow`) : les yeux regardent legerement vers le pointeur, sur trois positions en mosaique (au-dela d'un seuil), en douceur et a 60 % de leur course pour les yeux Lemegeton. Le regard autonome reprend 2,5 s apres le dernier mouvement. Souris seulement (pas au toucher), et coupe en mouvement reduit comme le mode autonome.
 - Palettes reprises des `COLOR_PRESETS` de l'overlay et ramenees aux 8 couleurs
   Videotex (cyan, phosphore, ambre, rouge, nitro, blanc). *Auto* reprend les couleurs
   d'humeur de Zyra.

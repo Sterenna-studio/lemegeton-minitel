@@ -1,10 +1,15 @@
-import type { Ambiance, Corridor, Room, Station, TemporalDoor, World } from "./types";
+import type { Ambiance, Corridor, Room, Station, TemporalDoor, Vec3, World } from "./types";
 
 // The world is derived from the catalogue : one room and one temporal door per
 // terminal (decision of 2026-10-06). Adding a ModelEntry adds both.
 
 /** What the world needs from a catalogue entry (a ModelEntry fits). */
-export type TerminalEntry = { id: string; label: string };
+export type TerminalEntry = {
+  id: string;
+  label: string;
+  /** Pose of the terminal station (src/world/terminalView.ts) ; a default otherwise. */
+  terminalView?: { position: Vec3; lookAt: Vec3 };
+};
 
 interface Era {
   year: string;
@@ -57,19 +62,22 @@ export function chronological(entries: TerminalEntry[]): TerminalEntry[] {
 function roomOf(entry: TerminalEntry): Room {
   const era = eraOf(entry);
   const prefix = `salle:${entry.id}`;
+  const terminal = entry.terminalView ?? { position: [0, EYE * 0.6, 12] as Vec3, lookAt: [0, EYE * 0.4, 0] as Vec3 };
   const stations: Station[] = [
     {
+      // From the doorway : the room and its terminal.
       id: `${prefix}:entree`,
       label: `Entrée — ${entry.label}`,
-      position: [0, EYE, 24],
-      lookAt: [0, EYE * 0.6, 0],
+      position: [0, EYE, 17],
+      lookAt: terminal.lookAt,
+      fov: 55,
     },
     {
-      // Placeholder : at an inspect station the current camera framing applies.
+      // In front of the terminal : the orbit camera of the simple version takes over.
       id: `${prefix}:terminal`,
       label: entry.label,
-      position: [0, EYE * 0.6, 12],
-      lookAt: [0, EYE * 0.4, 0],
+      position: terminal.position,
+      lookAt: terminal.lookAt,
       inspect: true,
     },
   ];

@@ -79,7 +79,7 @@ n'entre dans le rendu.
 | Cyber Djinn, dark_igorek (CC BY 4.0) | 104 Mo et 200 000 triangles ; style cyberpunk contraire au cadrage |
 | `white_mesh.glb` | ni auteur, ni licence, ni provenance |
 | Robot Lemegeton (Meshy, `Rusty Retrobot.glb`) | 30 Mo et 1,35 million de triangles ; rig non validé ; conditions Meshy à confirmer |
-| Cults : Minitel 1 NFZ 300 | piste de recherche, non téléchargée |
+| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, `lemegeton/02_SOURCES_3D/minitel-1-nfz-300-…zip` | Licence « Cults PU » (usage privé) et « No IA » : redistribution interdite, ce qui exclut un dépôt et un site publics ; usage avec des outils d'IA interdit. Déposé par l'utilisateur le 8 octobre 2026, gardé en local uniquement et non traité. Le contenu est un scan brut, en deux coques sans couleurs ni textures. |
 
 ## Organisation
 
@@ -206,6 +206,18 @@ En résumé :
 - pas de personne réelle, de marque, ni de document officiel imité ;
 - provenance consignée dans `docs/asset-audit/visuels.json` ;
 - conditions de l'outil employé vérifiées.
+
+### Décor des salles (lot E, 8 octobre 2026)
+
+Le décor des trois salles est **construit en code**, sans aucun fichier à
+télécharger ni licence à créditer (`src/world/three/rooms/`) :
+- meubles, cadres, fenêtres, horloges, plantes et cordons faits de boîtes, cylindres, tours et tubes fusionnés (une géométrie par matériau) ;
+- matières du salon reprises des textures Poly Haven du couloir (CC0, déjà servies) : lambris, papier peint, parquet à chevrons. Leurs copies ne changent que la répétition, l'image GPU est partagée ;
+- tapis, tableau abstrait, ciel des fenêtres, calendrier d'octobre 1982, tableau de liège, moquette, dalles de plafond, cadrans et plaque gravée dessinés sur canvas (`textures.ts`), sans personne réelle ni marque imitée ;
+- marbre de la salle du Terminatel : le marbre procédural de la finition (`src/demo/marble.ts`).
+
+Des modèles CC0 (Poly Haven) pourront remplacer les meubles plus tard, en passant
+par la chaîne ci-dessous.
 
 ### Chaîne de préparation
 

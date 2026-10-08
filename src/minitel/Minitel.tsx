@@ -4,6 +4,7 @@ import { genericProfile } from "./profiles";
 import { defaultEffects } from "../videotex/renderer";
 import { AnchorContext } from "./MinitelAttachment";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { RenderWhenReady } from "../scene/RenderWhenReady";
 export type MinitelProps = Omit<
   ComponentProps<typeof MinitelModel>,
   "profile" | "effects" | "reducedMotion"
@@ -29,6 +30,7 @@ export function Minitel({
           reducedMotion={reducedMotion}
         />
         {children}
+        <RenderWhenReady />
       </Suspense>
     </AnchorContext.Provider>
   );

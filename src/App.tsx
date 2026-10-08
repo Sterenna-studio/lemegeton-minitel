@@ -68,7 +68,8 @@ function Antenna() {
     </group>
   );
 }
-export default function App() {
+/** onMode3d : switches the site to the 3D+ mode (src/SiteModes.tsx). */
+export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
   const experience = useTerminalExperience();
   const { activeFrame, sendKey, goTo } = experience;
   const [webgl] = useState(supportsWebGL);
@@ -167,6 +168,11 @@ export default function App() {
           </h1>
         </a>
         <div className="service">
+          {onMode3d && (
+            <button type="button" className="doc-link mode-switch" onClick={onMode3d}>
+              <Box size={14} /> Mode 3D+
+            </button>
+          )}
           <a className="doc-link" href={`${import.meta.env.BASE_URL}documentation/`}>
             <FileText size={14} /> Documentation
           </a>

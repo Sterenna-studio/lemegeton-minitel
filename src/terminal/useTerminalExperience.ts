@@ -61,10 +61,19 @@ export function useTerminalExperience() {
   }, [smoothEyes, smoothActive]);
   useEffect(() => {
     // Autonomous blinking, gaze and reactions only while the eyes are shown,
-    // and never when the user prefers reduced motion.
+    // and never when the user prefers reduced motion. Same for the light gaze
+    // towards the mouse (not touch : a finger is on the screen, not beside it).
     if (screenMode !== "yeux" || reducedMotion) return;
     eyes.start();
-    return () => eyes.stop();
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      eyes.follow((event.clientX / window.innerWidth) * 2 - 1, (event.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("pointermove", move);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      eyes.stop();
+    };
   }, [eyes, screenMode, reducedMotion]);
   const chooseScreen = useCallback((mode: ScreenMode) => {
     setScreenMode(mode);
