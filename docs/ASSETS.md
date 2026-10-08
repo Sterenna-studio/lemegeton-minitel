@@ -128,6 +128,16 @@ GLB non compressés. **Après chaque préparation, relancer la compression** :
 node tools/optimize_glb.mjs public/models/minitel.glb public/models/minitel.glb
 ```
 
+**Cache Cloudflare** (8 octobre 2026) : sterenna.fr passe par Cloudflare, qui ne
+mettait pas les `.glb` et `.wasm` en cache (`cf-cache-status: DYNAMIC`). La règle de
+cache « Minitel - modeles 3D » (URI Path commence par `/minitel/models/` ou
+`/minitel/basis/`, éligible au cache, TTL de l'origine, soit 7 jours) a été créée
+dans le tableau de bord. Vérifiée : `MISS` au premier appel, `HIT` ensuite. Les
+pages HTML restent hors cache : un déploiement est visible tout de suite. En
+revanche, **un modèle remplacé sous le même nom reste servi jusqu'à 7 jours** (cache
+Cloudflare et navigateurs) : purger son URL (Caching → Configuration → Purge Cache)
+ou changer son nom. `tools/cloudflare_cache_rule.sh` recrée la même règle par l'API.
+
 Piège corrigé pendant ce travail : par défaut, `prune` de glTF Transform supprime
 les UV des meshes dont le matériau n'a pas de texture. C'est le cas des écrans,
 dessinés par un shader, qui apparaissaient alors vides. Le script garde désormais
