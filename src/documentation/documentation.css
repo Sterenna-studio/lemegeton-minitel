@@ -353,3 +353,46 @@
     padding: 36px 0;
   }
 }
+/* Links of a terminal : the simple version, its room in the 3D+ mode. */
+.open-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.open-world {
+  background: var(--key);
+  border-color: #3d362e;
+  border-bottom-color: var(--key-edge);
+  color: var(--cream);
+}
+/* Mode 3D+ section (worldDoc). */
+.world-doc .model-text {
+  max-width: 760px;
+}
+.world-rooms {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.world-rooms a {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--cream);
+  text-decoration: none;
+}
+.world-rooms a:hover,
+.world-rooms a:focus-visible {
+  border-color: var(--gold);
+}
+.world-rooms span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.doc-footer a {
+  color: inherit;
+}

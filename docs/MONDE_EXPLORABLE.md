@@ -386,7 +386,7 @@ Chaque lot fait l'objet d'une PR et se déploie sans casser l'existant.
 | **C. Couloir** | kit Blender, assemblage par données, trois emplacements de portes chronologiques, postes, preset `couloir` ; atelier `?brique=couloir` | trajet entre tous les postes ; budget « première vue » respecté, vérifié sur iPhone 11 |
 | **D. Rails et navigation** | `RailCamera`, points d'intérêt DOM, parallaxe, clavier, toucher, URL et historique, fondus ; salles provisoires (boîtes) | parcours complet au clavier ; Retour du navigateur ; `?salle=` et `?poste=` |
 | **E. Salles** | `terminatel-255` (scène actuelle dans une pièce), puis `minitel-1` (bureau 80s), puis `televiseur-1950` (salon 50s) ; poste `inspect` = caméra actuelle | non-régression au poste `terminal` ; budget « salle » respecté ; ambiances conformes à la DA |
-| **F. Intégration** | ~~`/minitel/` passe au monde~~ : remplacé le 8 octobre par les **modes** (§3), livrés avec le lot E ; restent l'inventaire en raccourci vers les salles, les docs (ATTRIBUTION), le contrôle du déploiement, la page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
+| **F. Intégration** | ~~`/minitel/` passe au monde~~ : remplacé le 8 octobre par les **modes** (§3), livrés avec le lot E ; inventaire en raccourci vers les salles, crédits à l'écran, ATTRIBUTION, contrôle du déploiement, page Documentation | parcours en ligne vérifié ; aucune erreur console ; crédits complets |
 | **G. Objets interactifs** (plus tard) | horloge de jeu, machine à écrire, téléphone, radio, objets mystérieux | à cadrer au moment venu |
 
 ### Avancement
@@ -491,6 +491,18 @@ Reporté au lot B :
   - 62 tests navigateur sur ordinateur et mobile.
 
 Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer les meubles en code si l'on veut plus de détail.
+
+**Lot F — terminé le 9 octobre 2026** : l'intégration du mode 3D+ au site. Les tests de ce lot viendront plus tard (décision de l'utilisateur).
+- **Raccourci vers les salles** : en mode 3D+, les cartes d'inventaire de la version simple, en petit dans le coin bas gauche de la vue, mènent à l'entrée de la salle choisie en fondu (`SAUT`). La carte de la salle courante est cochée. Elles s'effacent pendant les déplacements et devant le terminal, où le 3615 prend la place.
+- **Crédits à l'écran** (`src/world/credits.ts`) : la ligne du bas suit le lieu.
+  - Couloir : la porte (CC BY), les horloges et les matières Poly Haven (CC0).
+  - Salle : son terminal, sa table s'il y en a une, la porte de sortie et sa pendule ; pour le salon, les matières du couloir.
+  - Un lien mène à `models/ATTRIBUTION.md`. Sur téléphone, seul ce lien reste : la licence CC BY 4.0 admet un crédit par lien vers la liste.
+- **ATTRIBUTION.md** : le décor des salles, construit en code, et les assets que chaque salle réutilise.
+- **Page Documentation** : section « Mode 3D+ » (parcours, salles, modèles et matières, entrée dans le couloir) ; chaque terminal a un lien « Voir sa salle en 3D+ » ; deux documents du projet ajoutés (monde explorable, direction artistique) ; pied de page complété (porte CC BY, Poly Haven CC0).
+- **Déploiement** (`.github/workflows/deploy-ovh.yml`) :
+  - le build vérifie que le monde est un chunk à part, absent de `index.html` ;
+  - le test de fumée vérifie la porte, une texture KTX2, le transcodeur Basis et les crédits en ligne.
 
 ## 13. Questions ouvertes
 

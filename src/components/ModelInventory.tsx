@@ -12,10 +12,13 @@ export function ModelInventory({
   entries,
   selected,
   onSelect,
+  label = "Modele 3D",
 }: {
   entries: ModelEntry[];
   selected?: string;
   onSelect: (id: string) => void;
+  /** Name of the group (the world calls it « Salles »). */
+  label?: string;
 }) {
   function onKeyDown(event: KeyboardEvent) {
     const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
@@ -27,7 +30,7 @@ export function ModelInventory({
     document.getElementById(`model-${next.id}`)?.focus();
   }
   return (
-    <div className="inventory" role="radiogroup" aria-label="Modele 3D" onKeyDown={onKeyDown}>
+    <div className="inventory" role="radiogroup" aria-label={label} onKeyDown={onKeyDown}>
       {entries.map((entry, index) => {
         const checked = entry.id === selected;
         return (

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { assetUrl } from "../assets";
 import { ArrowLeft, ArrowUpRight, Monitor } from "lucide-react";
 import { catalog } from "../demo/catalog";
-import { modelDocs, projectDocs, sources, views, type Fact, type ModelDoc } from "./content";
+import { modelDocs, projectDocs, sources, views, worldDoc, type Fact, type ModelDoc } from "./content";
 import { referencePhotos, referenceFolder } from "./references";
 
 const base = import.meta.env.BASE_URL;
@@ -78,8 +78,49 @@ function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
               , {entry.credit.changes}.
             </p>
           )}
-          <a className="open-3d" href={`${base}?modele=${doc.id}`}>
-            Ouvrir dans le terminal 3D <ArrowUpRight size={16} />
+          <div className="open-links">
+            <a className="open-3d" href={`${base}?modele=${doc.id}`}>
+              Ouvrir dans le terminal 3D <ArrowUpRight size={16} />
+            </a>
+            <a className="open-3d open-world" href={`${base}?mode=3d&salle=${doc.id}`}>
+              Voir sa salle en 3D+ <ArrowUpRight size={16} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function World() {
+  return (
+    <section className="model-doc world-doc" id="monde" aria-labelledby="monde-title">
+      <header>
+        <span className="kicker">{worldDoc.kicker}</span>
+        <h2 id="monde-title">{worldDoc.title}</h2>
+      </header>
+      <div className="model-text">
+        {worldDoc.intro.map((paragraph) => (
+          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+        ))}
+        <h3>Parcours</h3>
+        <Facts items={worldDoc.facts} />
+        <h3>Salles</h3>
+        <ul className="world-rooms">
+          {worldDoc.rooms.map((room) => (
+            <li key={room.id}>
+              <a href={`${base}?mode=3d&salle=${room.id}`}>
+                <strong>{room.label}</strong>
+                <span>{room.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <h3>Modeles et matieres</h3>
+        <Facts items={worldDoc.assets} />
+        <div className="open-links">
+          <a className="open-3d open-world" href={`${base}?mode=3d`}>
+            Entrer dans le couloir <ArrowUpRight size={16} />
           </a>
         </div>
       </div>
@@ -140,9 +181,9 @@ export function DocumentationPage() {
         <section className="doc-intro">
           <h1>Documentation des terminaux</h1>
           <p>
-            Les modeles du terminal 3D, leurs caracteristiques, leur provenance
-            et la documentation du projet. Les vues sont des rendus du terminal
-            3D lui-meme, avec les memes finitions.
+            Les modeles du terminal 3D, leurs caracteristiques, leur provenance,
+            le monde du mode 3D+ et la documentation du projet. Les vues sont des
+            rendus du terminal 3D lui-meme, avec les memes finitions.
           </p>
           <nav aria-label="Sommaire de la documentation" className="doc-nav">
             {modelDocs.map((doc) => (
@@ -150,6 +191,7 @@ export function DocumentationPage() {
                 {doc.title}
               </a>
             ))}
+            <a href="#monde">Mode 3D+</a>
             <a href="#references">Photos de reference</a>
             <a href="#projet">Documentation du projet</a>
             <a href="#sources">Sources</a>
@@ -158,6 +200,7 @@ export function DocumentationPage() {
         {modelDocs.map((doc, index) => (
           <ModelSection key={doc.id} doc={doc} index={index} />
         ))}
+        <World />
         <References />
         <section className="project-docs" id="projet" aria-labelledby="projet-title">
           <header>
@@ -192,7 +235,9 @@ export function DocumentationPage() {
       <footer className="doc-footer">
         Modeles 3D sous licence CC BY 4.0 : Minitel 1982-France par okotaru,
         1950&apos;s Retro Television par Huuxloc, Wood Drawer &amp; Tables Set par
-        brandon_grey. Marbre procedural.
+        brandon_grey, Door_Wooden_Old par Mehdi Shahsavan. Horloges et matieres
+        Poly Haven (CC0). Marbre procedural, decor des salles construit en code.{" "}
+        <a href={`${base}models/ATTRIBUTION.md`}>Tous les credits</a>.
       </footer>
     </div>
   );

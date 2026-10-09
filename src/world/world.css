@@ -2,7 +2,7 @@
 .world {
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   height: 100vh;
   height: 100dvh;
   background: var(--page);
@@ -146,4 +146,40 @@
   font: 500 13px "IBM Plex Mono", monospace;
   letter-spacing: 0.08em;
   pointer-events: none;
+}
+/* Credits of what is on screen (src/world/credits.ts). */
+.world-credits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 6px 24px 8px;
+  background: var(--surface);
+  color: var(--faint);
+  font: 9px "IBM Plex Mono", monospace;
+}
+.world-credits a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.world-credits a:hover,
+.world-credits a:focus-visible {
+  text-decoration: underline;
+}
+/* The room cards, small, in the bottom left corner of the 3D view : the
+   middle stays free for the terminal. */
+.world-stage .inventory {
+  left: 18px;
+  bottom: 14px;
+  transform: none;
+  grid-auto-columns: min(68px, 16vw);
+  gap: 10px;
+}
+/* On a phone, the credits line would take five : only the link to the full
+   credits remains (CC BY 4.0 allows attribution by a link to them). */
+@media (max-width: 600px) {
+  .world-credits span {
+    display: none;
+  }
 }

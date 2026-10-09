@@ -83,3 +83,13 @@ License: CC0 1.0 (public domain dedication) ; credited for traceability.
 Derived web assets: monde/textures/*.ktx2, made by tools/encode_textures.mjs
 from the official 1k maps : colour in KTX2 ETC1S (1024 px), normal and ARM maps
 in KTX2 UASTC (512 px). Tints are applied in code.
+The same textures panel the 1950 living room of the explorable world.
+
+---
+
+Rooms of the explorable world (3D+ mode) : the decor (furniture, frames,
+windows, clocks, plants, rugs, posters, calendar, marble) is built in code in
+src/world/three/rooms/ and drawn on canvas. It uses no third-party asset besides
+the ones credited above. Each room shows its terminal (credited above), its
+furniture (Wood Drawer & Tables Set) and the temporal door back to the corridor
+(Door_Wooden_Old, with the Mantel Clock).

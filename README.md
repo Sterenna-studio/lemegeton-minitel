@@ -129,7 +129,7 @@ docs/           # cadrage, guide, préparation du modèle, rapports de vérifica
 - [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
 - [Cadrage du projet](docs/3D_WEB_PROJECT.md).
 - [Audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md) : bilan des trois dépôts, vérifications, points ouverts.
-- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails, en mode 3D+ ; la version simple reste le mode par défaut. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails, en mode 3D+ ; la version simple reste le mode par défaut. Lots A à F faits ; le lot G (objets interactifs) reste à cadrer. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
 
 ## Personnage Lemegéton (`lemegeton/`)
 

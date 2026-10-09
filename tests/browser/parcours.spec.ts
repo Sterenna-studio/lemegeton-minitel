@@ -11,6 +11,9 @@ async function open(page: Page, query = "") {
     if (message.type() === "error") errors.push(message.text());
   });
   await page.goto(`/parcours/${query}`);
+  // The models of the place are loaded (the room cards and the credits light
+  // up the stage before the 3D does).
+  await expect(page.locator(".world-loading")).toHaveCount(0, { timeout: 30000 });
   await expect.poll(async () => (await stagePixels(page, '[data-testid="monde"]')).lit, { timeout: 30000 }).toBeGreaterThan(5000);
   return errors;
 }

@@ -55,6 +55,9 @@ jobs:
           test -f dist/simple/index.html
           test -f dist/atelier/index.html
           test -f dist/parcours/index.html
+          # Mode 3D+ : le monde est un chunk à part, chargé à la demande.
+          ls dist/assets/WorldApp-*.js
+          ! grep -q 'WorldApp-' dist/index.html
           # Transcodeur Basis : sans lui, les textures KTX2 des modeles ne se chargent pas.
           ls dist/basis/*/basis_transcoder.js
           ls dist/basis/*/basis_transcoder.wasm
@@ -86,6 +89,11 @@ jobs:
           sleep 5
           curl -fsS -o /dev/null -w "index %{http_code}\n" https://sterenna.fr/minitel/
           curl -fsS -o /dev/null -w "model %{http_code} %{content_type}\n" https://sterenna.fr/minitel/models/minitel.glb
+          # Mode 3D+ : porte, texture du couloir, transcodeur Basis et crédits.
+          curl -fsS -o /dev/null -w "porte %{http_code} %{content_type}\n" https://sterenna.fr/minitel/models/monde/porte.glb
+          curl -fsS -o /dev/null -w "texture %{http_code} %{content_type}\n" https://sterenna.fr/minitel/models/monde/textures/herringbone_parquet_couleur.ktx2
+          curl -fsS -o /dev/null -w "basis %{http_code}\n" "https://sterenna.fr/minitel/$(cd dist && ls basis/*/basis_transcoder.wasm)"
+          curl -fsS -o /dev/null -w "credits %{http_code}\n" https://sterenna.fr/minitel/models/ATTRIBUTION.md
 
       - name: Cleanup
         if: always()

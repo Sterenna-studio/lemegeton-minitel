@@ -2,6 +2,8 @@ import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ArrowLeft, DoorOpen, FileText, Footprints, Monitor, Volume2, VolumeX } from "lucide-react";
 import { catalog, findEntry } from "../demo/catalog";
+import { ModelInventory } from "../components/ModelInventory";
+import { creditsFor } from "./credits";
 import { findFurniture } from "../scene/furniture";
 import { Camera, type CameraCommand } from "../scene/Camera";
 import { setUrlParam, urlParam } from "../hooks/urlParams";
@@ -29,7 +31,8 @@ import "./world.css";
 
 // The explorable world on its rails (lot D, docs/MONDE_EXPLORABLE.md §4) :
 // stations, travels, temporal doors, the rooms of lot E, the address of the
-// page and the browser history, keyboard, pointer and touch.
+// page and the browser history, keyboard, pointer and touch. The inventory
+// cards jump to a room with a fade, and the credits follow the place (lot F).
 
 function labelOf(world: World, link: Link): string {
   if (link.kind === "porte") return `Ouvrir la porte ${link.door.door.year}`;
@@ -334,6 +337,18 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
               }
             />
           )}
+          {/* Shortcut to the rooms : a fade straight to the chosen room's entry. */}
+          {!moving && !atTerminal && (
+            <ModelInventory
+              entries={catalog}
+              selected={room?.terminal}
+              label="Salles"
+              onSelect={(id) => {
+                const to = `salle:${id}:entree`;
+                if (reached !== to) dispatch({ type: "SAUT", to });
+              }}
+            />
+          )}
         </div>
       ) : (
         <p className="world-fallback" role="status">
@@ -353,6 +368,22 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
         ))}
         {moving && <span className="world-moving">En déplacement…</span>}
       </div>
+      <p className="world-credits">
+        {creditsFor(view.place, entry, piece).map((credit) => (
+          <span key={credit.title}>
+            <a href={credit.source} target="_blank" rel="noreferrer">
+              {credit.title}
+            </a>{" "}
+            par {credit.author} /{" "}
+            <a href={credit.licenseUrl} target="_blank" rel="noreferrer">
+              {credit.license}
+            </a>
+          </span>
+        ))}
+        <a href={`${base}models/ATTRIBUTION.md`} target="_blank" rel="noreferrer">
+          Crédits des modèles 3D
+        </a>
+      </p>
       <p className="sr-only" role="status" aria-live="polite" data-testid="annonce">
         {announce}
       </p>
