@@ -42,6 +42,7 @@ est affiche automatiquement et reste navigable.
 - `src/App.tsx` : version simple (terminal seul, inventaire, reglages, inspection de developpement), mode par defaut de `/` et de `/simple/`.
 - `src/atelier/` : page `atelier/` des briques du monde (porte, couloir).
 - `src/world/WorldApp.tsx` : le monde sur rails, mode 3D+ de l'accueil (`/?mode=3d`), et seul sur `/parcours/` (apercu). Adresse `?salle=&poste=`, historique du navigateur, clavier (fleches, `Echap`), clic sur les portes. Sur un ecran etroit (telephone tenu droit), le champ s'elargit pour garder la largeur de la vue (`fittedFov`, `src/world/pose.ts`).
+- `src/world/credits.ts` : credits affiches en mode 3D+ selon le lieu (porte, horloges, matieres, terminal, table), avec un lien vers `models/ATTRIBUTION.md`. Les cartes d'inventaire (`ModelInventory`, groupe « Salles ») menent a une salle en fondu.
 - `src/world/three/rooms/` : les salles du lot E, construites en code (aucun fichier a telecharger) : `RoomShell` (murs, sol, plafond, moulures, porte de sortie vers le couloir), `Salon1950`, `Bureau1982`, `TerminatelHall`, textures dessinees sur canvas (`textures.ts`).
 - `public/models/minitel.glb` : copie preparee pour le Web, compressee (KTX2 + meshopt), 0,86 Mo et 22 000 triangles. Les modeles passent par `useModel` (`src/scene/loaders.ts`), qui sait lire ces formats.
 

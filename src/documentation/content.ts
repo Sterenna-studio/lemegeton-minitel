@@ -95,6 +95,34 @@ export const modelDocs: ModelDoc[] = [
   },
 ];
 
+/** Mode 3D+ : le monde explorable (docs/MONDE_EXPLORABLE.md). */
+export const worldDoc = {
+  kicker: "Mode 3D+ · monde explorable",
+  title: "Le couloir hors du temps",
+  intro: [
+    "Le bouton Mode 3D+, en haut de la page du terminal, ouvre un couloir hors du temps. Une porte temporelle par terminal y est rangee dans l'ordre chronologique. Devant une porte, son compteur deroule les annees jusqu'a l'epoque de la salle, puis elle s'ouvre.",
+    "Chaque salle est d'epoque et montre son terminal. Devant lui, on retrouve le 3615, les yeux de Lemegeton et les reglages de la version simple. Mode simple revient a la page du terminal, sur le terminal de la salle quittee.",
+  ],
+  facts: [
+    { label: "Deplacement", value: "sur rails, de poste en poste : boutons, clavier (fleches, Echap), clic sur une porte" },
+    { label: "Raccourci", value: "les cartes d'inventaire menent a une salle, en fondu" },
+    { label: "Adresse", value: "?mode=3d, puis &salle= et &poste= : chaque poste a son adresse, le bouton Retour remonte le chemin" },
+    { label: "Mouvement reduit", value: "fondus brefs au lieu des trajets, pas de parallaxe" },
+    { label: "Son", value: "coupe par defaut ; tic-tac et souffle synthetises, sans fichier" },
+  ] as Fact[],
+  rooms: [
+    { id: "televiseur-1950", label: "Salon 1950", description: "meuble tele en teck, fauteuils cocktail, tapis a boomerangs, buffet, horloge soleil, lampadaire" },
+    { id: "minitel-1", label: "Bureau 1982", description: "faux plafond et neons, stores venitiens, classeur, fauteuil pivotant, calendrier d'octobre 1982" },
+    { id: "terminatel-255", label: "Salle du Terminatel 255", description: "marbre noir, laiton, plaque gravee, cordons autour du terminal" },
+  ],
+  assets: [
+    { label: "Porte temporelle", value: "Door_Wooden_Old, Mehdi Shahsavan · CC BY 4.0 (modele provisoire)" },
+    { label: "Horloges", value: "Mantel Clock 01, Vintage Grandfather Clock 01, Poly Haven · CC0" },
+    { label: "Matieres", value: "Dark Paneled Wood, Decrepit Wallpaper, Herringbone Parquet, Poly Haven · CC0" },
+    { label: "Decor des salles", value: "construit en code et dessine sur canvas, sans autre asset" },
+  ] as Fact[],
+};
+
 const repo = "https://github.com/Sterenna-studio/lemegeton-minitel/blob/main/";
 
 export const projectDocs = [
@@ -103,6 +131,8 @@ export const projectDocs = [
   { title: "Assets et licences", path: "docs/ASSETS.md", description: "Modeles retenus, credits, modeles ecartes et pourquoi" },
   { title: "Preparation des modeles", path: "docs/MODEL_PREPARATION.md", description: "Scripts Blender, conventions, UV d'ecran, export" },
   { title: "Cadrage", path: "docs/3D_WEB_PROJECT.md", description: "Objectifs, phases et decisions de direction artistique" },
+  { title: "Monde explorable", path: "docs/MONDE_EXPLORABLE.md", description: "Mode 3D+ : decisions, architecture, rails, portes, salles, budgets, lots" },
+  { title: "Direction artistique", path: "docs/DIRECTION_ARTISTIQUE.md", description: "Ambiances du couloir et des salles, palettes, lumiere" },
   { title: "Verification", path: "docs/VERIFICATION.md", description: "Rapport de tests et captures" },
   { title: "Passation du personnage", path: "lemegeton/PASSATION_AGENTS.md", description: "Pipeline 3D du robot Lemegeton" },
 ].map((doc) => ({ ...doc, url: repo + doc.path }));
