@@ -31,7 +31,9 @@ export type Destination =
   | { kind: "salle"; room: string }
   | { kind: "page"; href: string }
   | { kind: "externe"; href: string }
-  | { kind: "minitel"; service: string };
+  | { kind: "minitel"; service: string }
+  /** A door kept for a room to come : it does not open yet. */
+  | { kind: "fermee" };
 
 export interface DoorSlot {
   door: TemporalDoor;

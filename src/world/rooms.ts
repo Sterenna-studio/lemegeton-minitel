@@ -1,4 +1,4 @@
-import type { Ambiance, Corridor, Room, Station, TemporalDoor, Vec3, World } from "./types";
+import type { Ambiance, Corridor, DoorSlot, Room, Station, TemporalDoor, Vec3, World } from "./types";
 
 // The world is derived from the catalogue : one room and one temporal door per
 // terminal (decision of 2026-10-06). Adding a ModelEntry adds both.
@@ -45,6 +45,13 @@ const FACING_X = 4.6;
 /** Height the views aim at : handle and counter of the door. */
 const DOOR_AIM = 11;
 const CORRIDOR_FOV = 60;
+/**
+ * Doors kept for rooms to come, after the catalogue's : they stand in the
+ * corridor, closed, and get a room when a terminal joins the catalogue.
+ */
+export const FUTURE_DOORS = 3;
+/** Plate of a door that does not open yet. */
+export const FUTURE_PLAQUE = "Prochainement";
 
 export function eraOf(entry: TerminalEntry): Era {
   return ERAS[entry.id] ?? { year: "19??", ambiance: "terminatel", glow: "#ff9a4d" };
@@ -98,7 +105,7 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
   const stations: Station[] = [
     { id: "couloir:entree", label: "Entrée du couloir", position: [0, EYE, 6], lookAt: [0, DOOR_AIM + 0.5, -40], fov: CORRIDOR_FOV },
   ];
-  const doors = ordered.map((entry, index) => {
+  const doors: DoorSlot[] = ordered.map((entry, index) => {
     const side = index % 2 === 0 ? "gauche" : "droite";
     const z = -DOOR_SPACING * (index + 1);
     const x = side === "gauche" ? -DOOR_X : DOOR_X;
@@ -126,7 +133,31 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
       rotationY: side === "gauche" ? Math.PI / 2 : -Math.PI / 2,
     };
   });
-  const end = -DOOR_SPACING * (ordered.length + 1);
+  // Closed doors after the catalogue's, alternating sides as well.
+  for (let n = 0; n < FUTURE_DOORS; n++) {
+    const index = ordered.length + n;
+    const side = index % 2 === 0 ? "gauche" : "droite";
+    const z = -DOOR_SPACING * (index + 1);
+    const x = side === "gauche" ? -DOOR_X : DOOR_X;
+    const id = `futur-${n + 1}`;
+    const approach = `couloir:porte-${id}`;
+    stations.push({
+      id: approach,
+      label: `Porte fermée ${n + 1}`,
+      position: [side === "gauche" ? FACING_X : -FACING_X, EYE, z],
+      lookAt: [x, DOOR_AIM, z],
+      fov: CORRIDOR_FOV,
+    });
+    doors.push({
+      door: { id: `porte-${id}`, year: CORRIDOR_YEAR, glow: "#c9a56b", plaque: FUTURE_PLAQUE },
+      to: { kind: "fermee" },
+      approach,
+      side,
+      position: [x, 0, z],
+      rotationY: side === "gauche" ? Math.PI / 2 : -Math.PI / 2,
+    });
+  }
+  const end = -DOOR_SPACING * (ordered.length + FUTURE_DOORS + 1);
   stations.push({ id: "couloir:fond", label: "Fond du couloir", position: [0, EYE, end + 18], lookAt: [0, DOOR_AIM, end], fov: CORRIDOR_FOV });
   return {
     year: CORRIDOR_YEAR,

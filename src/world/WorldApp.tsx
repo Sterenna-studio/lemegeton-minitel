@@ -228,7 +228,12 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
   const layout = entry ? terminalLayout(entry, piece, narrow) : undefined;
   const atTerminal = !!room && reached === room.terminalStation;
   atTerminalRef.current = atTerminal;
-  const announce = station ? `${station.label}. ${links.length} déplacement${links.length > 1 ? "s" : ""} possible${links.length > 1 ? "s" : ""}.` : "";
+  // In front of a door kept for a room to come.
+  const closedDoor = !!reached && world.corridor.doors.some((slot) => slot.approach === reached && slot.to.kind === "fermee");
+  const closedHint = "Cette porte ne s'ouvre pas encore : une salle viendra.";
+  const announce = station
+    ? `${station.label}. ${closedDoor ? `${closedHint} ` : ""}${links.length} déplacement${links.length > 1 ? "s" : ""} possible${links.length > 1 ? "s" : ""}.`
+    : "";
   const base = import.meta.env.BASE_URL;
 
   return (
@@ -374,6 +379,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
           </button>
         ))}
         {moving && <span className="world-moving">En déplacement…</span>}
+        {closedDoor && !moving && <span className="world-moving">{closedHint}</span>}
       </div>
       <p className="world-credits">
         {creditsFor(view.place, entry, piece).map((credit) => (

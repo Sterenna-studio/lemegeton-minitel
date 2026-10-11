@@ -109,6 +109,7 @@ export function Corridor({
       rails: new MeshStandardMaterial({ color: "#3b2a1e", roughness: 0.55 }),
       brass: new MeshStandardMaterial({ color: "#b08d57", roughness: 0.35, metalness: 0.85 }),
       bulb: new MeshStandardMaterial({ color: "#ffd59a", emissive: "#ffb46b", emissiveIntensity: 2.2 }),
+      bulbOff: new MeshStandardMaterial({ color: "#6b5a44", roughness: 0.3 }),
     };
   }, [textures]);
   useEffect(
@@ -121,12 +122,15 @@ export function Corridor({
     [materials, built],
   );
   // Sconces : on the walls opposite the doors, and one above the clock.
-  const sconces: { position: Vec3; facing: number }[] = [
+  // The sconces of the closed doors (rooms to come) stay unlit : the far end
+  // of the corridor sinks into shadow, and three point lights are saved.
+  const sconces: { position: Vec3; facing: number; lit: boolean }[] = [
     ...data.doors.map((slot) => ({
       position: [slot.side === "gauche" ? width / 2 - 0.3 : -width / 2 + 0.3, 16, slot.position[2]] as Vec3,
       facing: slot.side === "gauche" ? -1 : 1,
+      lit: slot.to.kind !== "fermee",
     })),
-    { position: [0, 18, end + 0.3], facing: 0 },
+    { position: [0, 18, end + 0.3], facing: 0, lit: true },
   ];
   return (
     <group>
@@ -142,15 +146,15 @@ export function Corridor({
       <mesh rotation-x={Math.PI / 2} position={[0, height, (start + end) / 2]} material={materials.ceiling}>
         <planeGeometry args={[width, built.length]} />
       </mesh>
-      {sconces.map(({ position, facing }, i) => (
+      {sconces.map(({ position, facing, lit }, i) => (
         <group key={i} position={position}>
           <mesh material={materials.brass} position={[facing * -0.15, 0, 0]}>
             <cylinderGeometry args={[0.35, 0.45, 0.3, 16]} />
           </mesh>
-          <mesh material={materials.bulb} position={[facing * 0.45, 0.4, 0]}>
+          <mesh material={lit ? materials.bulb : materials.bulbOff} position={[facing * 0.45, 0.4, 0]}>
             <sphereGeometry args={[0.35, 16, 12]} />
           </mesh>
-          <pointLight position={[facing * 0.9, 0.2, 0]} color="#ffb46b" intensity={170} decay={2} distance={64} />
+          {lit && <pointLight position={[facing * 0.9, 0.2, 0]} color="#ffb46b" intensity={170} decay={2} distance={64} />}
         </group>
       ))}
       {data.doors.map((slot) => (

@@ -508,6 +508,13 @@ Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer
 - d'un côté à l'autre du couloir, le regard tourne par angle (`travelLookAt`, `src/world/pose.ts`) au lieu de glisser d'un point visé à l'autre : le point visé passait à côté de la caméra et la vue basculait d'un coup. Un demi-tour passe par la direction de la marche, jamais par l'arrière ;
 - un léger grain de vieux film recouvre la vue pendant les déplacements (`src/world/grain.ts`), immobile en mouvement réduit.
 
+**Portes à venir (11 octobre 2026)** : trois portes fermées après celles du catalogue (`FUTURE_DOORS`, `src/world/rooms.ts`), du même modèle, côtés alternés, plaque « Prochainement ».
+- Destination `{ kind: "fermee" }` : pas d'action « Ouvrir » (`linksFrom`), l'annonce et la barre disent « Cette porte ne s'ouvre pas encore : une salle viendra ».
+- Chaque porte a son poste (`couloir:porte-futur-1` à `-3`) : on y va, on en revient.
+- Leurs appliques restent éteintes : le fond du couloir s'enfonce dans l'ombre, et trois lumières ponctuelles sont épargnées.
+- Coût à l'entrée du couloir : 71 appels, 81 k triangles (cibles 120 et 150 k).
+- Donner une salle à une porte : ajouter le terminal au catalogue, comme les trois premiers. La salle prend la première place, et une porte fermée reste au bout.
+
 ## 13. Questions ouvertes
 
 Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
