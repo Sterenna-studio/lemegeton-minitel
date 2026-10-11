@@ -175,6 +175,12 @@ Restent ouverts : la validation artistique (textures grises d'origine conservée
 les essais sur téléphones physiques, l'optimisation du chargement (bundle
 d'environ 1,2 Mo), et l'émulation protocolaire Vidéotex (décodeur VDT).
 
+**À faire : une icône pour le site.** Les cinq pages (`index.html`, `simple/`,
+`documentation/`, `atelier/`, `parcours/`) déclarent aujourd'hui une icône vide,
+`<link rel="icon" href="data:," />`, pour éviter une requête `favicon.ico` en
+erreur. Il faudra une vraie icône (SVG et PNG 32/180 px pour iOS, dans
+`public/`), puis remplacer cette ligne dans les cinq fichiers.
+
 Le Minitel physique, l'ESP32 et le serveur de visage restent dans
 [minitel-face](https://github.com/Sterenna-studio/minitel-face).
 
