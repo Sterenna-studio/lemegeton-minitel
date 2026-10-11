@@ -57,6 +57,45 @@ export function fittedFov(fov: number, aspect: number, fit = 1): number {
   return fov + (wide - fov) * Math.min(1, fit);
 }
 
+const TAU = Math.PI * 2;
+/** Angle brought into (-π, π]. */
+const wrap = (angle: number) => angle - TAU * Math.floor((angle + Math.PI) / TAU);
+
+/** Direction of a look : yaw around y (0 towards +z), pitch, and distance. */
+function aim(position: Vec3, lookAt: Vec3) {
+  const [dx, dy, dz] = [lookAt[0] - position[0], lookAt[1] - position[1], lookAt[2] - position[2]];
+  const flat = Math.hypot(dx, dz);
+  return { yaw: Math.atan2(dx, dz), pitch: Math.atan2(dy, flat), distance: Math.hypot(flat, dy) };
+}
+
+/**
+ * Where the camera looks during a travel : the gaze turns like a head, by
+ * angle, instead of sliding from one aim point to the other. Crossing the
+ * corridor (a door on the left, then one on the right), a slid aim point
+ * passed right by the camera and the view snapped round ; a half turn goes
+ * through the direction of the walk, never backwards.
+ */
+export function travelLookAt(from: { position: Vec3; lookAt: Vec3 }, to: { position: Vec3; lookAt: Vec3 }, position: Vec3, k: number): Vec3 {
+  const a = aim(from.position, from.lookAt);
+  const b = aim(to.position, to.lookAt);
+  let turn = wrap(b.yaw - a.yaw);
+  if (Math.abs(turn) > (2 * Math.PI) / 3) {
+    // Wide turn : take the side that faces the way the camera walks.
+    const walk = Math.atan2(to.position[0] - from.position[0], to.position[2] - from.position[2]);
+    const other = turn - Math.sign(turn) * TAU;
+    const off = (t: number) => Math.abs(wrap(a.yaw + t / 2 - walk));
+    if (off(other) < off(turn)) turn = other;
+  }
+  const yaw = a.yaw + turn * k;
+  const pitch = a.pitch + (b.pitch - a.pitch) * k;
+  const distance = a.distance + (b.distance - a.distance) * k;
+  return [
+    position[0] + Math.sin(yaw) * Math.cos(pitch) * distance,
+    position[1] + Math.sin(pitch) * distance,
+    position[2] + Math.cos(yaw) * Math.cos(pitch) * distance,
+  ];
+}
+
 /** Point just past the doorway, inside the wall : where the passage leads. */
 function threshold(slot: DoorSlot, depth: number): Vec3 {
   const inward = slot.side === "gauche" ? -1 : 1;
@@ -72,10 +111,11 @@ export function viewOf(world: World, state: NavState): View {
       const from = requireStation(world, state.from);
       const to = requireStation(world, state.to);
       const k = easeInOutCubic(state.t / state.duration);
+      const position = catmullRom(travelPath(from, to), k);
       return {
         place: placeOf(world, state.from),
-        position: catmullRom(travelPath(from, to), k),
-        lookAt: mix(from.lookAt, to.lookAt, k),
+        position,
+        lookAt: travelLookAt(from, to, position, k),
         fov: (from.fov ?? DEFAULT_FOV) + ((to.fov ?? DEFAULT_FOV) - (from.fov ?? DEFAULT_FOV)) * k,
         fit: (from.fov ? 1 : 0) + ((to.fov ? 1 : 0) - (from.fov ? 1 : 0)) * k,
         fade: 0,

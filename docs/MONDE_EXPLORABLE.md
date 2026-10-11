@@ -504,6 +504,10 @@ Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer
   - le build vérifie que le monde est un chunk à part, absent de `index.html` ;
   - le test de fumée vérifie la porte, une texture KTX2, le transcodeur Basis et les crédits en ligne.
 
+**Retouche du 11 octobre 2026** (travelling) :
+- d'un côté à l'autre du couloir, le regard tourne par angle (`travelLookAt`, `src/world/pose.ts`) au lieu de glisser d'un point visé à l'autre : le point visé passait à côté de la caméra et la vue basculait d'un coup. Un demi-tour passe par la direction de la marche, jamais par l'arrière ;
+- un léger grain de vieux film recouvre la vue pendant les déplacements (`src/world/grain.ts`), immobile en mouvement réduit.
+
 ## 13. Questions ouvertes
 
 Les cinq questions ont été tranchées le 7 octobre 2026 ; elles figurent au §1.
