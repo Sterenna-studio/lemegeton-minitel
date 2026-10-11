@@ -3,7 +3,7 @@
 ## Source et convention de presentation
 
 Conserver le fichier original et travailler par Save As dans une copie Blender.
-Le modele source est `lemegeton/06_MODEL/minitel_1982-france.glb`, present
+Le modele source est `sources/06_MODEL/minitel_1982-france.glb`, present
 localement mais non versionne. La preparation est reproductible depuis la racine du depot :
 
 ```powershell

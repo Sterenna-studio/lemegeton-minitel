@@ -134,8 +134,8 @@ export const projectDocs = [
   { title: "Monde explorable", path: "docs/MONDE_EXPLORABLE.md", description: "Mode 3D+ : decisions, architecture, rails, portes, salles, budgets, lots" },
   { title: "Direction artistique", path: "docs/DIRECTION_ARTISTIQUE.md", description: "Ambiances du couloir et des salles, palettes, lumiere" },
   { title: "Verification", path: "docs/VERIFICATION.md", description: "Rapport de tests et captures" },
-  { title: "Passation du personnage", path: "lemegeton/PASSATION_AGENTS.md", description: "Pipeline 3D du robot Lemegeton" },
-].map((doc) => ({ ...doc, url: repo + doc.path }));
+  { title: "Personnage Lemegeton", path: "Sterenna-studio/lemegeton", description: "Pipeline 3D du robot (depot dedie)", url: "https://github.com/Sterenna-studio/lemegeton" },
+].map((doc) => ({ ...doc, url: doc.url ?? repo + doc.path }));
 
 export const sources = [
   { title: "Futura Sciences : Minitel, qu'est-ce que c'est ?", url: "https://www.futura-sciences.com/tech/definitions/technologie-minitel-1250/" },

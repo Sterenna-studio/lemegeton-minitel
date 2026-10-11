@@ -27,7 +27,7 @@ Licence et auteur vérifiés via l'API Sketchfab ; ils figurent aussi dans
 dans le README.
 
 Les polices IBM Plex Sans et Mono (paquets `@fontsource`) sont sous licence
-SIL OFL 1.1 ; leurs licences sont copiées dans `public/licenses/`. Le GLB d'origine (`lemegeton/06_MODEL/`) et ses textures sont présents
+SIL OFL 1.1 ; leurs licences sont copiées dans `public/licenses/`. Le GLB d'origine (`sources/06_MODEL/`) et ses textures sont présents
 localement mais pas versionnés.
 
 Ce modèle sert deux entrées : « Minitel 1 », avec ses textures d'origine, et
@@ -59,7 +59,7 @@ reproduction du Terminatel.
 
 Le Minitel et le Terminatel sont posés sur la pièce choisie (Réglages CRT > Mobilier,
 ou `?table=`) : table à tiroir (par défaut), chevet haut, meuble à niche, table basse,
-ou sans table. Le téléviseur, meuble sur pieds, reste au sol. Le lot d'origine est gardé en local dans `lemegeton/06_MODEL/`.
+ou sans table. Le téléviseur, meuble sur pieds, reste au sol. Le lot d'origine est gardé en local dans `sources/06_MODEL/`.
 
 ## Direction artistique Terminatel 255
 
@@ -73,13 +73,13 @@ n'entre dans le rendu.
 
 ## Modèles écartés
 
-| Modèle (`lemegeton/06_MODEL`, `02_SOURCES_3D`) | Raison |
+| Modèle (`sources/06_MODEL`, `sources/02_SOURCES_3D`) | Raison |
 | --- | --- |
 | Minitel – TELTEL, bsavinien (CGTrader), soit `Table+-+Minitel.*` et `Minitel - TELETEL/` | « Royalty Free License (no AI) ». L'article 21A.6 interdit la redistribution. L'article 21A.3 impose, dans une application, d'empêcher l'accès au fichier du modèle. Un GLB servi sur un site public, ou versionné dans un dépôt public, ne respecte pas ces conditions. |
 | Cyber Djinn, dark_igorek (CC BY 4.0) | 104 Mo et 200 000 triangles ; style cyberpunk contraire au cadrage |
 | `white_mesh.glb` | ni auteur, ni licence, ni provenance |
 | Robot Lemegeton (Meshy, `Rusty Retrobot.glb`) | 30 Mo et 1,35 million de triangles ; rig non validé ; conditions Meshy à confirmer |
-| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, `lemegeton/02_SOURCES_3D/minitel-1-nfz-300-…zip` | Licence « Cults PU » (usage privé) et « No IA » : redistribution interdite, ce qui exclut un dépôt et un site publics ; usage avec des outils d'IA interdit. Déposé par l'utilisateur le 8 octobre 2026, gardé en local uniquement et non traité. Le contenu est un scan brut, en deux coques sans couleurs ni textures. |
+| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, `sources/02_SOURCES_3D/minitel-1-nfz-300-…` | Licence « Cults PU » (usage privé) et « No IA » : redistribution interdite, ce qui exclut un dépôt et un site publics ; usage avec des outils d'IA interdit. Déposé par l'utilisateur le 8 octobre 2026, gardé en local uniquement et non traité. Le contenu est un scan brut, en deux coques sans couleurs ni textures. |
 
 ## Organisation
 
@@ -230,7 +230,7 @@ par la chaîne ci-dessous.
 
 ### Sources locales
 
-Les sources lourdes restent locales et hors Git, comme le pipeline `lemegeton/`.
+Les sources lourdes restent locales et hors Git, comme `sources/` et le dépôt du personnage.
 Cela concerne les `.blend`, les téléchargements bruts, les textures 4K et les sons
 sources. Elles vivent dans le dossier `monde/` à la racine, créé le 7 octobre 2026. Une liste
 blanche dans `.gitignore` n'y versionne que les formats texte (`.md`, `.csv`, `.py`).

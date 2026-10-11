@@ -15,7 +15,7 @@ import bpy
 from mathutils import Matrix, Vector
 
 WEB = Path(__file__).resolve().parents[1]
-SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'lemegeton' / '06_MODEL' / 'wood_drawer__tables_set.glb'
+SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'sources' / '06_MODEL' / 'wood_drawer__tables_set.glb'
 PIECES = {
     'table-tiroir': 'SM_WoodenDrawer_1_LOD0_Drawer_1_INST_0',
     'chevet-haut': 'SM_WoodenDrawer_2_LOD0_Drawer_2_INST_0',
