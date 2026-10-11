@@ -3,7 +3,7 @@ import { catalog, findEntry } from "../src/demo/catalog";
 import { framings } from "../src/scene/framing";
 import { findFurniture } from "../src/scene/furniture";
 import { buildWorld } from "../src/world/rooms";
-import { initialState } from "../src/world/navigation";
+import { initialState, navigate } from "../src/world/navigation";
 import { PORTRAIT_ASPECT, fittedFov, viewOf } from "../src/world/pose";
 import { STAND_TOP, terminalLayout } from "../src/world/terminalView";
 import { modeOf, switchedUrl } from "../src/siteMode";
@@ -70,5 +70,26 @@ describe("modes du site", () => {
     const url = switchedUrl("https://sterenna.fr/minitel/?mode=3d&salle=televiseur-1950&poste=terminal", "simple", "televiseur-1950");
     expect(url.search).toBe("?modele=televiseur-1950");
     expect(switchedUrl("https://sterenna.fr/minitel/?mode=3d&poste=fond", "simple").search).toBe("");
+  });
+});
+
+describe("travelling d'un côté à l'autre du couloir", () => {
+  it("une rotation simple, par la direction de la marche, jamais vers l'arrière", () => {
+    const world = buildWorld(catalog);
+    const moving = navigate(world, initialState("couloir:porte-televiseur-1950"), { type: "ALLER", to: "couloir:porte-minitel-1" });
+    if (moving.mode !== "trajet") throw new Error("trajet attendu");
+    let previous = -Infinity;
+    for (let i = 0; i <= 20; i++) {
+      const view = viewOf(world, { ...moving, t: (moving.duration * i) / 20 });
+      const dir = view.lookAt.map((v, j) => v - view.position[j]);
+      // The corridor runs along -z : never a look back towards the entry.
+      expect(dir[2]).toBeLessThan(0.5);
+      // The aim stays far ahead, it never sweeps past the camera.
+      expect(Math.hypot(dir[0], dir[2])).toBeGreaterThan(5);
+      // One way round : the yaw keeps turning the same way (left door to right door).
+      const yaw = Math.atan2(dir[0], -dir[2]);
+      expect(yaw).toBeGreaterThanOrEqual(previous - 1e-9);
+      previous = yaw;
+    }
   });
 });

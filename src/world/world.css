@@ -76,6 +76,34 @@
   pointer-events: none;
   transition: opacity 0.25s linear;
 }
+/* Old-film grain while the camera moves : faint, it comes and goes with the
+   travelling ; the tile jumps about a few times a second. */
+.world-grain {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  opacity: 0;
+  background-size: 160px 160px;
+  mix-blend-mode: screen;
+  transition: opacity 0.5s ease;
+}
+.world-grain.is-on {
+  opacity: 0.55;
+  animation: world-grain 0.5s steps(5) infinite;
+}
+@keyframes world-grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-23px, 17px); }
+  40% { transform: translate(31px, -11px); }
+  60% { transform: translate(-13px, -29px); }
+  80% { transform: translate(19px, 27px); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world-grain {
+    animation: none;
+  }
+}
 .world-actions {
   display: flex;
   flex-wrap: wrap;

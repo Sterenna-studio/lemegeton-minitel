@@ -4,6 +4,7 @@ import { ArrowLeft, DoorOpen, FileText, Footprints, Monitor, Volume2, VolumeX } 
 import { catalog, findEntry } from "../demo/catalog";
 import { ModelInventory } from "../components/ModelInventory";
 import { creditsFor } from "./credits";
+import { grainTile } from "./grain";
 import { findFurniture } from "../scene/furniture";
 import { Camera, type CameraCommand } from "../scene/Camera";
 import { setUrlParam, urlParam } from "../hooks/urlParams";
@@ -315,6 +316,12 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             )}
           </Canvas>
           <div className="world-fade" style={{ opacity: view.fade }} aria-hidden="true" />
+          {/* Old-film grain while the camera moves (src/world/grain.ts). */}
+          <div
+            className={moving ? "world-grain is-on" : "world-grain"}
+            style={{ backgroundImage: `url(${grainTile()})` }}
+            aria-hidden="true"
+          />
           {ready !== view.place && (
             <p className="world-loading" aria-live="polite">
               Chargement…
