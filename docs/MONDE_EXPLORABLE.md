@@ -3,7 +3,7 @@
 Ce document décrit une évolution du Minitel 3D : on n'y montre plus un terminal
 seul, mais un lieu à parcourir. Un couloir hors du temps est bordé de portes
 temporelles, et chaque porte ouvre sur la salle d'un terminal. Le suivi se fait
-dans l'[issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8).
+dans l'[issue #8](https://github.com/Sterenna-studio/minitel-musee/issues/8).
 
 **Statut au 7 octobre 2026 : rien n'est implémenté.** Ce document fixe les
 décisions et l'architecture. Il fait l'état des lieux du code actuel, pose les
