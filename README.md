@@ -1,33 +1,48 @@
 # Lemegéton Minitel
 
-Projet numérique autour du Minitel : asset 3D Web réaliste, simulation Vidéotex, expérience interactive et univers Lemegéton.
+Un Minitel 3D pour le Web : terminal manipulable, simulation Vidéotex, yeux du
+robot Lemegéton, et un monde à explorer où chaque terminal a sa salle d'époque.
+
+En ligne : https://sterenna.fr/minitel/
 
 ## Vision
 
-Construire un Minitel 3D réutilisable dans des sites Web, avec un écran indépendant capable d'afficher une expérience Vidéotex dynamique, tout en préparant les bases pour l'interaction, l'animation et la narration.
+Construire un Minitel 3D réutilisable dans des sites Web, avec un écran
+indépendant capable d'afficher une expérience Vidéotex dynamique, et autour de
+lui un univers à parcourir.
 
-Le projet n'est pas un projet d'électronique : le Minitel physique, ESP32, Arduino et serveur de façade restent dans `minitel-face`.
+Ce n'est pas un projet d'électronique : le Minitel physique, l'ESP32 et le
+serveur de visage restent dans
+[minitel-face](https://github.com/Sterenna-studio/minitel-face). Le personnage
+Lemegéton (modélisation, rigs, animation) a son propre dépôt :
+[Sterenna-studio/lemegeton](https://github.com/Sterenna-studio/lemegeton).
 
-## Axes
+## Deux modes
 
-- 🖥️ Minitel 3D Web
-- 📟 simulation Vidéotex
-- 🎭 expérience Lemegéton
-- 🎨 assets GLB/GLTF
-- 🌐 WebGL / Three.js
-- 🕹️ interaction et animation
-- 🧩 composants réutilisables
-- 📖 narration et prototypes
+- **Version simple** (par défaut, `/minitel/`) : un terminal sur sa table, à
+  faire tourner, zoomer et inspecter ; l'inventaire pour changer de terminal
+  (Terminatel 255, Minitel 1, téléviseur 1950) et de mobilier ; le 3615
+  Lemegéton, les yeux, les effets CRT. Un double-clic sur l'écran fait la mise
+  au point, un second revient.
+- **Mode 3D+** (bouton de l'en-tête, `/minitel/?mode=3d`) : un couloir hors du
+  temps, parcouru sur rails. Une porte temporelle par terminal, dans l'ordre
+  chronologique, ouvre sur une salle d'époque (salon 1950, bureau 1982, salle de
+  marbre du Terminatel) ; devant le terminal, on retrouve le 3615, les yeux et
+  les réglages. Trois portes fermées attendent les salles à venir. **Mode simple**
+  revient, sur le terminal de la salle quittée.
 
-## Stack cible
+Chaque poste du monde a son adresse (`&salle=`, `&poste=`) et le bouton Retour
+du navigateur remonte le chemin. Le clavier suffit partout (flèches, `Échap`),
+une lecture textuelle remplace la 3D sans WebGL, et le mouvement réduit
+remplace les trajets par des fondus.
 
-- TypeScript
-- Vite
-- Three.js
-- React / React Three Fiber selon le besoin
-- GLB / GLTF pour les assets 3D
+Autres pages : `/minitel/documentation/` (fiche de chaque terminal et du mode
+3D+), `/minitel/atelier/` (chaque brique du monde vue seule),
+`/minitel/parcours/` (le monde seul, aperçu de développement).
 
 ## Démarrer
+
+Node 22.12+ ou 24.
 
 ```bash
 npm ci
@@ -35,161 +50,141 @@ npm run dev          # http://127.0.0.1:5174
 npm run build        # contrôle des types puis bundle dans dist/
 ```
 
-Le site a deux modes. Par défaut, la **version simple** : un terminal sur sa table.
-Le bouton **Mode 3D+** de l'en-tête ouvre le **monde explorable** (`/?mode=3d`) :
-couloir, portes temporelles, une salle d'époque par terminal. **Mode simple**
-revient. Le monde seul reste sur `/parcours/`, et chaque brique dans `/atelier/`.
-
-Node 22.12+ ou 24. Rotation, toucher et zoom pilotent la caméra. Un double-clic sur
-l'écran fait la mise au point : l'écran passe de face, remplit la vue, et la caméra
-se verrouille ; un second double-clic revient à la vue d'avant (bouton équivalent
-dans les outils de caméra). Les touches du
-modèle 3D, le clavier physique et le clavier virtuel pilotent le même terminal.
-Sans WebGL, une lecture textuelle navigable s'affiche automatiquement.
-
 ## Vérifier
 
 ```bash
 npm run typecheck
 npm run lint
-npm test               # 23 tests unitaires Vitest
-npm run test:browser   # 22 tests Playwright (Edge headless, serveur dev sur 5174)
+npm test               # Vitest : 63 tests unitaires
+npm run test:browser   # Playwright : 32 tests sur ordinateur et mobile (Edge headless)
 ```
 
 ## En ligne
 
-https://sterenna.fr/minitel/ — publié par [`.github/workflows/deploy-ovh.yml`](.github/workflows/deploy-ovh.yml)
-à chaque push sur `main` (ou manuellement via *Run workflow*) : contrôles,
-`npm run build:ovh` (base `/minitel/`), puis `rsync --delete` de `dist/` vers
-`~/www/minitel/` sur l'hébergement OVH, et test de fumée.
+https://sterenna.fr/minitel/ est publié par
+[`.github/workflows/deploy-ovh.yml`](.github/workflows/deploy-ovh.yml) à chaque
+push sur `main` (ou manuellement via *Run workflow*) :
+1. contrôles, puis `npm run build:ovh` (base `/minitel/`) ;
+2. validation du build : modèles, transcodeur Basis, pages, le monde dans un
+   chunk à part, aucune photo de référence ;
+3. `rsync --delete` de `dist/` vers `~/www/minitel/` sur OVH ;
+4. test de fumée : page, modèles, porte, texture KTX2, transcodeur, crédits.
 
-- Secrets utilisés : `OVH_SSH_KEY`, `OVH_HOST`, `OVH_USER`, définis au niveau de
-  l'organisation. Sur le plan GitHub Free, ils ne sont transmis qu'aux dépôts
-  **publics** : rendre ce dépôt privé casserait le déploiement.
-- Le site sterenna.fr est déployé dans la même racine par `MutenRock/sterenna`,
-  avec `rsync --delete`. Son workflow exclut `/minitel/` : ne pas retirer cette exclusion.
-- `public/.htaccess` déclare le type MIME du GLB et les durées de cache.
+- Secrets : `OVH_SSH_KEY`, `OVH_HOST`, `OVH_USER`, au niveau de l'organisation.
+  Sur le plan GitHub Free, ils ne sont transmis qu'aux dépôts **publics** :
+  rendre ce dépôt privé casserait le déploiement.
+- sterenna.fr est déployé dans la même racine par `MutenRock/sterenna`, en
+  `rsync --delete` : son workflow exclut `/minitel/`, ne pas retirer cette exclusion.
+- Le site est derrière Cloudflare : une règle met en cache `/minitel/models/` et
+  `/minitel/basis/`. Les fichiers de `public/` sont appelés avec une empreinte
+  (`?v=…`, `src/assets.ts`) : un fichier remplacé change d'adresse, aucune purge
+  n'est nécessaire. `public/.htaccess` déclare les types (GLB, KTX2, wasm) et un
+  cache d'un an.
 
 Pour vérifier localement le build de production :
 
 ```bash
 npm run build:ovh
-npx vite preview --base=/minitel/   # http://127.0.0.1:4173/minitel/
+npm run preview -- --base=/minitel/   # http://127.0.0.1:4173/minitel/
 ```
-
-## Documentation en ligne
-
-`/documentation/` (https://sterenna.fr/minitel/documentation/) présente chaque
-modèle : quatre vues, caractéristiques, provenance, licence, et un lien vers le
-terminal 3D. La page liste aussi les photos de référence du Terminatel 255 et
-renvoie à la documentation du projet. Son contenu est dans
-`src/documentation/content.ts`.
-
-Les vues sont des captures du terminal 3D lui-même (`?vue=face|profil|dos` et
-`?capture=1`). Pour les régénérer, lancer `npm run dev` puis :
-
-```bash
-node tools/capture_views.mjs http://127.0.0.1:5174
-```
-
-Les photos de référence (annonce eBay) ne s'affichent qu'en local, avec
-`npm run dev`. Le build n'en contient aucune, et le workflow de déploiement
-le vérifie.
 
 ## Architecture
 
-```
-src/
-  minitel/      # composant Minitel, profils de modèle, écran dynamique, anchors, API (index.ts)
-  videotex/     # grille 40 × 25, palette, mosaïques 2 × 3, rendu Canvas, contrôleur Terminal
-  scene/        # caméra tactile, lumière, ombres, suivi du contexte WebGL
-  components/   # AccessibleTerminal, inventaire, bouton Tool
-  hooks/        # abonnement au terminal, mouvement réduit, paramètres d'URL
-  demo/         # pages 3615 Lemegéton, seul module narratif ; catalogue des terminaux
-  terminal/     # expérience du terminal (3615, yeux, effets) et ses panneaux, réutilisables
-  world/        # monde explorable : données, rails, navigation, séquence de porte, URL (pur, testé) ; three/ : couloir, portes, salles
-  atelier/      # page atelier : chaque brique du monde vue seule
-  App.tsx       # version simple : le terminal seul (mode par défaut)
-  SiteModes.tsx # bascule entre la version simple et le mode 3D+ (monde chargé à la demande)
+```text
+index.html, simple/, parcours/, atelier/, documentation/   entrées Vite des cinq pages
 
-simple/, atelier/, documentation/   # entrées Vite des autres pages
+src/
+  main.tsx, SiteModes.tsx, siteMode.ts   version simple ou mode 3D+ (monde chargé à la demande)
+  App.tsx        version simple : le terminal sur sa table, inventaire, réglages
+  assets.ts      adresses versionnées des fichiers de public/
+  minitel/       composant Minitel : modèle, écran dynamique, bombé du tube, profils, anchors (index.ts)
+  videotex/      grille 40 × 25, palette, mosaïques G1, rendu Canvas, contrôleur Terminal
+  demo/          pages 3615 Lemegéton, catalogue des terminaux, marbre procédural
+  eyes/          yeux de Lemegéton : Zyra, LibEyes, Lemegeton (firmware), rendu lisse, contrôleur
+  terminal/      expérience du terminal (3615, yeux, effets) et ses panneaux
+  scene/         scène de la version simple : caméra orbitale, éclairages, table, chargeurs KTX2/meshopt
+  components/    lecture accessible, cartes d'inventaire, bouton
+  hooks/         paramètres d'URL, mouvement réduit, abonnement au terminal
+  world/         mode 3D+ : salles et portes dérivées du catalogue, rails, navigation,
+                 séquence des portes, adresse (logique pure et testée), crédits, grain
+    three/       rendu : couloir, porte temporelle, horloges, caméras, salles
+      rooms/     salles construites en code : RoomShell, Salon1950, Bureau1982, TerminatelHall
+  atelier/, documentation/   pages atelier et documentation
 
 public/
-  models/       # minitel.glb préparé + ATTRIBUTION.md
-  licenses/     # licences des polices IBM Plex
+  models/        modèles compressés (KTX2 + meshopt) : terminaux, mobilier, monde/ (porte,
+                 horloges, textures) ; ATTRIBUTION.md
+  inventaire/, documentation/, licenses/, .htaccess
 
-tools/          # préparation Blender, inventaire des assets, vérification de production
-tests/          # Vitest (tests/*.test.ts) et Playwright (tests/browser/)
-lemegeton/      # pipeline du personnage : scripts Blender, rigs, rapports, passation
-docs/           # cadrage, guide, préparation du modèle, rapports de vérification
+tests/           Vitest (tests/*.test.ts) et Playwright (tests/browser/)
+tools/           préparation des modèles (prepare_*), compression (optimize_glb, encode_textures),
+                 budget, captures, vérification de production, règle de cache Cloudflare
+docs/            guide, assets et licences, monde explorable, direction artistique, vérification
+sources/         sources des modèles (local, hors Git ; voir sources/README.md)
+monde/           sources du monde explorable (local, hors Git ; provenance dans SOURCES.csv)
 ```
 
-- [Guide d'utilisation et d'intégration](docs/USAGE.md) : réutiliser `<Minitel>`, sources d'écran, pages Vidéotex, accessoires, inspection.
-- [Préparation du modèle](docs/MODEL_PREPARATION.md), [assets et licences](docs/ASSETS.md).
-- [Vérification](docs/VERIFICATION.md) et [notes d'implémentation](docs/IMPLEMENTATION.md).
-- [Cadrage du projet](docs/3D_WEB_PROJECT.md).
-- [Audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md) : bilan des trois dépôts, vérifications, points ouverts.
-- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : couloir, portes temporelles et salles sur rails, en mode 3D+ ; la version simple reste le mode par défaut. Lots A à F faits ; le lot G (objets interactifs) reste à cadrer. Décisions, architecture, audit du code, budgets (iPhone 11), lots. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+Documentation :
+- [Guide d'utilisation et d'intégration](docs/USAGE.md) : réutiliser `<Minitel>`, sources d'écran, pages Vidéotex, yeux, accessoires.
+- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : décisions, architecture, rails, portes, salles, budgets (iPhone 11), lots A à F faits ; le lot G (objets interactifs) reste à cadrer. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+- [Assets et licences](docs/ASSETS.md), [préparation des modèles](docs/MODEL_PREPARATION.md).
+- [Vérification](docs/VERIFICATION.md), [notes d'implémentation](docs/IMPLEMENTATION.md), [cadrage](docs/3D_WEB_PROJECT.md), [audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md).
 
-## Personnage Lemegéton (`lemegeton/`)
+La page `/documentation/` reprend les fiches des terminaux. Ses vues sont des
+captures du terminal 3D lui-même ; pour les régénérer, lancer `npm run dev` puis
+`node tools/capture_views.mjs http://127.0.0.1:5174`. Les photos de référence du
+Terminatel (annonce eBay) ne s'affichent qu'en local ; le build n'en contient
+aucune, et le workflow le vérifie.
 
-Scripts et documentation du pipeline 3D du personnage : rigs V1 à V3, atelier
-Blender V4, rapports d'audit, feuille de route et passation entre agents.
-Point d'entrée : [lemegeton/PASSATION_AGENTS.md](lemegeton/PASSATION_AGENTS.md),
-puis [la pipeline](lemegeton/PIPELINE_TRAVAIL.md).
+## Personnage Lemegéton
 
-C'est le dossier de travail complet, migré depuis `Downloads\lemegeton_3d`
-le 6 octobre 2026 avec contrôle SHA-256 ([rapport](lemegeton/08_AUDIT/migration-2026-10-06/MIGRATION.md)).
-Tous les fichiers sont présents en local, mais seuls les formats texte sont
-versionnés : GLB, `.blend`, OBJ, images, vidéo et sauvegardes ZIP sont exclus
-par une liste blanche dans `.gitignore`. Un clone neuf n'a donc pas les binaires. Le personnage reste au stade
-expérimental : géométrie, doigts et pivots sont à reprendre avant l'animation.
+Le pipeline 3D du robot (références, sources, rigs, scènes Blender, exports,
+audits) a quitté ce dépôt le 12 octobre 2026 pour
+[Sterenna-studio/lemegeton](https://github.com/Sterenna-studio/lemegeton), avec
+son historique. Copie de travail locale : `C:\DEV\repos\lemegeton`. Quand le
+personnage aura un export Web, il viendra ici comme les autres modèles :
+préparé dans `public/models/` par un script `tools/prepare_*`.
 
-## État du MVP
+## État
 
-Les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont atteints :
-- Minitel 3D visible et manipulable, avec un écran dynamique indépendant ;
-- UI Vidéotex et démo 3615 Lemegéton ;
-- page responsive ;
-- modèle remplaçable via un profil ;
-- touches 3D cliquables et accessoires par anchors.
+- **Version simple** : les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont
+  atteints (terminal manipulable, écran dynamique indépendant, 3615 Lemegéton,
+  page responsive, modèle remplaçable par profil, touches 3D cliquables,
+  accessoires par anchors), avec trois terminaux et quatre meubles.
+- **Mode 3D+** : couloir, portes temporelles, trois salles d'époque, portes
+  fermées pour la suite, cartes d'inventaire vers les salles, crédits à l'écran ;
+  cadrage adapté aux téléphones tenus droit.
+- **Yeux de Lemegéton** (Réglages CRT > Écran, ou `?ecran=yeux`) : en mosaïque
+  Vidéotex ou en rendu lisse, repris de l'overlay OBS de nitro-clicker, des
+  librairies de minitel-face et du firmware `Minitel_Sigil`. Ils clignent,
+  regardent, réagissent, suivent légèrement la souris, et les touches Minitel
+  changent leur humeur. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
 
-Un sélecteur propose trois modèles :
-- le Terminatel 255, en finition marbre noir ;
-- le Minitel 1 d'origine ;
-- un téléviseur des années 1950.
-
-La page suit la direction artistique du Terminatel 255 (voir
-[assets et licences](docs/ASSETS.md)).
-
-L'écran peut aussi afficher **les yeux de Lemegeton** en mosaïque Vidéotex
-(Réglages CRT > Écran, ou `?ecran=yeux`). Ce sont les yeux de l'overlay OBS de
-nitro-clicker, repris des librairies `LibZyraEyes` et `LibEyes` de minitel-face, ou
-ceux du firmware `Minitel_Sigil` qui branche le Minitel physique à Sigil.
-Ils clignent, regardent et réagissent seuls, et les touches Minitel changent leur
-humeur. Deux rendus sont proposés : la mosaïque Vidéotex, ou un rendu classique lisse
-comme l'overlay. La taille se règle au curseur. Dans tous les cas, l'écran est bombé
-comme un vrai tube, avec des effets CRT activables. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
-
-Restent ouverts : la validation artistique (textures grises d'origine conservées),
-les essais sur téléphones physiques, l'optimisation du chargement (bundle
-d'environ 1,2 Mo), et l'émulation protocolaire Vidéotex (décodeur VDT).
-
-**À faire : une icône pour le site.** Les cinq pages (`index.html`, `simple/`,
-`documentation/`, `atelier/`, `parcours/`) déclarent aujourd'hui une icône vide,
-`<link rel="icon" href="data:," />`, pour éviter une requête `favicon.ico` en
-erreur. Il faudra une vraie icône (SVG et PNG 32/180 px pour iOS, dans
-`public/`), puis remplacer cette ligne dans les cinq fichiers.
-
-Le Minitel physique, l'ESP32 et le serveur de visage restent dans
-[minitel-face](https://github.com/Sterenna-studio/minitel-face).
+Restent ouverts :
+- l'essai sur un vrai iPhone 11 ;
+- les tests du lot F ;
+- le lot G (objets interactifs), à cadrer ;
+- la validation artistique, l'optimisation du chargement (bundle d'environ 1,2 Mo)
+  et l'émulation protocolaire Vidéotex (décodeur VDT) ;
+- **une icône pour le site** : les cinq pages déclarent aujourd'hui une icône vide,
+  `<link rel="icon" href="data:," />`, pour éviter une requête `favicon.ico` en
+  erreur. Il faudra une vraie icône (SVG, et PNG 32 et 180 px pour iOS) dans
+  `public/`, puis remplacer cette ligne dans les cinq fichiers.
 
 ## Crédits
 
-Modèle 3D « Minitel 1982-France » par okotaru
-([Sketchfab](https://sketchfab.com/3d-models/minitel-1982-france-864f54ce4e1f41abab0688b88a45babf)),
-sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), adapté :
-voir [ATTRIBUTION.md](public/models/ATTRIBUTION.md). Polices IBM Plex sous
-licence SIL OFL 1.1 ([public/licenses/](public/licenses/)). Animations des yeux
-d'après [Web-Eye-Animation](https://github.com/CyberAgentAILab/web-eye-animation)
+Modèles 3D sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),
+adaptés :
+- « Minitel 1982-France » par okotaru ;
+- « 1950's Retro Television » par Huuxloc ;
+- « Wood Drawer & Tables Set » par brandon_grey ;
+- « Door_Wooden_Old » par Mehdi Shahsavan (porte temporelle provisoire).
+
+Horloges et matières du monde : Poly Haven (CC0). Le décor des salles est
+construit en code. Détail des sources et des modifications :
+[ATTRIBUTION.md](public/models/ATTRIBUTION.md).
+
+Polices IBM Plex sous licence SIL OFL 1.1 ([public/licenses/](public/licenses/)).
+Animations des yeux d'après
+[Web-Eye-Animation](https://github.com/CyberAgentAILab/web-eye-animation)
 (CyberAgent AI Lab, licence MIT).

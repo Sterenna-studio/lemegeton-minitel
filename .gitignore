@@ -6,23 +6,15 @@ playwright-report/
 .vite/
 *.tsbuildinfo
 
-# Pipeline personnage : dossier de travail complet en local, seuls les
-# formats texte (scripts, docs, rapports) sont versionnés. Tout autre format
-# (GLB, .blend, OBJ, images, vidéo, ZIP...) reste ignoré par défaut.
-lemegeton/**
-!lemegeton/**/
-!lemegeton/**/*.md
-!lemegeton/**/*.txt
-!lemegeton/**/*.py
-!lemegeton/**/*.json
-!lemegeton/**/*.csv
-!lemegeton/**/*.html
-!lemegeton/**/*.bat
-!lemegeton/**/*.ps1
-# Exceptions texte non publiées : conversation privée, sauvegardes locales.
-lemegeton/ChatGPT-*.md
-lemegeton/09_SAUVEGARDES/
-lemegeton/**/__pycache__/
+# Le personnage Lemegéton a son propre dépôt depuis le 12 octobre 2026
+# (Sterenna-studio/lemegeton, copie de travail C:\DEV\repos\lemegeton).
+lemegeton/
+
+# Sources des terminaux et du mobilier (GLB, .blend, OBJ d'origine) : locales,
+# préparées par tools/prepare_*.py vers public/models/. Seul le README est
+# versionné.
+sources/**
+!sources/README.md
 
 # Photos de reference du Terminatel 255 (annonce eBay) : droits du vendeur,
 # usage local uniquement. Le README et l'inventaire CSV restent versionnes.

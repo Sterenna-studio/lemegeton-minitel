@@ -13,7 +13,7 @@ import bpy
 from mathutils import Matrix, Vector
 
 WEB = Path(__file__).resolve().parents[1]
-SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'lemegeton' / '06_MODEL' / '1950s_retro_television (1).glb'
+SOURCE = Path(sys.argv[sys.argv.index('--') + 1]) if '--' in sys.argv else WEB / 'sources' / '06_MODEL' / '1950s_retro_television (1).glb'
 OUT = WEB / 'public' / 'models'
 OUT.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
