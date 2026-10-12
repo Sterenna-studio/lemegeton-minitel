@@ -45,7 +45,7 @@ test("parcours au clavier seul : couloir → porte → salle → retour", async 
 
 test("parcours : le bouton Retour du navigateur remonte le chemin", async ({ page }) => {
   await open(page, "?poste=porte-minitel-1");
-  await expect(status(page)).toHaveText("Porte 1982. 3 déplacements possibles.");
+  await expect(status(page)).toHaveText("Porte 1982 — Minitel 1. 3 déplacements possibles.");
   await actions(page).getByRole("button", { name: "Ouvrir la porte 1982" }).click();
   await expect(page).toHaveURL(/\?salle=minitel-1$/, { timeout: 8000 });
   await actions(page).getByRole("button", { name: /Aller : Minitel 1/ }).click();
@@ -53,7 +53,7 @@ test("parcours : le bouton Retour du navigateur remonte le chemin", async ({ pag
   await page.goBack();
   await expect(status(page)).toHaveText(/^Entrée — Minitel 1\./, { timeout: 6000 });
   await page.goBack();
-  await expect(status(page)).toHaveText("Porte 1982. 3 déplacements possibles.", { timeout: 8000 });
+  await expect(status(page)).toHaveText("Porte 1982 — Minitel 1. 3 déplacements possibles.", { timeout: 8000 });
   await expect(page).toHaveURL(/\?poste=porte-minitel-1$/);
 });
 
@@ -120,6 +120,7 @@ const cost = async (page: Page) => {
 for (const [room, label] of [
   ["televiseur-1950", "Televiseur 1950"],
   ["minitel-1", "Minitel 1"],
+  ["minitel-nfz-300", "Minitel NFZ 300"],
   ["terminatel-255", "Terminatel 255"],
 ]) {
   test(`salle ${room} : décor rendu dès l'arrivée, budget d'une salle`, async ({ page }) => {

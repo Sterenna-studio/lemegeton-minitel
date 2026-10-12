@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Minitel } from "../../minitel/Minitel";
 import { Table } from "../../scene/Table";
 import { RenderWhenReady } from "../../scene/RenderWhenReady";
-import { Lighting, bureauLighting, salonLighting, terminatelLighting, type LightingPreset } from "../../scene/Lighting";
+import { Lighting, bureauLighting, salon1982Lighting, salonLighting, terminatelLighting, type LightingPreset } from "../../scene/Lighting";
 import type { ModelEntry } from "../../demo/catalog";
 import type { Furniture } from "../../scene/furniture";
 import type { CrtEffects } from "../../videotex/renderer";
@@ -10,6 +10,7 @@ import type { ScreenSource } from "../../minitel/types";
 import type { Room } from "../types";
 import { Bureau1982 } from "./rooms/Bureau1982";
 import { Salon1950 } from "./rooms/Salon1950";
+import { Salon1982 } from "./rooms/Salon1982";
 import { TerminatelHall } from "./rooms/TerminatelHall";
 
 // A room of the world (lot E) : the decor of its era (src/world/three/rooms/),
@@ -20,6 +21,7 @@ import { TerminatelHall } from "./rooms/TerminatelHall";
 const LIGHTING: Record<Room["ambiance"], LightingPreset> = {
   "salon-1950": salonLighting,
   "bureau-1982": bureauLighting,
+  "salon-1982": salon1982Lighting,
   terminatel: terminatelLighting,
 };
 
@@ -60,6 +62,8 @@ export function TerminalRoom({
         <Salon1950 year={room.era} stand={stand} onExit={onExit} />
       ) : room.ambiance === "bureau-1982" ? (
         <Bureau1982 year={room.era} onExit={onExit} />
+      ) : room.ambiance === "salon-1982" ? (
+        <Salon1982 year={room.era} onExit={onExit} />
       ) : (
         <TerminatelHall year={room.era} onExit={onExit} />
       )}

@@ -56,7 +56,7 @@ export interface Corridor {
   doors: DoorSlot[];
 }
 
-export type Ambiance = "salon-1950" | "bureau-1982" | "terminatel";
+export type Ambiance = "salon-1950" | "bureau-1982" | "salon-1982" | "terminatel";
 
 export interface Room {
   id: string;

@@ -898,6 +898,10 @@ button.mode-switch {
 .inventory-minitel-1 .inventory-back {
   background: radial-gradient(circle at 30% 20%, #ddd5c4, #a0978a 62%, #6d665b);
 }
+/* Minitel NFZ 300 : the beige of its plastic, on the brown of its living room. */
+.inventory-minitel-nfz-300 .inventory-back {
+  background: radial-gradient(circle at 30% 20%, #efe2c6, #b88a52 60%, #6b4426);
+}
 .inventory-televiseur-1950 .inventory-back {
   background:
     linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.45)),

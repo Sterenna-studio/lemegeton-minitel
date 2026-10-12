@@ -22,6 +22,10 @@ interface Era {
 export const ERAS: Record<string, Era> = {
   "televiseur-1950": { year: "1950", ambiance: "salon-1950", glow: "#8fd1c4" },
   "minitel-1": { year: "1982", ambiance: "bureau-1982", glow: "#e8e2c8" },
+  // « Un des tout premiers modèles de Minitel » (PATSTEC, record 27402) : the
+  // terminal reached homes from 1982 (the electronic directory), hence a
+  // family living room. Same year as the Minitel 1 : it comes after it.
+  "minitel-nfz-300": { year: "1982", ambiance: "salon-1982", glow: "#f2cf94" },
   // No public source dates the Terminatel 255 : its counter stays a mystery.
   "terminatel-255": { year: "198?", ambiance: "terminatel", glow: "#ff9a4d" },
 };
@@ -105,6 +109,9 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
   const stations: Station[] = [
     { id: "couloir:entree", label: "Entrée du couloir", position: [0, EYE, 6], lookAt: [0, DOOR_AIM + 0.5, -40], fov: CORRIDOR_FOV },
   ];
+  // Two doors of the same year are told apart by their terminal.
+  const sameYear = (entry: TerminalEntry) => ordered.filter((other) => eraOf(other).year === eraOf(entry).year).length > 1;
+  const doorLabel = (entry: TerminalEntry) => `Porte ${eraOf(entry).year}${sameYear(entry) ? ` — ${entry.label}` : ""}`;
   const doors: DoorSlot[] = ordered.map((entry, index) => {
     const side = index % 2 === 0 ? "gauche" : "droite";
     const z = -DOOR_SPACING * (index + 1);
@@ -112,7 +119,7 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
     const approach = `couloir:porte-${entry.id}`;
     stations.push({
       id: approach,
-      label: `Porte ${eraOf(entry).year}`,
+      label: doorLabel(entry),
       position: [side === "gauche" ? FACING_X : -FACING_X, EYE, z],
       lookAt: [x, DOOR_AIM, z],
       fov: CORRIDOR_FOV,

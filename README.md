@@ -21,15 +21,15 @@ Lemegéton (modélisation, rigs, animation) a son propre dépôt :
 
 - **Version simple** (par défaut, `/minitel/`) : un terminal sur sa table, à
   faire tourner, zoomer et inspecter ; l'inventaire pour changer de terminal
-  (Terminatel 255, Minitel 1, téléviseur 1950) et de mobilier ; le 3615
+  (Terminatel 255, Minitel 1, téléviseur 1950, Minitel NFZ 300) et de mobilier ; le 3615
   Lemegéton, les yeux, les effets CRT. Un double-clic sur l'écran fait la mise
   au point, un second revient.
 - **Mode 3D+** (bouton de l'en-tête, `/minitel/?mode=3d`) : un couloir hors du
   temps, parcouru sur rails. Une porte temporelle par terminal, dans l'ordre
-  chronologique, ouvre sur une salle d'époque (salon 1950, bureau 1982, salle de
-  marbre du Terminatel) ; devant le terminal, on retrouve le 3615, les yeux et
-  les réglages. Trois portes fermées attendent les salles à venir. **Mode simple**
-  revient, sur le terminal de la salle quittée.
+  chronologique, ouvre sur une salle d'époque (salon 1950, bureau 1982, salon
+  familial 1982 du NFZ 300, salle de marbre du Terminatel) ; devant le terminal,
+  on retrouve le 3615, les yeux et les réglages. Trois portes fermées attendent
+  les salles à venir. **Mode simple** revient, sur le terminal de la salle quittée.
 
 Chaque poste du monde a son adresse (`&salle=`, `&poste=`) et le bouton Retour
 du navigateur remonte le chemin. Le clavier suffit partout (flèches, `Échap`),
@@ -150,8 +150,8 @@ préparé dans `public/models/` par un script `tools/prepare_*`.
 - **Version simple** : les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont
   atteints (terminal manipulable, écran dynamique indépendant, 3615 Lemegéton,
   page responsive, modèle remplaçable par profil, touches 3D cliquables,
-  accessoires par anchors), avec trois terminaux et quatre meubles.
-- **Mode 3D+** : couloir, portes temporelles, trois salles d'époque, portes
+  accessoires par anchors), avec quatre terminaux et quatre meubles.
+- **Mode 3D+** : couloir, portes temporelles, quatre salles d'époque, portes
   fermées pour la suite, cartes d'inventaire vers les salles, crédits à l'écran ;
   cadrage adapté aux téléphones tenus droit.
 - **Yeux de Lemegéton** (Réglages CRT > Écran, ou `?ecran=yeux`) : en mosaïque
