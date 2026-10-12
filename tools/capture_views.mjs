@@ -28,7 +28,7 @@ try {
   page.on("pageerror", (error) => errors.push(error.message));
   for (const model of models)
     for (const view of views) {
-      await page.goto(`${base}/?modele=${model}&vue=${view}&capture=1`);
+      await page.goto(`${base}/?modele=${model}&vue=${view}&capture=1&lang=fr`);
       await page.waitForFunction(() => !document.body.textContent?.includes("Chargement du modele"), null, { timeout: 30000 });
       await page.waitForTimeout(1500);
       const file = path.join(out, `${model}-${view}.jpg`);
@@ -39,7 +39,7 @@ try {
   // model (the shadow catcher is translucent and ignored).
   await page.setViewportSize({ width: 560, height: 560 });
   for (const model of models) {
-    await page.goto(`${base}/?modele=${model}&capture=1&transparent=1`);
+    await page.goto(`${base}/?modele=${model}&capture=1&transparent=1&lang=fr`);
     await page.waitForFunction(() => !document.body.textContent?.includes("Chargement du modele"), null, { timeout: 30000 });
     await page.waitForTimeout(1500);
     const box = await page.locator('[data-testid="scene"] canvas').evaluate((canvas) => {

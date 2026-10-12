@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { assetUrl } from "../assets";
 import { ArrowLeft, ArrowUpRight, Monitor } from "lucide-react";
-import { catalog } from "../demo/catalog";
-import { modelDocs, projectDocs, sources, views, worldDoc, type Fact, type ModelDoc } from "./content";
+import { catalog, creditChanges } from "../demo/catalog";
+import { t, useLang } from "../i18n";
+import { LanguageSwitch } from "../components/LanguageSwitch";
+import { docContent, sources, type DocContent, type Fact, type ModelDoc, type WorldDoc } from "./content";
 import { referencePhotos, referenceFolder } from "./references";
 
 const base = import.meta.env.BASE_URL;
@@ -20,7 +22,7 @@ function Facts({ items }: { items: Fact[] }) {
   );
 }
 
-function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
+function ModelSection({ doc, index, views }: { doc: ModelDoc; index: number; views: DocContent["views"] }) {
   const [view, setView] = useState<string>(views[0].id);
   const entry = catalog.find((item) => item.id === doc.id);
   const image = (id: string) => assetUrl(`documentation/vues/${doc.id}-${id}.jpg`);
@@ -37,14 +39,14 @@ function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
         <figure className="viewer">
           <img
             src={image(current.id)}
-            alt={`${doc.title}, vue ${current.label.toLowerCase()}, rendu du terminal 3D`}
+            alt={t("doc.view.alt", { title: doc.title, view: current.label.toLowerCase() })}
             width={1200}
             height={900}
           />
           <figcaption>
-            Vue {current.label.toLowerCase()} · rendu du terminal 3D
+            {t("doc.view.caption", { view: current.label.toLowerCase() }).replace(/^./, (c) => c.toUpperCase())}
           </figcaption>
-          <div className="thumbs" role="group" aria-label={`Vues de ${doc.title}`}>
+          <div className="thumbs" role="group" aria-label={t("doc.views", { title: doc.title })}>
             {views.map((item) => (
               <button
                 key={item.id}
@@ -62,28 +64,28 @@ function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
           {doc.note && <p className="note">{doc.note}</p>}
-          <h3>Caracteristiques</h3>
+          <h3>{t("doc.characteristics")}</h3>
           <Facts items={doc.facts} />
-          <h3>Modele 3D</h3>
+          <h3>{t("doc.model3d")}</h3>
           <Facts items={doc.asset} />
           {entry && (
             <p className="credit">
-              <a href={entry.credit.source} target="_blank" rel="noreferrer">
+              <a href={entry.credit.source} target="_blank" rel="noreferrer" translate="no">
                 {entry.credit.title}
               </a>{" "}
-              par {entry.credit.author}, sous licence{" "}
+              {t("doc.credit.by")} <span translate="no">{entry.credit.author}</span>, {t("doc.credit.license")}{" "}
               <a href={entry.credit.licenseUrl} target="_blank" rel="noreferrer">
                 {entry.credit.license}
               </a>
-              , {entry.credit.changes}.
+              , {creditChanges(entry)}.
             </p>
           )}
           <div className="open-links">
             <a className="open-3d" href={`${base}?modele=${doc.id}`}>
-              Ouvrir dans le terminal 3D <ArrowUpRight size={16} />
+              {t("doc.open3d")} <ArrowUpRight size={16} />
             </a>
             <a className="open-3d open-world" href={`${base}?mode=3d&salle=${doc.id}`}>
-              Voir sa salle en 3D+ <ArrowUpRight size={16} />
+              {t("doc.openRoom")} <ArrowUpRight size={16} />
             </a>
           </div>
         </div>
@@ -92,7 +94,7 @@ function ModelSection({ doc, index }: { doc: ModelDoc; index: number }) {
   );
 }
 
-function World() {
+function World({ worldDoc }: { worldDoc: WorldDoc }) {
   return (
     <section className="model-doc world-doc" id="monde" aria-labelledby="monde-title">
       <header>
@@ -103,9 +105,9 @@ function World() {
         {worldDoc.intro.map((paragraph) => (
           <p key={paragraph.slice(0, 24)}>{paragraph}</p>
         ))}
-        <h3>Parcours</h3>
+        <h3>{t("doc.world.route")}</h3>
         <Facts items={worldDoc.facts} />
-        <h3>Salles</h3>
+        <h3>{t("doc.world.rooms")}</h3>
         <ul className="world-rooms">
           {worldDoc.rooms.map((room) => (
             <li key={room.id}>
@@ -116,11 +118,11 @@ function World() {
             </li>
           ))}
         </ul>
-        <h3>Modeles et matieres</h3>
+        <h3>{t("doc.world.assets")}</h3>
         <Facts items={worldDoc.assets} />
         <div className="open-links">
           <a className="open-3d open-world" href={`${base}?mode=3d`}>
-            Entrer dans le couloir <ArrowUpRight size={16} />
+            {t("doc.world.enter")} <ArrowUpRight size={16} />
           </a>
         </div>
       </div>
@@ -135,15 +137,12 @@ function References() {
   return (
     <section className="references" id="references" aria-labelledby="references-title">
       <header>
-        <span className="kicker">Archives / Terminatel 255</span>
-        <h2 id="references-title">Photos de reference</h2>
+        <span className="kicker">{t("doc.references.kicker")}</span>
+        <h2 id="references-title">{t("doc.references.title")}</h2>
       </header>
       <p>
-        {referencePhotos.length} vues photographiques du Terminatel 255, classees par
-        element. Elles ont servi de modele pour la direction artistique.
-        {local
-          ? " Consultation locale : les photos s'affichent depuis le dossier du depot."
-          : " Ces photos proviennent d'une annonce et appartiennent a leur auteur : elles ne sont pas publiees ici, seule leur description l'est."}
+        {t("doc.references.intro", { count: referencePhotos.length })}{" "}
+        {local ? t("doc.references.local") : t("doc.references.published")}
       </p>
       <ol className="reference-list">
         {referencePhotos.map((photo) => (
@@ -164,48 +163,51 @@ function References() {
 }
 
 export function DocumentationPage() {
+  const lang = useLang();
+  const { views, modelDocs, worldDoc, projectDocs, related } = docContent(lang);
   return (
     <div className="doc-page">
       <header className="doc-masthead">
-        <a href={base} className="brand" aria-label="Retour au terminal 3D">
+        <a href={base} className="brand" aria-label={t("doc.backLabel")}>
           <Monitor size={26} />
           <span className="doc-brand">
-            MINITEL<span>DOCUMENTATION</span>
+            <bdi translate="no">MINITEL</bdi>
+            <span>{t("doc.brand")}</span>
           </span>
         </a>
-        <a href={base} className="back-link">
-          <ArrowLeft size={16} /> Terminal 3D
-        </a>
+        <div className="doc-tools">
+          <LanguageSwitch className="back-link" />
+          <a href={base} className="back-link">
+            <ArrowLeft size={16} /> {t("doc.back")}
+          </a>
+        </div>
       </header>
       <main id="contenu">
         <section className="doc-intro">
-          <h1>Documentation des terminaux</h1>
-          <p>
-            Les modeles du terminal 3D, leurs caracteristiques, leur provenance,
-            le monde du mode 3D+ et la documentation du projet. Les vues sont des
-            rendus du terminal 3D lui-meme, avec les memes finitions.
-          </p>
-          <nav aria-label="Sommaire de la documentation" className="doc-nav">
+          <h1>{t("doc.title")}</h1>
+          <p>{t("doc.intro")}</p>
+          <nav aria-label={t("doc.nav")} className="doc-nav">
             {modelDocs.map((doc) => (
               <a key={doc.id} href={`#${doc.id}`}>
                 {doc.title}
               </a>
             ))}
-            <a href="#monde">Mode 3D+</a>
-            <a href="#references">Photos de reference</a>
-            <a href="#projet">Documentation du projet</a>
-            <a href="#sources">Sources</a>
+            <a href="#monde">{t("doc.nav.world")}</a>
+            <a href="#references">{t("doc.nav.references")}</a>
+            <a href="#projet">{t("doc.nav.project")}</a>
+            <a href="#lies">{t("doc.nav.related")}</a>
+            <a href="#sources">{t("doc.nav.sources")}</a>
           </nav>
         </section>
         {modelDocs.map((doc, index) => (
-          <ModelSection key={doc.id} doc={doc} index={index} />
+          <ModelSection key={`${lang}-${doc.id}`} doc={doc} index={index} views={views} />
         ))}
-        <World />
+        <World worldDoc={worldDoc} />
         <References />
         <section className="project-docs" id="projet" aria-labelledby="projet-title">
           <header>
-            <span className="kicker">Depot lemegeton-minitel</span>
-            <h2 id="projet-title">Documentation du projet</h2>
+            <span className="kicker">{t("doc.project.kicker")}</span>
+            <h2 id="projet-title">{t("doc.project.title")}</h2>
           </header>
           <ul>
             {projectDocs.map((doc) => (
@@ -219,8 +221,25 @@ export function DocumentationPage() {
             ))}
           </ul>
         </section>
+        <section className="project-docs" id="lies" aria-labelledby="lies-title">
+          <header>
+            <span className="kicker">{t("doc.related.kicker")}</span>
+            <h2 id="lies-title">{t("doc.related.title")}</h2>
+          </header>
+          <ul>
+            {related.map((project) => (
+              <li key={project.name}>
+                <a href={project.url} target="_blank" rel="noreferrer">
+                  <strong translate="no">{project.name}</strong>
+                  <span>{project.description}</span>
+                  <code translate="no">{project.url.replace("https://github.com/", "")}</code>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
         <section className="sources" id="sources" aria-labelledby="sources-title">
-          <h2 id="sources-title">Sources</h2>
+          <h2 id="sources-title">{t("doc.sources.title")}</h2>
           <ul>
             {sources.map((source) => (
               <li key={source.url}>
@@ -233,11 +252,7 @@ export function DocumentationPage() {
         </section>
       </main>
       <footer className="doc-footer">
-        Modeles 3D sous licence CC BY 4.0 : Minitel 1982-France par okotaru,
-        1950&apos;s Retro Television par Huuxloc, Wood Drawer &amp; Tables Set par
-        brandon_grey, Door_Wooden_Old par Mehdi Shahsavan. Horloges et matieres
-        Poly Haven (CC0). Marbre procedural, decor des salles construit en code.{" "}
-        <a href={`${base}models/ATTRIBUTION.md`}>Tous les credits</a>.
+        {t("doc.footer")} <a href={`${base}models/ATTRIBUTION.md`}>{t("doc.footer.all")}</a>.
       </footer>
     </div>
   );

@@ -6,6 +6,7 @@ import { DOOR_FRAME, closedState, freeSpans } from "../Corridor";
 import { TemporalDoor } from "../TemporalDoor";
 import { RenderWhenReady } from "../../../scene/RenderWhenReady";
 import { CORRIDOR_YEAR } from "../../rooms";
+import { t, useLang } from "../../../i18n";
 import type { Vec3 } from "../../types";
 
 // The four walls of a room, its floor and ceiling, the rails along the walls,
@@ -96,7 +97,11 @@ export function RoomShell({
     },
     [built],
   );
-  const door = useMemo(() => ({ id: `sortie-${year}`, year: CORRIDOR_YEAR, glow: "#ffb46b", plaque: "Couloir" }), [year]);
+  const lang = useLang();
+  const door = useMemo(
+    () => ({ id: `sortie-${year}`, year: CORRIDOR_YEAR, glow: "#ffb46b", plaque: t("world.plaque.exit", undefined, lang) }),
+    [year, lang],
+  );
   return (
     <group>
       <mesh geometry={built.lower} material={materials.lower} receiveShadow />

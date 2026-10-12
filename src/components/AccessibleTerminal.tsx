@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { plainText, type TerminalFrame } from "../videotex/screen";
 import { defaultEffects, renderTerminal } from "../videotex/renderer";
+import { t } from "../i18n";
 export function AccessibleTerminal({
   frame,
   visible,
@@ -24,7 +25,7 @@ export function AccessibleTerminal({
   }, [frame, visible]);
   return (
     <section
-      aria-label="Contenu du terminal"
+      aria-label={t("terminal.content")}
       className={visible ? "terminal-reader" : "sr-only"}
     >
       {visible && (
@@ -34,7 +35,7 @@ export function AccessibleTerminal({
         {frame.title}
       </p>
       <pre className="sr-only">{plainText(frame)}</pre>
-      <nav aria-label="Rubriques du terminal">
+      <nav aria-label={t("terminal.sections")}>
         {frame.actions.map((action) => (
           <button key={action.key} onClick={() => onKey(action.key)}>
             {action.label}

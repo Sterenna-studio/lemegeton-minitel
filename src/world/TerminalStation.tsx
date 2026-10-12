@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Tool } from "../components/Tool";
+import { t } from "../i18n";
 import { AccessibleTerminal } from "../components/AccessibleTerminal";
 import { furniture } from "../scene/furniture";
 import { SettingsPanel } from "../terminal/SettingsPanel";
@@ -29,7 +30,7 @@ export function TerminalStation({
         <aside className="reader-panel">
           <div className="panel-title">
             <h2>{activeFrame.title}</h2>
-            <Tool label="Fermer la lecture" onClick={() => setPanels((current) => ({ ...current, reader: false }))}>
+            <Tool label={t("terminal.closeReader")} onClick={() => setPanels((current) => ({ ...current, reader: false }))}>
               <X size={18} />
             </Tool>
           </div>

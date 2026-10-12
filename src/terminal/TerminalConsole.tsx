@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { ArrowRight, BookOpen, Cable, Keyboard, Settings2 } from "lucide-react";
 import { Tool } from "../components/Tool";
+import { t, useLang } from "../i18n";
 import type { TerminalFrame } from "../videotex/screen";
 
 export interface ConsolePanels {
@@ -39,6 +40,7 @@ export function TerminalConsole({
   /** Extra buttons after the panel toggles (inspection in dev). */
   extraTools?: ReactNode;
 }) {
+  useLang();
   const [input, setInput] = useState("");
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -52,50 +54,53 @@ export function TerminalConsole({
         <div className="terminal-title">
           <Cable size={18} />
           <div>
-            <strong>3615 LEMEGETON</strong>
-            <span>{frame.title === "3615 LEMEGETON" ? "SOMMAIRE" : frame.title}</span>
+            <strong translate="no">3615 LEMEGETON</strong>
+            <span>{frame.title === "3615 LEMEGETON" ? t("console.index") : frame.title}</span>
           </div>
-          <span className="online">EN LIGNE</span>
+          <span className="online">{t("console.online")}</span>
         </div>
         <div className="console-tools">
-          <Tool label="Lecture accessible" onClick={() => onToggle("reader")} active={panels.reader}>
+          <Tool label={t("console.reader")} onClick={() => onToggle("reader")} active={panels.reader}>
             <BookOpen size={18} />
           </Tool>
-          <Tool label="Clavier" onClick={() => onToggle("keyboard")} active={panels.keyboard}>
+          <Tool label={t("console.keyboard")} onClick={() => onToggle("keyboard")} active={panels.keyboard}>
             <Keyboard size={18} />
           </Tool>
-          <Tool label="Reglages CRT" onClick={() => onToggle("settings")} active={panels.settings}>
+          <Tool label={t("console.settings")} onClick={() => onToggle("settings")} active={panels.settings}>
             <Settings2 size={18} />
           </Tool>
           {extraTools}
         </div>
       </div>
       <div className="console-bottom">
-        <nav aria-label="Navigation principale">
+        <nav aria-label={t("console.nav")}>
           <button onClick={() => goTo("home")} className="home-key">
-            Sommaire
+            {t("console.home")}
           </button>
           <button onClick={() => goTo("connection")}>
-            <span>1</span>Entrer
+            <span>1</span>
+            {t("console.enter")}
           </button>
           <button onClick={() => goTo("archives")}>
-            <span>2</span>Archives
+            <span>2</span>
+            {t("console.archives")}
           </button>
           <button onClick={() => goTo("messages")}>
-            <span>3</span>Messages
+            <span>3</span>
+            {t("console.messages")}
           </button>
         </nav>
         <form onSubmit={submit}>
           <span aria-hidden="true">&gt;</span>
           <input
-            aria-label="Commande du terminal"
+            aria-label={t("console.command")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             maxLength={28}
-            placeholder="Votre commande"
+            placeholder={t("console.placeholder")}
             autoComplete="off"
           />
-          <button type="submit" aria-label="Envoi" title="Envoi">
+          <button type="submit" aria-label={t("console.send")} title={t("console.send")}>
             <ArrowRight size={20} />
           </button>
         </form>
@@ -106,8 +111,9 @@ export function TerminalConsole({
 
 /** On-screen keys for touch devices. */
 export function VirtualKeyboard({ sendKey }: { sendKey: (key: string) => void }) {
+  useLang();
   return (
-    <section className="virtual-keyboard" aria-label="Clavier du terminal">
+    <section className="virtual-keyboard" aria-label={t("console.virtualKeyboard")}>
       <div className="number-keys">
         {"1234567890".split("").map((key) => (
           <button key={key} onClick={() => sendKey(key)}>
@@ -115,7 +121,8 @@ export function VirtualKeyboard({ sendKey }: { sendKey: (key: string) => void })
           </button>
         ))}
       </div>
-      <div className="function-keys">
+      {/* The Minitel's own key caps : their names stay as printed. */}
+      <div className="function-keys" translate="no">
         {["Sommaire", "Correction", "Annulation", "Envoi"].map((key) => (
           <button key={key} onClick={() => sendKey(key)}>
             {key}

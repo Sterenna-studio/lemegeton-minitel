@@ -396,3 +396,13 @@
 .doc-footer a {
   color: inherit;
 }
+/* Language switch next to the way back to the terminal. */
+.doc-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+button.back-link {
+  cursor: pointer;
+}

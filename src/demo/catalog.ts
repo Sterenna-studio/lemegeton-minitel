@@ -1,3 +1,4 @@
+import { tFor } from "../i18n";
 import { Color, MeshStandardMaterial } from "three";
 import type { MaterialFinish } from "../minitel/MinitelModel";
 import type { ModelProfile } from "../minitel/types";
@@ -151,3 +152,18 @@ export const tableCredit: ModelCredit = {
   licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
   changes: "table d'appoint extraite, textures JPEG",
 };
+
+/** Text of an entry in the current language (src/i18n/locales) ; the entry's own text otherwise. */
+export function entryText(entry: ModelEntry, field: "label" | "series" | "title" | "subtitle" | "tagline"): string {
+  return tFor(`catalog.${entry.id}.${field}`, entry[field]);
+}
+
+/** Changes made to the model, in the current language. */
+export function creditChanges(entry: ModelEntry): string {
+  return tFor(`catalog.${entry.id}.changes`, entry.credit.changes);
+}
+
+/** Changes made to the furniture models, in the current language. */
+export function tableChanges(): string {
+  return tFor("catalog.table.changes", tableCredit.changes);
+}

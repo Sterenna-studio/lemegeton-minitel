@@ -1,5 +1,6 @@
 import type { KeyboardEvent } from "react";
-import type { ModelEntry } from "../demo/catalog";
+import { entryText, type ModelEntry } from "../demo/catalog";
+import { t, useLang } from "../i18n";
 import { assetUrl } from "../assets";
 
 
@@ -12,7 +13,7 @@ export function ModelInventory({
   entries,
   selected,
   onSelect,
-  label = "Modele 3D",
+  label,
 }: {
   entries: ModelEntry[];
   selected?: string;
@@ -20,6 +21,7 @@ export function ModelInventory({
   /** Name of the group (the world calls it « Salles »). */
   label?: string;
 }) {
+  useLang();
   function onKeyDown(event: KeyboardEvent) {
     const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
     if (!step) return;
@@ -30,7 +32,7 @@ export function ModelInventory({
     document.getElementById(`model-${next.id}`)?.focus();
   }
   return (
-    <div className="inventory" role="radiogroup" aria-label={label} onKeyDown={onKeyDown}>
+    <div className="inventory" role="radiogroup" aria-label={label ?? t("simple.models")} onKeyDown={onKeyDown}>
       {entries.map((entry, index) => {
         const checked = entry.id === selected;
         return (
@@ -45,7 +47,9 @@ export function ModelInventory({
           >
             <span className="inventory-back" aria-hidden="true" />
             <img src={assetUrl(`inventaire/${entry.id}.png`)} alt="" draggable={false} />
-            <span className="inventory-caption">{entry.label}</span>
+            <span className="inventory-caption" translate="no">
+              {entryText(entry, "label")}
+            </span>
           </button>
         );
       })}
