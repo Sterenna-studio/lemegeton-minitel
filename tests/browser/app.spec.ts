@@ -293,8 +293,8 @@ test("page documentation : fiches, vues et liens", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Documentation des terminaux",
   );
-  for (const title of ["Terminatel 255", "Minitel 1", "Televiseur 1950"])
-    await expect(page.getByRole("heading", { level: 2, name: title })).toBeVisible();
+  for (const title of ["Terminatel 255", "Minitel 1", "Televiseur 1950", "Minitel 1 NFZ 300"])
+    await expect(page.getByRole("heading", { level: 2, name: title, exact: true })).toBeVisible();
   const section = page.locator("#televiseur-1950");
   await section.getByRole("button", { name: "Dos" }).click();
   await expect(section.locator(".viewer > img")).toHaveAttribute(

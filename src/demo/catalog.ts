@@ -61,6 +61,20 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
 };
 
 
+// Interpretation of the Radiotechnique Minitel 1 « 9 NFZ 300/2 » (PATSTEC record
+// 27402, ACONIT) : « un appareil en plastique absolument monobloc de couleur
+// beige ». No 3D model of it can be used (the one found on Cults is for private
+// use, without AI) : the Minitel 1 geometry gets a beige tint, keys untouched.
+const beige = new Color("#d8bf94");
+const nfz300Finish: MaterialFinish = (_mesh, material, role) => {
+  if (!(material instanceof MeshStandardMaterial) || role === "key") return;
+  // The tint multiplies the original maps : light plastic turns beige, the
+  // dark bezel stays dark.
+  material.color.copy(beige);
+  material.roughness = Math.max(material.roughness, 0.6);
+  material.needsUpdate = true;
+};
+
 export const catalog: ModelEntry[] = [
   {
     id: "terminatel-255",
@@ -106,6 +120,19 @@ export const catalog: ModelEntry[] = [
       licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
       changes: "copie adaptee",
     },
+  },
+  {
+    id: "minitel-nfz-300",
+    label: "Minitel NFZ 300",
+    series: "04 / RADIOTECHNIQUE",
+    title: "Minitel 1 NFZ 300",
+    subtitle: "Radiotechnique · monobloc beige, interpretation",
+    tagline: "RADIOTECHNIQUE / 1982",
+    file: assetUrl("models/minitel.glb"),
+    profile: suppliedProfile,
+    finish: nfz300Finish,
+    onTable: true,
+    credit: { ...okotaru, changes: "copie adaptee, teinte beige (interpretation du NFZ 300)" },
   },
 ];
 

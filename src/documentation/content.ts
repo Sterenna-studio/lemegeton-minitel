@@ -93,6 +93,29 @@ export const modelDocs: ModelDoc[] = [
       { label: "Preparation", value: "tools/prepare_television.py : echelle, noms, ecran Minitel_Screen" },
     ],
   },
+  {
+    id: "minitel-nfz-300",
+    title: "Minitel 1 NFZ 300",
+    kicker: "Radiotechnique · monobloc beige",
+    intro: [
+      "Minitel 1 de La Radiotechnique, reference 9 NFZ 300/2, conserve par l'association ACONIT a Grenoble. Sa fiche PATSTEC le presente comme un des tout premiers modeles de Minitel, deja dote d'un clavier AZERTY : le tout premier, a clavier alphabetique, avait ete rejete par les usagers.",
+      "C'est un appareil monobloc en plastique beige, developpe au sein du groupe Philips France : le modem 1200/75 bauds vient de la filiale TRT, le tube et l'assemblage de Radiotechnique. Dans le terminal 3D, il est interprete sur la geometrie du Minitel 1, teintee de beige.",
+    ],
+    facts: [
+      { label: "Reference", value: "Minitel 9 NFZ 300/2 (fiche PATSTEC, ACONIT)" },
+      { label: "Fabricant", value: "La Radiotechnique, groupe Philips France (modem : TRT)" },
+      { label: "Aspect", value: "monobloc en plastique beige, ecran cathodique, clavier AZERTY" },
+      { label: "Touches de fonction", value: "Connexion/Fin, Repetition, Sommaire, Guide, Annulation, Correction, Retour, Suite, Envoi" },
+      { label: "Arriere", value: "prise d'alimentation 220 V et prise telephone" },
+    ],
+    asset: [
+      ...minitelAsset.slice(0, 3),
+      { label: "Finition 3D", value: "teinte beige sur les textures d'origine du Minitel 1 (interpretation)" },
+      minitelAsset[5],
+      minitelAsset[3],
+    ],
+    note: "Aucun modele 3D du NFZ 300 n'est utilise : celui trouve sur Cults est reserve a un usage prive et interdit aux outils d'IA. La forme reste celle du Minitel 1.",
+  },
 ];
 
 /** Mode 3D+ : le monde explorable (docs/MONDE_EXPLORABLE.md). */
@@ -113,6 +136,7 @@ export const worldDoc = {
   rooms: [
     { id: "televiseur-1950", label: "Salon 1950", description: "meuble tele en teck, fauteuils cocktail, tapis a boomerangs, buffet, horloge soleil, lampadaire" },
     { id: "minitel-1", label: "Bureau 1982", description: "faux plafond et neons, stores venitiens, classeur, fauteuil pivotant, calendrier d'octobre 1982" },
+    { id: "minitel-nfz-300", label: "Salon 1982", description: "le Minitel arrive a la maison : papier peint a bandes, moquette, canape de velours, meuble mural et television, telephone a cadran" },
     { id: "terminatel-255", label: "Salle du Terminatel 255", description: "marbre noir, laiton, plaque gravee, cordons autour du terminal" },
   ],
   assets: [
@@ -142,5 +166,6 @@ export const sources = [
   { title: "Techno-Science : Minitel", url: "https://www.techno-science.net/definition/3781.html" },
   { title: "Futura Sciences : le Minitel survivra jusqu'au 30 juin 2012", url: "https://www.futura-sciences.com/tech/actualites/internet-sursis-minitel-survivra-jusquau-30-juin-2012-31555/" },
   { title: "Computer History Museum : Minitel", url: "https://www.computerhistory.org/revolution/the-web/20/379/2117" },
+  { title: "PATSTEC : Minitel 1, Radiotechnique, 9 NFZ 300/2 (ACONIT)", url: "https://www.patstec.fr/ressources/objets/detail?id=27402" },
   { title: "Science Museum Group : Alcatel Minitel, 1983", url: "https://collection.sciencemuseum.org.uk/objects/co447955/alcatel-minitel-communication-terminal-france-1983-personal-computer" },
 ];

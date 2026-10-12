@@ -118,6 +118,22 @@ export const bureauLighting: LightingPreset = {
   },
 };
 
+// Early-1980s family living room : the opal globe overhead (~2,700 K) and the
+// daylight of the window on the right, through net curtains
+// (src/world/three/rooms/Salon1982.tsx). No breathing lamp : electric light.
+export const salon1982Lighting: LightingPreset = {
+  hemisphere: { sky: "#ffe2c0", ground: "#3a2618", intensity: 1.15 },
+  key: { position: [0, 14, 2], color: "#ffd6a0", intensity: 2.3, shadowExtent: 12 },
+  fill: { position: [12, 5, -4], color: "#e8eef2", intensity: 0.85 },
+  environment: {
+    intensity: 0.45,
+    formers: [
+      { form: "rect", intensity: 1.4, color: "#ffd6a0", position: [0, 8, 2], scale: [6, 3, 1], rotationX: Math.PI / 2 },
+      { form: "rect", intensity: 0.7, color: "#e8eef2", position: [6, 3, -3], scale: [4, 4, 1] },
+    ],
+  },
+};
+
 // A warm lamp far behind the terminal, slowly breathing like a filament or a
 // flame. The scene renders on demand : the light asks for frames itself, at a
 // modest rate, and stays still when the user prefers reduced motion or when

@@ -302,3 +302,72 @@ export function plaqueTexture(): CanvasTexture {
     g.fillText("MARBRE NOIR · SÉRIE LIMITÉE", 256, 100);
   });
 }
+
+/** Early-1980s wallpaper : cream ground, brown and ochre bands with rings, 1 m a tile. */
+export function wallpaper1982Texture(): CanvasTexture {
+  const texture = canvasTexture(256, 256, (g) => {
+    g.fillStyle = "#e9dcc2";
+    g.fillRect(0, 0, 256, 256);
+    const bands = ["#8a5a32", "#c98a3e", "#6b4226"];
+    bands.forEach((color, i) => {
+      g.fillStyle = color;
+      g.fillRect(28 + i * 22, 0, 14, 256);
+      g.fillRect(156 + i * 22, 0, 14, 256);
+    });
+    g.strokeStyle = "#a8692f";
+    g.lineWidth = 6;
+    for (const y of [64, 192]) {
+      g.beginPath();
+      g.arc(128, y, 26, 0, tau);
+      g.stroke();
+      g.beginPath();
+      g.arc(128, y, 12, 0, tau);
+      g.stroke();
+    }
+    speckle(g, 256, 256, 900, ["#d8c8a8", "#f2e8d4"], 2, 1982);
+  });
+  return repeating(texture, 1, 1);
+}
+
+/** Brown shag carpet, wall to wall. */
+export function moquetteTexture(): CanvasTexture {
+  const texture = canvasTexture(256, 256, (g) => {
+    g.fillStyle = "#6e4a2c";
+    g.fillRect(0, 0, 256, 256);
+    speckle(g, 256, 256, 12000, ["#5c3c22", "#80583a", "#664226", "#8d6544"], 1.8, 300);
+  });
+  return repeating(texture, 10, 12);
+}
+
+/** Round rug : concentric orange, rust and cream rings. */
+export function roundRugTexture(): CanvasTexture {
+  return canvasTexture(256, 256, (g) => {
+    const rings = ["#e9dcc2", "#c2702e", "#8a3f1f", "#d99a4e", "#6b3a1e", "#e3b073"];
+    rings.forEach((color, i) => {
+      g.fillStyle = color;
+      g.beginPath();
+      g.arc(128, 128, 128 - i * 20, 0, tau);
+      g.fill();
+    });
+    speckle(g, 256, 256, 2500, ["#00000022", "#ffffff22"], 1.5, 7);
+  });
+}
+
+/** Poster of the period : a sunset in bands over the sea. */
+export function sunsetPosterTexture(): CanvasTexture {
+  return canvasTexture(256, 352, (g) => {
+    const colors = ["#2b1d3d", "#5a2a4a", "#9a3b3b", "#d0603a", "#ec9440", "#f5c45c"];
+    colors.forEach((color, i) => {
+      g.fillStyle = color;
+      g.fillRect(0, i * 36, 256, 36);
+    });
+    g.fillStyle = "#f9e08a";
+    g.beginPath();
+    g.arc(128, 216, 54, Math.PI, 0);
+    g.fill();
+    g.fillStyle = "#1f2d4a";
+    g.fillRect(0, 216, 256, 136);
+    g.fillStyle = "#f9e08a";
+    for (let y = 226; y < 330; y += 14) g.fillRect(128 - (330 - y) / 3, y, ((330 - y) / 3) * 2, 3);
+  });
+}

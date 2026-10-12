@@ -34,11 +34,11 @@ test("couloir : budget de la première vue", async ({ page }) => {
 test("couloir : de poste en poste, puis ouvrir une porte", async ({ page }) => {
   const errors = await open(page);
   const entry = await stagePixels(page);
-  await page.getByRole("button", { name: "Porte 1982", exact: true }).click();
+  await page.getByRole("button", { name: "Porte 1982 — Minitel 1", exact: true }).click();
   await expect(page).toHaveURL(/poste=porte-minitel-1/);
   await expect(state(page)).toContainText("en route");
-  await expect(page.getByRole("status")).toHaveText("Arrivé : Porte 1982.", { timeout: 5000 });
-  await expect(page.getByRole("button", { name: "Porte 1982", exact: true })).toHaveAttribute("aria-current", "true");
+  await expect(page.getByRole("status")).toHaveText("Arrivé : Porte 1982 — Minitel 1.", { timeout: 5000 });
+  await expect(page.getByRole("button", { name: "Porte 1982 — Minitel 1", exact: true })).toHaveAttribute("aria-current", "true");
   expect((await stagePixels(page)).hash).not.toBe(entry.hash);
   await page.getByRole("button", { name: "Ouvrir la porte 1982" }).click();
   await expect(state(page)).toContainText("100 %", { timeout: 6000 });

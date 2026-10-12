@@ -33,11 +33,15 @@ function run(state: NavState, events: NavEvent[], options = {}) {
 describe("monde : salles et couloir dérivés du catalogue", () => {
   it("une salle et une porte par terminal, dans l'ordre chronologique", () => {
     for (const entry of catalog) expect(ERAS[entry.id], entry.id).toBeDefined();
-    expect(world.rooms.map((room) => room.id)).toEqual(["televiseur-1950", "minitel-1", "terminatel-255"]);
+    // Same year : the catalogue's order decides (the Minitel 1, then the NFZ 300).
+    expect(world.rooms.map((room) => room.id)).toEqual(["televiseur-1950", "minitel-1", "minitel-nfz-300", "terminatel-255"]);
     // The catalogue's doors first, then the closed ones kept for rooms to come.
     const open = world.corridor.doors.filter((slot) => slot.to.kind === "salle");
-    expect(open.map((slot) => slot.door.year)).toEqual(["1950", "1982", "198?"]);
-    expect(world.corridor.doors.map((slot) => slot.side)).toEqual(["gauche", "droite", "gauche", "droite", "gauche", "droite"]);
+    expect(open.map((slot) => slot.door.year)).toEqual(["1950", "1982", "1982", "198?"]);
+    expect(world.corridor.doors.map((slot) => slot.side)).toEqual(["gauche", "droite", "gauche", "droite", "gauche", "droite", "gauche"]);
+    // Two doors of the same year are told apart by their terminal.
+    const labels = world.corridor.doors.map((slot) => findStation(world, slot.approach)?.label);
+    expect(labels.slice(0, 4)).toEqual(["Porte 1950", "Porte 1982 — Minitel 1", "Porte 1982 — Minitel NFZ 300", "Porte 198?"]);
     const closed = world.corridor.doors.slice(open.length);
     expect(closed).toHaveLength(FUTURE_DOORS);
     for (const slot of closed) expect(slot.to.kind).toBe("fermee");
@@ -62,6 +66,7 @@ describe("monde : salles et couloir dérivés du catalogue", () => {
       "couloir:entree",
       "couloir:porte-televiseur-1950",
       "couloir:porte-minitel-1",
+      "couloir:porte-minitel-nfz-300",
       "couloir:porte-terminatel-255",
       "couloir:porte-futur-1",
       "couloir:porte-futur-2",

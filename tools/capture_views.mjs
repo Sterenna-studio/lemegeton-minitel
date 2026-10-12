@@ -1,6 +1,7 @@
 // Captures, from the 3D app itself, the views of the documentation page and the
 // cut-out miniatures of the inventory (transparent PNG, cropped to the model) :
-// node tools/capture_views.mjs [http://127.0.0.1:5174]
+// node tools/capture_views.mjs [http://127.0.0.1:5174] [terminal,terminal...]
+// (every terminal of the catalogue by default ; name some to capture only them)
 // Needs a running dev or preview server. Uses the installed Edge, like the tests.
 import { chromium } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
@@ -11,7 +12,8 @@ const base = (process.argv[2] ?? "http://127.0.0.1:5174").replace(/\/$/, "");
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "public/documentation/vues");
 const minis = path.join(root, "public/inventaire");
-const models = ["terminatel-255", "minitel-1", "televiseur-1950"];
+const all = ["terminatel-255", "minitel-1", "televiseur-1950", "minitel-nfz-300"];
+const models = process.argv[3] ? process.argv[3].split(",") : all;
 const views = ["trois-quarts", "face", "profil", "dos"];
 
 await mkdir(out, { recursive: true });
