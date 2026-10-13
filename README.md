@@ -26,15 +26,27 @@ Lemegéton (modélisation, rigs, animation) a son propre dépôt, son cœur cré
 
 - **Version simple** (par défaut, `/minitel/`) : un terminal sur sa table, à
   faire tourner, zoomer et inspecter ; l'inventaire pour changer de terminal
-  (Terminatel 255, Minitel 1, téléviseur 1950, Minitel NFZ 300) et de mobilier ; le 3615
+  (Terminatel 255, Minitel 1, téléviseur 1950) et de mobilier ; le 3615
   Lemegéton, les yeux, les effets CRT. Un double-clic sur l'écran fait la mise
-  au point, un second revient.
+  au point, un second revient. Le Minitel NFZ 300 n'apparaît qu'en développement,
+  le temps de corriger son modèle.
+- **3615 GOTO10**, sur l'écran de chaque terminal (touche 4 du sommaire, ou le
+  code `GOTO10` puis Envoi) : l'archive des BBS et du Minitel de
+  [Goto10](https://www.goto10.fr/), avec l'accord de Frédéric Cambus. Écrans
+  Vidéotex d'origine (serveur Pinky, guide Télétel 1992, photos RTE et AFP du
+  Vidéotex photographique), lus par un décodeur Vidéotex
+  (`src/videotex/decoder.ts`), et documents en pages de 40 colonnes. SUITE et
+  RETOUR feuillettent (touches Page suivante et Page précédente du clavier).
 - **Mode 3D+** (bouton de l'en-tête, `/minitel/?mode=3d`) : un couloir hors du
   temps, parcouru sur rails. Une porte temporelle par terminal, dans l'ordre
   chronologique, ouvre sur une salle d'époque (salon 1950, bureau 1982, salon
   familial 1982 du NFZ 300, salle de marbre du Terminatel) ; devant le terminal,
   on retrouve le 3615, les yeux et les réglages. Trois portes fermées attendent
-  les salles à venir. **Mode simple** revient, sur le terminal de la salle quittée.
+  les salles à venir ; au fond, trois **portails** ouvrent d'autres lieux de la
+  mémoire du Minitel dans un nouvel onglet : [minitel.org](https://www.minitel.org/),
+  [l'INA, « Du Minitel à l'internet »](https://larevuedesmedias.ina.fr/du-minitel-linternet)
+  et [la collection Minitel d'ACONIT](https://db.aconit.org/dbaconit/consulter.php?idcollection=9385&db=0).
+  **Mode simple** revient, sur le terminal de la salle quittée.
 
 Chaque poste du monde a son adresse (`&salle=`, `&poste=`) et le bouton Retour
 du navigateur remonte le chemin. Le clavier suffit partout (flèches, `Échap`),
@@ -174,13 +186,18 @@ Minitel physique n'y figurent pas.
 Ailleurs sur le Minitel :
 
 - [Goto10](https://www.goto10.fr/) : archives des BBS et du Minitel francophones
-  (Frédéric Cambus). Une copie locale sert de référence, sans être publiée
-  ([docs/archive_minitel/README.md](docs/archive_minitel/README.md)) ; sa
-  consultation depuis les terminaux du musée est à l'étude.
+  (Frédéric Cambus), consultables depuis les terminaux du musée (3615 GOTO10).
+  Le corpus complet reste local
+  ([docs/archive_minitel/README.md](docs/archive_minitel/README.md)) ; seule une
+  sélection est publiée (`public/goto10/`, `tools/build_goto10.mjs`).
 - [Musée du Minitel](https://www.museeminitel.fr/2019/12/le-musee-du-minitel-a-la-retro-gaming-connexion-rgc2019/) :
   projet de préservation du patrimoine Minitel, ici à la Rétro Gaming Connexion 2019.
 
-Les deux figurent dans les sources de la page Documentation.
+- [minitel.org](https://www.minitel.org/), [l'INA](https://larevuedesmedias.ina.fr/du-minitel-linternet)
+  et [ACONIT](https://db.aconit.org/dbaconit/consulter.php?idcollection=9385&db=0) :
+  les portails du fond du couloir (mode 3D+).
+
+Tous figurent dans les sources de la page Documentation.
 
 ## État
 

@@ -51,6 +51,7 @@ function worldText(): WorldText {
     door: (year) => t("world.station.door", { year }),
     doorOf: (year, terminal) => t("world.station.doorOf", { year, terminal }),
     closedDoor: (n) => t("world.station.closed", { n }),
+    portal: (name) => t("world.station.portal", { name }),
     roomEntry: (terminal) => t("world.station.roomEntry", { terminal }),
     futurePlaque: t("world.plaque.future"),
   };
@@ -204,7 +205,10 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
     (slot: DoorSlot) => {
       const current = latest.current;
       if (current.mode !== "poste") return;
-      if (current.station === slot.approach) dispatch({ type: "PORTE" });
+      if (current.station === slot.approach) {
+        if (slot.to.kind === "externe") window.open(slot.to.href, "_blank", "noopener");
+        else if (slot.to.kind === "salle") dispatch({ type: "PORTE" });
+      }
       else if (areNeighbours(world, current.station, slot.approach)) dispatch({ type: "ALLER", to: slot.approach });
     },
     [world],
@@ -253,6 +257,9 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
   atTerminalRef.current = atTerminal;
   // In front of a door kept for a room to come.
   const closedDoor = !!reached && world.corridor.doors.some((slot) => slot.approach === reached && slot.to.kind === "fermee");
+  // In front of a portal : a link to its site.
+  const portalSlot = reached ? world.corridor.doors.find((slot) => slot.approach === reached && slot.to.kind === "externe") : undefined;
+  const portal = portalSlot?.to.kind === "externe" ? { name: portalSlot.door.plaque, href: portalSlot.to.href } : undefined;
   const closedHint = t("world.closedHint");
   const announce = station
     ? (closedDoor ? `${closedHint} ` : "") +
@@ -404,6 +411,11 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             {link.kind === "aller" ? <Footprints size={16} /> : <DoorOpen size={16} />} {labelOf(world, link)}
           </button>
         ))}
+        {portal && !moving && (
+          <a className="world-portal" href={portal.href} target="_blank" rel="noopener noreferrer">
+            <DoorOpen size={16} /> {t("world.link.portal", { name: portal.name })}
+          </a>
+        )}
         {moving && <span className="world-moving">{t("world.moving")}</span>}
         {closedDoor && !moving && <span className="world-moving">{closedHint}</span>}
       </div>

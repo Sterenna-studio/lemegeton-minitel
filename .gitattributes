@@ -1,2 +1,5 @@
 # Scripts shell : fins de ligne LF, sinon bash echoue sur les retours chariot (Windows).
 *.sh text eol=lf
+
+# Ecrans Videotex (3615 GOTO10) : flux binaires, CR et LF y sont des commandes.
+*.vdt binary

@@ -56,6 +56,15 @@ const CORRIDOR_FOV = 60;
 export const FUTURE_DOORS = 3;
 /** Plate of a door that does not open yet. */
 export const FUTURE_PLAQUE = "Prochainement";
+/**
+ * Portals at the end of the corridor, after the closed doors : each opens
+ * another place of the Minitel's memory, in a new tab (request of 14 October 2026).
+ */
+export const PORTALS: { id: string; name: string; href: string }[] = [
+  { id: "minitel-org", name: "minitel.org", href: "https://www.minitel.org/" },
+  { id: "ina", name: "INA", href: "https://larevuedesmedias.ina.fr/du-minitel-linternet" },
+  { id: "aconit", name: "ACONIT", href: "https://db.aconit.org/dbaconit/consulter.php?idcollection=9385&db=0" },
+];
 
 /**
  * Words of the world (station labels, plates) : French by default, the
@@ -67,6 +76,7 @@ export interface WorldText {
   door: (year: string) => string;
   doorOf: (year: string, terminal: string) => string;
   closedDoor: (n: number) => string;
+  portal: (name: string) => string;
   roomEntry: (terminal: string) => string;
   futurePlaque: string;
 }
@@ -77,6 +87,7 @@ export const FRENCH_TEXT: WorldText = {
   door: (year) => `Porte ${year}`,
   doorOf: (year, terminal) => `Porte ${year} — ${terminal}`,
   closedDoor: (n) => `Porte fermée ${n}`,
+  portal: (name) => `Portail — ${name}`,
   roomEntry: (terminal) => `Entrée — ${terminal}`,
   futurePlaque: FUTURE_PLAQUE,
 };
@@ -189,7 +200,30 @@ function corridorOf(entries: TerminalEntry[], text: WorldText): Corridor {
       rotationY: side === "gauche" ? Math.PI / 2 : -Math.PI / 2,
     });
   }
-  const end = -DOOR_SPACING * (ordered.length + FUTURE_DOORS + 1);
+  // Portals to other places, after the closed doors.
+  PORTALS.forEach((portal, n) => {
+    const index = ordered.length + FUTURE_DOORS + n;
+    const side = index % 2 === 0 ? "gauche" : "droite";
+    const z = -DOOR_SPACING * (index + 1);
+    const x = side === "gauche" ? -DOOR_X : DOOR_X;
+    const approach = `couloir:portail-${portal.id}`;
+    stations.push({
+      id: approach,
+      label: text.portal(portal.name),
+      position: [side === "gauche" ? FACING_X : -FACING_X, EYE, z],
+      lookAt: [x, DOOR_AIM, z],
+      fov: CORRIDOR_FOV,
+    });
+    doors.push({
+      door: { id: `portail-${portal.id}`, year: CORRIDOR_YEAR, glow: "#8fd3d0", plaque: portal.name },
+      to: { kind: "externe", href: portal.href },
+      approach,
+      side,
+      position: [x, 0, z],
+      rotationY: side === "gauche" ? Math.PI / 2 : -Math.PI / 2,
+    });
+  });
+  const end = -DOOR_SPACING * (ordered.length + FUTURE_DOORS + PORTALS.length + 1);
   stations.push({ id: "couloir:fond", label: text.corridorEnd, position: [0, EYE, end + 18], lookAt: [0, DOOR_AIM, end], fov: CORRIDOR_FOV });
   return {
     year: CORRIDOR_YEAR,

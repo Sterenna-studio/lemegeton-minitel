@@ -9,6 +9,20 @@ export interface Cell {
   mosaic?: number;
   /** Videotex disjoint mosaic : sextants drawn apart. */
   separated?: boolean;
+  underline?: boolean;
+  /** Double width / height : the glyph spans w x h cells from this one. */
+  w?: 2;
+  h?: 2;
+  /** Cell under a double-size glyph : background only. */
+  covered?: boolean;
+}
+/** A picture over the grid (photographic Videotex), in columns and rows. */
+export interface FrameImage {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  image: CanvasImageSource;
 }
 export interface TerminalAction {
   key: string;
@@ -21,6 +35,9 @@ export interface TerminalFrame {
   actions: TerminalAction[];
   cursor?: { x: number; y: number };
   status: string;
+  /** Service shown by the console ("3615 LEMEGETON" when absent). */
+  service?: string;
+  images?: FrameImage[];
 }
 export function createScreen(
   title: string,
@@ -56,7 +73,7 @@ export function plainText(screen: TerminalFrame): string {
   return Array.from({ length: ROWS }, (_, y) =>
     screen.cells
       .slice(y * COLS, (y + 1) * COLS)
-      .map((cell) => (cell.mosaic !== undefined ? "#" : cell.char))
+      .map((cell) => (cell.mosaic !== undefined ? "#" : cell.covered ? " " : cell.char))
       .join("")
       .trimEnd(),
   )

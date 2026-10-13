@@ -23,8 +23,9 @@ export function linksFrom(world: World, stationId: string): Link[] {
   if (index >= 0) {
     const links: Link[] = [];
     const door = world.corridor.doors.find((slot) => slot.approach === stationId);
-    // A closed door (a room to come) has no « open » move.
-    if (door && door.to.kind !== "fermee") links.push({ kind: "porte", door });
+    // Only the doors of rooms open here : a closed door has no move, and a
+    // portal is a link to another site (WorldApp).
+    if (door && door.to.kind === "salle") links.push({ kind: "porte", door });
     if (index + 1 < corridor.length) links.push({ kind: "aller", to: corridor[index + 1] });
     if (index > 0) links.push({ kind: "aller", to: corridor[index - 1] });
     return links;

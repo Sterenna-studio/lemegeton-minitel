@@ -75,7 +75,7 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
   // Re-render in the new language when the visitor switches it.
   useLang();
   const experience = useTerminalExperience();
-  const { activeFrame, sendKey, goTo } = experience;
+  const { activeFrame, sendKey, submit, goTo } = experience;
   const [webgl] = useState(supportsWebGL);
   const [error, setError] = useState("");
   const [panels, setPanels] = useState<ConsolePanels>(closedPanels);
@@ -300,6 +300,7 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         panels={panels}
         onToggle={(name) => setPanels((current) => togglePanel(current, name))}
         sendKey={sendKey}
+        sendCommand={submit}
         goTo={goTo}
         extraTools={
           import.meta.env.DEV && (
