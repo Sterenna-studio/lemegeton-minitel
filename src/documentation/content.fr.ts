@@ -81,10 +81,10 @@ export const contentFr: DocContent = {
     {
       id: "minitel-nfz-300",
       title: "Minitel 1 NFZ 300",
-      kicker: "Radiotechnique · monobloc beige",
+      kicker: "Radiotechnique · scan Velta-3D",
       intro: [
         "Minitel 1 de La Radiotechnique, reference 9 NFZ 300/2, conserve par l'association ACONIT a Grenoble. Sa fiche PATSTEC le presente comme un des tout premiers modeles de Minitel, deja dote d'un clavier AZERTY : le tout premier, a clavier alphabetique, avait ete rejete par les usagers.",
-        "C'est un appareil monobloc en plastique beige, developpe au sein du groupe Philips France : le modem 1200/75 bauds vient de la filiale TRT, le tube et l'assemblage de Radiotechnique. Dans le terminal 3D, il est interprete sur la geometrie du Minitel 1, en plastique beige.",
+        "C'est un appareil monobloc en plastique beige, developpe au sein du groupe Philips France : le modem 1200/75 bauds vient de la filiale TRT, le tube et l'assemblage de Radiotechnique. Le terminal 3D vient d'un scan de ses deux coques par Velta-3D, place sous licence CC0.",
       ],
       facts: [
         { label: "Reference", value: "Minitel 9 NFZ 300/2 (fiche PATSTEC, ACONIT)" },
@@ -94,12 +94,14 @@ export const contentFr: DocContent = {
         { label: "Arriere", value: "prise d'alimentation 220 V et prise telephone" },
       ],
       asset: [
-        ...minitelAsset.slice(0, 3),
-        { label: "Finition 3D", value: "plastique beige uni, relief et rugosite d'origine du Minitel 1 (interpretation)" },
+        { label: "Fichier", value: "models/minitel-nfz-300.glb · 0,34 Mo (meshopt)" },
+        { label: "Geometrie", value: "54 meshes · 50 582 triangles" },
+        { label: "Textures", value: "aucune : plastique beige, touches et ecran en matieres unies" },
+        { label: "Modele source", value: "Minitel 1 NFZ 300 La Radiotechnique, Velta-3D (publie par Arcade Makers sur Cults) · CC0" },
+        { label: "Preparation", value: "tools/prepare_nfz300.py : coques redressees et assemblees, maillage allege, capot arriere referme, ecran et 48 touches ajoutes" },
         minitelAsset[5],
-        minitelAsset[3],
       ],
-      note: "Aucun modele 3D du NFZ 300 n'est utilise : celui trouve sur Cults est reserve a un usage prive et interdit aux outils d'IA. La forme reste celle du Minitel 1.",
+      note: "Le scan ne contient que les deux coques en plastique, sans ecran, touches ni couleurs : l'ecran, la plaque et les touches du clavier, et le dessus arriere du capot du tube sont reconstitues. Velta-3D a place le modele sous licence CC0 le 13 octobre 2026, a notre demande : merci a Velta-3D.",
     },
   ],
   worldDoc: {

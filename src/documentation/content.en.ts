@@ -82,10 +82,10 @@ export const contentEn: DocContent = {
     {
       id: "minitel-nfz-300",
       title: "Minitel 1 NFZ 300",
-      kicker: "Radiotechnique · beige one-piece",
+      kicker: "Radiotechnique · Velta-3D scan",
       intro: [
         "A Minitel 1 by La Radiotechnique, reference 9 NFZ 300/2, kept by the ACONIT association in Grenoble. Its PATSTEC record presents it as one of the very first Minitel models, already fitted with an AZERTY keyboard: the very first one, with an alphabetical keyboard, had been rejected by its users.",
-        "It is a one-piece unit in beige plastic, developed within the Philips France group: the 1200/75 baud modem comes from the TRT subsidiary, the tube and assembly from Radiotechnique. In the 3D terminal, it is interpreted on the Minitel 1 geometry, in beige plastic.",
+        "It is a one-piece unit in beige plastic, developed within the Philips France group: the 1200/75 baud modem comes from the TRT subsidiary, the tube and assembly from Radiotechnique. The 3D terminal comes from a scan of its two shells by Velta-3D, released under the CC0 licence.",
       ],
       facts: [
         { label: "Reference", value: "Minitel 9 NFZ 300/2 (PATSTEC record, ACONIT)" },
@@ -95,12 +95,14 @@ export const contentEn: DocContent = {
         { label: "Back", value: "220 V power socket and telephone socket" },
       ],
       asset: [
-        ...minitelAsset.slice(0, 3),
-        { label: "3D finish", value: "plain beige plastic, original Minitel 1 relief and roughness (interpretation)" },
+        { label: "File", value: "models/minitel-nfz-300.glb · 0.34 MB (meshopt)" },
+        { label: "Geometry", value: "54 meshes · 50,582 triangles" },
+        { label: "Textures", value: "none: beige plastic, keys and screen in plain materials" },
+        { label: "Source model", value: "Minitel 1 NFZ 300 La Radiotechnique, Velta-3D (published by Arcade Makers on Cults) · CC0" },
+        { label: "Preparation", value: "tools/prepare_nfz300.py: shells straightened and assembled, mesh lightened, rear cover closed, screen and 48 keys added" },
         minitelAsset[5],
-        minitelAsset[3],
       ],
-      note: "No 3D model of the NFZ 300 is used: the one found on Cults is for private use only and forbidden to AI tools. The shape remains the Minitel 1's.",
+      note: "The scan only holds the two plastic shells, with no screen, keys or colours: the screen, the keyboard plate and keys, and the rear top of the tube housing are reconstructed. Velta-3D released the model under CC0 on 13 October 2026, at our request: many thanks to Velta-3D.",
     },
   ],
   worldDoc: {

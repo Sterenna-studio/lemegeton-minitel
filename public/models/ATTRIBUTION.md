@@ -30,6 +30,23 @@ distributing the derived model.
 
 ---
 
+Minitel 1 NFZ 300 La Radiotechnique by Velta-3D, published by Arcade Makers on Cults.
+Source: https://cults3d.com/en/3d-model/art/minitel-1-nfz-300-la-radiotechnique
+License: Creative Commons CC0 1.0 Universal (public domain dedication), since
+13 October 2026, at the museum's request. Credit is not required by CC0 but is
+given gladly: thank you, Velta-3D.
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
+
+Derived web asset: minitel-nfz-300.glb, made by tools/prepare_nfz300.py from the
+two Artec scans (0_S_Fusion.obj, casing; 0_SFusion.obj, keyboard). Changes:
+casing straightened and turned upright, keyboard aligned and laid open in front,
+both meshes decimated to 45 %, rear top of the tube housing closed (convex hull
+faces over the open part), screen plane, dark tube backing, keyboard plate and
+48 keys added, plain materials, scaled to the museum tables.
+Web compression (tools/optimize_glb.mjs): geometry compressed with meshopt.
+
+---
+
 Wood Drawer & Tables Set by brandon_grey (https://sketchfab.com/brandondmc10).
 Source: https://sketchfab.com/3d-models/wood-drawer-tables-set-958db224ef514b2eabd69ac0a4e59ca0
 License: Creative Commons Attribution 4.0 International.

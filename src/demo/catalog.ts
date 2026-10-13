@@ -2,7 +2,7 @@ import { tFor } from "../i18n";
 import { Color, MeshStandardMaterial } from "three";
 import type { MaterialFinish } from "../minitel/MinitelModel";
 import type { ModelProfile } from "../minitel/types";
-import { suppliedProfile, televisionProfile } from "../minitel/profiles";
+import { nfz300Profile, suppliedProfile, televisionProfile } from "../minitel/profiles";
 import { marbleTexture } from "./marble";
 import { assetUrl } from "../assets";
 
@@ -62,23 +62,6 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
 };
 
 
-// Interpretation of the Radiotechnique Minitel 1 « 9 NFZ 300/2 » (PATSTEC record
-// 27402, ACONIT) : « un appareil en plastique absolument monobloc de couleur
-// beige ». No 3D model of it can be used (the one found on Cults is for private
-// use, without AI) : the Minitel 1 geometry gets a beige plastic, keys untouched.
-const beige = new Color("#d6bf95");
-const nfz300Finish: MaterialFinish = (_mesh, material, role) => {
-  if (!(material instanceof MeshStandardMaterial) || role === "key") return;
-  // A tint over the original colour map read as the grey, mottled Minitel 1
-  // (seen in its room, 13 October 2026) : the colour map goes, the plastic is
-  // beige and one-piece ; the relief and roughness maps keep the details.
-  material.map = null;
-  material.color.copy(beige);
-  material.roughness = 0.55;
-  material.metalness = 0;
-  material.needsUpdate = true;
-};
-
 export const catalog: ModelEntry[] = [
   {
     id: "terminatel-255",
@@ -130,13 +113,21 @@ export const catalog: ModelEntry[] = [
     label: "Minitel NFZ 300",
     series: "04 / RADIOTECHNIQUE",
     title: "Minitel 1 NFZ 300",
-    subtitle: "Radiotechnique · monobloc beige, interpretation",
+    subtitle: "Radiotechnique · scan Velta-3D",
     tagline: "RADIOTECHNIQUE / 1982",
-    file: assetUrl("models/minitel.glb"),
-    profile: suppliedProfile,
-    finish: nfz300Finish,
+    file: assetUrl("models/minitel-nfz-300.glb"),
+    profile: nfz300Profile,
     onTable: true,
-    credit: { ...okotaru, changes: "copie adaptee, teinte beige (interpretation du NFZ 300)" },
+    // Licence CC0 since 13 October 2026, as reported by the user (Cults page
+    // behind a Cloudflare check, not read by the agent).
+    credit: {
+      title: "Minitel 1 NFZ 300 La Radiotechnique",
+      author: "Velta-3D (publie par Arcade Makers)",
+      source: "https://cults3d.com/en/3d-model/art/minitel-1-nfz-300-la-radiotechnique",
+      license: "CC0 1.0",
+      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
+      changes: "boitier et clavier assembles, maillage allege, capot arriere referme, ecran et touches ajoutes",
+    },
   },
 ];
 
