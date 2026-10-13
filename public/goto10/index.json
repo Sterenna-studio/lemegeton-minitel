@@ -1,0 +1,759 @@
+{
+ "source": "https://www.goto10.fr/",
+ "author": "Frederic Cambus",
+ "retrieved": "2026-10-13",
+ "screens": [
+  {
+   "id": "pinky-accueil",
+   "title": "Pinky : accueil",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Accueil Pinky.vdt",
+   "bytes": 813
+  },
+  {
+   "id": "pinky-sommaire",
+   "title": "Pinky : sommaire",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Sommaire Pinky.vdt",
+   "bytes": 910
+  },
+  {
+   "id": "pinky-god",
+   "title": "Pinky : God",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/God.vdt",
+   "bytes": 2259
+  },
+  {
+   "id": "pinky-forum-minitel",
+   "title": "Pinky : forum Minitel",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Minitel.vdt",
+   "bytes": 422912
+  },
+  {
+   "id": "pinky-forum-general",
+   "title": "Pinky : forum general",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum General.vdt",
+   "bytes": 586752
+  },
+  {
+   "id": "pinky-forum-atari",
+   "title": "Pinky : forum Atari ST",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Atari ST.vdt",
+   "bytes": 508800
+  },
+  {
+   "id": "pinky-forum-oric",
+   "title": "Pinky : forum Oric-1 Atmos",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Oric-1 Atmos.vdt",
+   "bytes": 102272
+  },
+  {
+   "id": "pinky-forum-telestrat",
+   "title": "Pinky : forum Telestrat",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Telestrat.vdt",
+   "bytes": 154240
+  },
+  {
+   "id": "pinky-forum-musique",
+   "title": "Pinky : forum musique",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Musique.vdt",
+   "bytes": 75264
+  },
+  {
+   "id": "pinky-forum-medias",
+   "title": "Pinky : forum medias",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Medias.vdt",
+   "bytes": 85504
+  },
+  {
+   "id": "pinky-forum-litterature",
+   "title": "Pinky : forum litterature",
+   "credit": "Pinky",
+   "source": "minitel/rtcs/pinky/vdt/Forum Litterature.vdt",
+   "bytes": 60032
+  },
+  {
+   "id": "ellis",
+   "title": "Ellis",
+   "credit": "Ellis",
+   "source": "minitel/rtcs/ellis/ellis.vdt",
+   "bytes": 1402
+  },
+  {
+   "id": "teletel-guide",
+   "title": "Teletel : guide des services",
+   "credit": "France Telecom",
+   "source": "minitel/videotex/ecrans/teletel2.vdt",
+   "bytes": 874
+  },
+  {
+   "id": "teletel-3",
+   "title": "Teletel : page 3",
+   "credit": "France Telecom",
+   "source": "minitel/videotex/ecrans/teletel3.vdt",
+   "bytes": 914
+  },
+  {
+   "id": "rtel",
+   "title": "RTEL",
+   "credit": "",
+   "source": "minitel/videotex/ecrans/rtel.vdt",
+   "bytes": 1115
+  },
+  {
+   "id": "stmag",
+   "title": "ST Mag",
+   "credit": "",
+   "source": "minitel/videotex/ecrans/stmag.vdt",
+   "bytes": 873
+  },
+  {
+   "id": "mgs",
+   "title": "MGS",
+   "credit": "",
+   "source": "minitel/videotex/ecrans/mgs.vdt",
+   "bytes": 925
+  },
+  {
+   "id": "ngs",
+   "title": "NGS",
+   "credit": "",
+   "source": "minitel/videotex/ecrans/ngs.vdt",
+   "bytes": 1626
+  },
+  {
+   "id": "xfile",
+   "title": "X-File",
+   "credit": "",
+   "source": "minitel/videotex/ecrans/xfile.vdt",
+   "bytes": 9001
+  },
+  {
+   "id": "afp-photo",
+   "title": "AFP : photos",
+   "credit": "AFP",
+   "source": "minitel/videotex/ecrans/afpphoto.vdt",
+   "bytes": 13856
+  },
+  {
+   "id": "afp-photo-3",
+   "title": "AFP : photos (suite)",
+   "credit": "AFP",
+   "source": "minitel/videotex/ecrans/afpphot3.vdt",
+   "bytes": 10080
+  },
+  {
+   "id": "rte-eiffel",
+   "title": "RTE : tour Eiffel",
+   "credit": "RTE, Ressources Telematiques Europeennes",
+   "source": "minitel/videotex/ecrans/rte_eiff.vdt",
+   "bytes": 8162
+  },
+  {
+   "id": "rte-louvre",
+   "title": "RTE : Louvre",
+   "credit": "RTE, Ressources Telematiques Europeennes",
+   "source": "minitel/videotex/ecrans/rte_louv.vdt",
+   "bytes": 8946
+  },
+  {
+   "id": "rte-cana",
+   "title": "RTE : canape convertible",
+   "credit": "RTE, Ressources Telematiques Europeennes",
+   "source": "minitel/videotex/ecrans/rte_cana.vdt",
+   "bytes": 10132
+  },
+  {
+   "id": "rte-van2",
+   "title": "RTE : Van Gogh",
+   "credit": "RTE, Ressources Telematiques Europeennes",
+   "source": "minitel/videotex/ecrans/rte_van2.vdt",
+   "bytes": 94764
+  },
+  {
+   "id": "rte-drcs",
+   "title": "RTE : caracteres DRCS",
+   "credit": "RTE, Ressources Telematiques Europeennes",
+   "source": "minitel/videotex/ecrans/rte_drcs.vdt",
+   "bytes": 43383
+  },
+  {
+   "id": "flashcode",
+   "title": "Flashcode",
+   "credit": "",
+   "source": "minitel/videotex/flashcode/FlashCode.vdt",
+   "bytes": 54
+  },
+  {
+   "id": "qrcode",
+   "title": "QR code",
+   "credit": "",
+   "source": "minitel/videotex/flashcode/QRCodeV2a.vdt",
+   "bytes": 193
+  }
+ ],
+ "sections": [
+  {
+   "id": "presse",
+   "title": "Articles et annuaires",
+   "docs": [
+    {
+     "id": "article-1998",
+     "title": "Le Minitel ou l'archaisme francais (1998)",
+     "pages": 4
+    },
+    {
+     "id": "serveurs-gratuits",
+     "title": "Liste des serveurs Minitel gratuits",
+     "pages": 8
+    }
+   ]
+  },
+  {
+   "id": "services",
+   "title": "Annuaire des services",
+   "docs": [
+    {
+     "id": "services-astro",
+     "title": "Jeux - Astrologie - Messageries",
+     "pages": 3
+    },
+    {
+     "id": "services-automoto",
+     "title": "Auto - moto",
+     "pages": 2
+    },
+    {
+     "id": "services-conso",
+     "title": "Consommation : achat, conseils",
+     "pages": 4
+    },
+    {
+     "id": "services-culture",
+     "title": "Culture",
+     "pages": 4
+    },
+    {
+     "id": "services-docu",
+     "title": "Documentation - médias - actualités",
+     "pages": 6
+    },
+    {
+     "id": "services-emploi",
+     "title": "Emploi",
+     "pages": 3
+    },
+    {
+     "id": "services-europe",
+     "title": "Europe",
+     "pages": 3
+    },
+    {
+     "id": "services-finance",
+     "title": "Finance - Bourse",
+     "pages": 7
+    },
+    {
+     "id": "services-fiscal",
+     "title": "Fiscalité - droit - administation",
+     "pages": 3
+    },
+    {
+     "id": "services-format",
+     "title": "Formation",
+     "pages": 3
+    },
+    {
+     "id": "services-immo",
+     "title": "Immobilier",
+     "pages": 4
+    },
+    {
+     "id": "services-loisirs",
+     "title": "Loisirs",
+     "pages": 5
+    },
+    {
+     "id": "services-sante",
+     "title": "Santé",
+     "pages": 4
+    },
+    {
+     "id": "services-sports",
+     "title": "Sports",
+     "pages": 10
+    },
+    {
+     "id": "services-telecom",
+     "title": "Télécommunications",
+     "pages": 2
+    },
+    {
+     "id": "services-tourisme",
+     "title": "Tourisme",
+     "pages": 6
+    },
+    {
+     "id": "services-transpor",
+     "title": "Transports",
+     "pages": 4
+    },
+    {
+     "id": "services-vieprat",
+     "title": "Vie Pratique - Société",
+     "pages": 8
+    },
+    {
+     "id": "services-pro-agri",
+     "title": "Agriculture",
+     "pages": 2
+    },
+    {
+     "id": "services-pro-consopro",
+     "title": "Consommation : achat, conseils",
+     "pages": 4
+    },
+    {
+     "id": "services-pro-docupro",
+     "title": "Documentation - médias : France,",
+     "pages": 7
+    },
+    {
+     "id": "services-pro-economie",
+     "title": "Economie - politique",
+     "pages": 3
+    },
+    {
+     "id": "services-pro-emploi",
+     "title": "Emploi",
+     "pages": 3
+    },
+    {
+     "id": "services-pro-europro",
+     "title": "Europe",
+     "pages": 3
+    },
+    {
+     "id": "services-pro-finanpro",
+     "title": "Finance - Bourse",
+     "pages": 7
+    },
+    {
+     "id": "services-pro-gestion",
+     "title": "Gestion - juridique : fiscalité,",
+     "pages": 7
+    },
+    {
+     "id": "services-pro-industrie",
+     "title": "Industrie - technologie",
+     "pages": 9
+    },
+    {
+     "id": "services-pro-informat",
+     "title": "Informatique",
+     "pages": 7
+    },
+    {
+     "id": "services-pro-marketin",
+     "title": "Marketing - commercial",
+     "pages": 7
+    },
+    {
+     "id": "services-pro-sgfret",
+     "title": "Services Généraux : Fret - transport",
+     "pages": 3
+    },
+    {
+     "id": "services-pro-sgimmo",
+     "title": "Service généraux : immobilier",
+     "pages": 4
+    },
+    {
+     "id": "services-pro-sgtrad",
+     "title": "Services Généraux : Traduction",
+     "pages": 1
+    },
+    {
+     "id": "services-pro-sgvoyage",
+     "title": "Service généraux : voyage d'affaires",
+     "pages": 5
+    },
+    {
+     "id": "services-pro-telecom",
+     "title": "Télécommunications",
+     "pages": 2
+    }
+   ]
+  },
+  {
+   "id": "gigantex",
+   "title": "Gigantex, journal des RTC",
+   "docs": [
+    {
+     "id": "gigantex-g0101",
+     "title": "INTERVIEW D'EINSTEL SYSOP D'EINSTEL",
+     "pages": 9
+    },
+    {
+     "id": "gigantex-g0201",
+     "title": "SECTEL, un serveur un peu particulier",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0301",
+     "title": "Auto-interview issu du magazine BANZAI",
+     "pages": 17
+    },
+    {
+     "id": "gigantex-g0302",
+     "title": "Pacush Blues, pourquoi ce nom insolite",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0303",
+     "title": "Des news du Téléphone : la ZLE",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0401",
+     "title": "JEU : INITIATION AU BLOOD BOWL",
+     "pages": 6
+    },
+    {
+     "id": "gigantex-g0402",
+     "title": "Campus RTC, le magazine des nouvelles",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0403",
+     "title": "Normes fixées par le CCITT",
+     "pages": 3
+    },
+    {
+     "id": "gigantex-g0404",
+     "title": "La Crise Des RTC vu par SPY B :",
+     "pages": 5
+    },
+    {
+     "id": "gigantex-g0405",
+     "title": "BarJoTeL c'est le serveur et le",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0406",
+     "title": "Un serveur RTC ? Keskeçèca ?!",
+     "pages": 19
+    },
+    {
+     "id": "gigantex-g0407",
+     "title": "POUR QUE MIDI SONNE...",
+     "pages": 21
+    },
+    {
+     "id": "gigantex-g0408",
+     "title": "POURQUOI VOULOIR ETRE SYSOP ?",
+     "pages": 5
+    },
+    {
+     "id": "gigantex-g0409",
+     "title": "UN SALON DU RTC ???",
+     "pages": 3
+    },
+    {
+     "id": "gigantex-g0410",
+     "title": "RTC & RADIO : Des points communs...",
+     "pages": 6
+    },
+    {
+     "id": "gigantex-g0411",
+     "title": "RADIO & RTC L'EXPERIENCE",
+     "pages": 3
+    },
+    {
+     "id": "gigantex-g0412",
+     "title": "Un Virus INDETECTABLE",
+     "pages": 9
+    },
+    {
+     "id": "gigantex-g0501",
+     "title": "Alternatif mon serveur",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0502",
+     "title": "Le Cri du BarJoTrOn (2 ème époque)",
+     "pages": 20
+    },
+    {
+     "id": "gigantex-g0503",
+     "title": "RTC, La crise.",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0504",
+     "title": "CLOP un rtc dans les plaines du",
+     "pages": 5
+    },
+    {
+     "id": "gigantex-g0505",
+     "title": "La cédule et le cénobite (par",
+     "pages": 3
+    },
+    {
+     "id": "gigantex-g0506",
+     "title": "LES SYSOPS",
+     "pages": 7
+    },
+    {
+     "id": "gigantex-g0507",
+     "title": "- INTER RTC, Hi-tech et Mentalité -",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0508",
+     "title": "INTERVIEW DE PUMP UP' POUR GIGANTEX N°5.",
+     "pages": 17
+    },
+    {
+     "id": "gigantex-g0509",
+     "title": "Ce qui va et s'envole...",
+     "pages": 1
+    },
+    {
+     "id": "gigantex-g0510",
+     "title": "MöngôlO's répondeur: parlez après le",
+     "pages": 11
+    },
+    {
+     "id": "gigantex-g0511",
+     "title": "Voici un petit complément sur WinVir",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0601",
+     "title": "Une maison de campagne achetée à",
+     "pages": 31
+    },
+    {
+     "id": "gigantex-g0602",
+     "title": "___________________ Le Cri du BarJoTron",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0603",
+     "title": "To get the lastest ELECTRON BBS -",
+     "pages": 13
+    },
+    {
+     "id": "gigantex-g0604",
+     "title": "............. L'ACTE GRATUIT",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0605",
+     "title": "Le Minitel Rose",
+     "pages": 10
+    },
+    {
+     "id": "gigantex-g0606",
+     "title": "C'est pour un soir je crois",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0607",
+     "title": "Le Pourquoi Pas ?",
+     "pages": 3
+    },
+    {
+     "id": "gigantex-g0608",
+     "title": "- Le point sur la Realité Virtuelle -",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0701",
+     "title": "La Ville",
+     "pages": 6
+    },
+    {
+     "id": "gigantex-g0702",
+     "title": "Monsieur Dupetit est un con:",
+     "pages": 5
+    },
+    {
+     "id": "gigantex-g0703",
+     "title": "Droit de réponse a propos de l'article",
+     "pages": 4
+    },
+    {
+     "id": "gigantex-g0704",
+     "title": "RTC ou PAS RTC ?",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0801",
+     "title": "ZZ_COM 1.0 02/01/1980 - 01:14:10",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0802",
+     "title": "Comment sortir de la crise:",
+     "pages": 10
+    },
+    {
+     "id": "gigantex-g0803",
+     "title": "ISUA, Mes remarques, ma vie, mes",
+     "pages": 9
+    },
+    {
+     "id": "gigantex-g0804",
+     "title": "Gigantex Magazine No 8 Fr",
+     "pages": 1
+    },
+    {
+     "id": "gigantex-g0805",
+     "title": "- IL N'Y A PAS DE MOTS... -",
+     "pages": 2
+    },
+    {
+     "id": "gigantex-g0806",
+     "title": "Le cri du BarJoTron",
+     "pages": 16
+    },
+    {
+     "id": "gigantex-g0807",
+     "title": "Salut",
+     "pages": 13
+    },
+    {
+     "id": "gigantex-g0901",
+     "title": "Le Cri du BarJoTron (2 ème époque)",
+     "pages": 10
+    },
+    {
+     "id": "gigantex-g0902",
+     "title": "To get the lastest ELECTRON BBS -",
+     "pages": 12
+    },
+    {
+     "id": "gigantex-g0903",
+     "title": "Annuaire des Fanzines de France",
+     "pages": 14
+    },
+    {
+     "id": "gigantex-g0904",
+     "title": "Gigantex Magazine No 9 Fr",
+     "pages": 1
+    },
+    {
+     "id": "gigantex-g0905",
+     "title": "LA RUBRIQUE FRAPARIENNE",
+     "pages": 10
+    },
+    {
+     "id": "gigantex-g0906",
+     "title": "Réponse à l'article de SPY B sur",
+     "pages": 4
+    }
+   ]
+  },
+  {
+   "id": "technique",
+   "title": "La norme Videotex",
+   "docs": [
+    {
+     "id": "videotex-sommaire",
+     "title": "Aide Videotex : sommaire",
+     "pages": 6
+    },
+    {
+     "id": "videotex-vdtx01-0",
+     "title": "Les codes de controle (< 32)",
+     "pages": 4
+    },
+    {
+     "id": "videotex-vdtx02-0",
+     "title": "Les codes US (DRCS, STUTEL, STUCAM)",
+     "pages": 3
+    },
+    {
+     "id": "videotex-vdtx03-0",
+     "title": "Les separateurs",
+     "pages": 5
+    },
+    {
+     "id": "videotex-vdtx04-0",
+     "title": "Les codes ISO 2022 (1)",
+     "pages": 5
+    },
+    {
+     "id": "videotex-vdtx04-1",
+     "title": "Les codes ISO 2022 (2)",
+     "pages": 3
+    },
+    {
+     "id": "videotex-vdtx05-0",
+     "title": "Les codes escape",
+     "pages": 6
+    },
+    {
+     "id": "videotex-vdtx06-0",
+     "title": "Les codes ANSI ou ISO 6429",
+     "pages": 4
+    },
+    {
+     "id": "videotex-vdtx07-0",
+     "title": "Les autres codes du 80 colonnes",
+     "pages": 3
+    },
+    {
+     "id": "videotex-vdtx08-0",
+     "title": "Les protocoles (1) : la liste",
+     "pages": 7
+    },
+    {
+     "id": "videotex-vdtx08-1",
+     "title": "Les protocoles (2) : explications",
+     "pages": 10
+    },
+    {
+     "id": "videotex-vdtx08-2",
+     "title": "Les protocoles (3) : ROM et RAM",
+     "pages": 4
+    },
+    {
+     "id": "videotex-vdtx09-0",
+     "title": "Le clavier (1)",
+     "pages": 5
+    },
+    {
+     "id": "videotex-vdtx09-1",
+     "title": "Le clavier (2)",
+     "pages": 4
+    },
+    {
+     "id": "videotex-vdtx09-2",
+     "title": "Le clavier (3)",
+     "pages": 4
+    },
+    {
+     "id": "videotex-vdtx10-0",
+     "title": "La prise peri-informatique",
+     "pages": 2
+    },
+    {
+     "id": "protrans",
+     "title": "Le protocole ProTrans",
+     "pages": 14
+    }
+   ]
+  }
+ ]
+}
