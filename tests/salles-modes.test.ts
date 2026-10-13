@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { catalog, findEntry } from "../src/demo/catalog";
+import { catalog, findEntry, visibleEntries } from "../src/demo/catalog";
 import { framings } from "../src/scene/framing";
 import { findFurniture } from "../src/scene/furniture";
 import { buildWorld } from "../src/world/rooms";
@@ -91,5 +91,14 @@ describe("travelling d'un côté à l'autre du couloir", () => {
       expect(yaw).toBeGreaterThanOrEqual(previous - 1e-9);
       previous = yaw;
     }
+  });
+});
+
+describe("terminaux en chantier", () => {
+  it("le NFZ 300 reste hors du site publié, visible en développement", () => {
+    const published = visibleEntries(catalog, false).map((entry) => entry.id);
+    expect(published).not.toContain("minitel-nfz-300");
+    expect(published).toEqual(["terminatel-255", "minitel-1", "televiseur-1950"]);
+    expect(visibleEntries(catalog, true).map((entry) => entry.id)).toContain("minitel-nfz-300");
   });
 });
