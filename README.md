@@ -171,6 +171,17 @@ préparé dans `public/models/` par un script `tools/prepare_*`.
 La page Documentation les liste aussi (« Projets liés »). Les dépôts privés liés au
 Minitel physique n'y figurent pas.
 
+Ailleurs sur le Minitel :
+
+- [Goto10](https://www.goto10.fr/) : archives des BBS et du Minitel francophones
+  (Frédéric Cambus). Une copie locale sert de référence, sans être publiée
+  ([docs/archive_minitel/README.md](docs/archive_minitel/README.md)) ; sa
+  consultation depuis les terminaux du musée est à l'étude.
+- [Musée du Minitel](https://www.museeminitel.fr/2019/12/le-musee-du-minitel-a-la-retro-gaming-connexion-rgc2019/) :
+  projet de préservation du patrimoine Minitel, ici à la Rétro Gaming Connexion 2019.
+
+Les deux figurent dans les sources de la page Documentation.
+
 ## État
 
 - **Version simple** : les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont
