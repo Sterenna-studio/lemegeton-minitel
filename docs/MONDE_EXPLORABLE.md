@@ -526,6 +526,7 @@ Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer
   - Éclairage `salon1982Lighting`.
 - **Coût** : 107 appels et 37 k triangles à l'entrée, 99 appels et 35 k triangles devant le terminal (cible 150 et 300 k).
 - La carte d'inventaire, la fiche Documentation (sources PATSTEC) et les vues sont produites comme pour les autres terminaux (`tools/capture_views.mjs … minitel-nfz-300`).
+- **Masqué en ligne depuis le 13 octobre 2026** (décision de l'utilisateur : le scan demande des corrections). L'entrée porte `draft: true` (`src/demo/catalog.ts`) : `catalog` ne garde les brouillons qu'en développement (`import.meta.env.DEV`), la fiche Documentation et sa salle suivent le catalogue. Le site publié a donc trois salles ; pour le remettre en ligne, retirer `draft`.
 
 ## 13. Questions ouvertes
 

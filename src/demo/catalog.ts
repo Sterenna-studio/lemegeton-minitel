@@ -30,6 +30,8 @@ export interface ModelEntry {
   /** Shown on the side table (desk terminals) or standing on the floor. */
   onTable: boolean;
   credit: ModelCredit;
+  /** Work in progress : shown by the dev server only, hidden from the published site. */
+  draft?: boolean;
 }
 
 const okotaru: ModelCredit = {
@@ -62,7 +64,7 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
 };
 
 
-export const catalog: ModelEntry[] = [
+const allEntries: ModelEntry[] = [
   {
     id: "terminatel-255",
     label: "Terminatel 255",
@@ -118,6 +120,8 @@ export const catalog: ModelEntry[] = [
     file: assetUrl("models/minitel-nfz-300.glb"),
     profile: nfz300Profile,
     onTable: true,
+    // Hidden online until the scan is corrected (decision of 13 October 2026).
+    draft: true,
     // Licence CC0 since 13 October 2026, as reported by the user (Cults page
     // behind a Cloudflare check, not read by the agent).
     credit: {
@@ -130,6 +134,14 @@ export const catalog: ModelEntry[] = [
     },
   },
 ];
+
+/** Entries to show : drafts only when `drafts` is true. */
+export function visibleEntries(entries: ModelEntry[], drafts: boolean): ModelEntry[] {
+  return entries.filter((entry) => drafts || !entry.draft);
+}
+
+/** The terminals of the site ; the dev server also shows the drafts. */
+export const catalog: ModelEntry[] = visibleEntries(allEntries, import.meta.env.DEV);
 
 export const defaultEntry = catalog[0];
 

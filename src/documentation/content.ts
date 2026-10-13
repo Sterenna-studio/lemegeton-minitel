@@ -1,6 +1,7 @@
 import type { Lang } from "../i18n";
 import { contentFr } from "./content.fr";
 import { contentEn } from "./content.en";
+import { catalog } from "../demo/catalog";
 
 // Contenu de la page Documentation, une version par langue (content.fr.ts,
 // content.en.ts) au meme format : le type DocContent garantit qu'aucune
@@ -60,7 +61,14 @@ const repo = "https://github.com/Sterenna-studio/minitel-musee/blob/main/";
 /** Le contenu d'une langue, avec l'adresse de chaque document du projet. */
 export function docContent(lang: Lang): DocContent & { projectDocs: (ProjectDoc & { url: string })[] } {
   const content = lang === "en" ? contentEn : contentFr;
-  return { ...content, projectDocs: content.projectDocs.map((doc) => ({ ...doc, url: doc.url ?? repo + doc.path })) };
+  // Only the terminals of the catalogue : drafts stay out of the published page.
+  const shown = (id: string) => catalog.some((entry) => entry.id === id);
+  return {
+    ...content,
+    modelDocs: content.modelDocs.filter((doc) => shown(doc.id)),
+    worldDoc: { ...content.worldDoc, rooms: content.worldDoc.rooms.filter((room) => shown(room.id)) },
+    projectDocs: content.projectDocs.map((doc) => ({ ...doc, url: doc.url ?? repo + doc.path })),
+  };
 }
 
 /** Sources (communes aux langues : titres d'origine). */
