@@ -33,20 +33,39 @@ export function renderTerminal(
   ctx.font = 'bold 20px "Courier New", monospace';
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
+  // Backgrounds first : a double-size glyph spills over the cells after it.
   screen.cells.forEach((cell, index) => {
+    ctx.fillStyle = palette[cell.bg];
+    ctx.fillRect((index % COLS) * cw, Math.floor(index / COLS) * ch, cw, ch);
+  });
+  screen.cells.forEach((cell, index) => {
+    if (cell.covered || (cell.blink && !visible)) return;
     const x = (index % COLS) * cw;
     const y = Math.floor(index / COLS) * ch;
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = palette[cell.bg];
-    ctx.fillRect(x, y, cw, ch);
-    if (cell.blink && !visible) return;
     ctx.fillStyle = palette[cell.fg];
     ctx.shadowColor = palette[cell.fg];
     ctx.shadowBlur = effects.glow ? 2 : 0;
-    if (cell.mosaic !== undefined) drawMosaic(ctx, cell.mosaic, x, y, cw, ch, cell.separated);
-    else ctx.fillText(cell.char, x + cw / 2, y + ch / 2);
+    if (cell.mosaic !== undefined) {
+      drawMosaic(ctx, cell.mosaic, x, y, cw, ch, cell.separated);
+      return;
+    }
+    const w = cell.w ?? 1;
+    const h = cell.h ?? 1;
+    if (w === 1 && h === 1) ctx.fillText(cell.char, x + cw / 2, y + ch / 2);
+    else {
+      ctx.save();
+      ctx.translate(x + (cw * w) / 2, y + (ch * h) / 2);
+      ctx.scale(w, h);
+      ctx.fillText(cell.char, 0, 0);
+      ctx.restore();
+    }
+    if (cell.underline) ctx.fillRect(x, y + ch * h - 2, cw * w, 1.5);
   });
   ctx.shadowBlur = 0;
+  ctx.shadowBlur = 0;
+  // Photographic Videotex : the picture covers its area of the grid (column 1 is x = 0).
+  for (const picture of screen.images ?? [])
+    ctx.drawImage(picture.image, (picture.x - 1) * cw, picture.y * ch, picture.w * cw, picture.h * ch);
   if (screen.cursor && visible) {
     ctx.fillStyle = palette[2];
     ctx.fillRect(

@@ -64,12 +64,14 @@ describe("le monde dans une autre langue", () => {
       door: (year) => `${year} door`,
       doorOf: (year, terminal) => `${year} door — ${terminal}`,
       closedDoor: (n) => `Closed door ${n}`,
+      portal: (name) => `Portal — ${name}`,
       roomEntry: (terminal) => `Entrance — ${terminal}`,
       futurePlaque: "Coming soon",
     });
     expect(english.corridor.stations.map((s) => s.id)).toEqual(french.corridor.stations.map((s) => s.id));
     expect(findStation(english, "couloir:entree")?.label).toBe("Corridor entrance");
     expect(findStation(english, "couloir:porte-televiseur-1950")?.label).toBe("1950 door");
-    expect(english.corridor.doors.at(-1)?.door.plaque).toBe("Coming soon");
+    expect(english.corridor.doors.find((slot) => slot.to.kind === "fermee")?.door.plaque).toBe("Coming soon");
+    expect(findStation(english, "couloir:portail-ina")?.label).toBe("Portal — INA");
   });
 });

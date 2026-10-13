@@ -21,7 +21,7 @@ export function TerminalStation({
   /** Furniture choice, for a desk terminal. */
   furnitureChoice?: { selected: string; onChoose: (id: string) => void };
 }) {
-  const { activeFrame, sendKey, goTo } = experience;
+  const { activeFrame, sendKey, submit, goTo } = experience;
   const [panels, setPanels] = useState<ConsolePanels>(closedPanels);
   useTerminalKeyboard(sendKey);
   return (
@@ -51,6 +51,7 @@ export function TerminalStation({
         panels={panels}
         onToggle={(name) => setPanels((current) => togglePanel(current, name))}
         sendKey={sendKey}
+        sendCommand={submit}
         goTo={goTo}
       />
     </div>

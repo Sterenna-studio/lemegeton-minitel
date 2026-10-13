@@ -1,4 +1,5 @@
 import { Terminal, type TerminalPage } from "../videotex/terminal";
+import { Goto10Service, HOME as GOTO10, type Loader } from "../goto10/service";
 import {
   createScreen,
   text,
@@ -63,6 +64,7 @@ export const lemegetonPages: TerminalPage[] = [
           { key: "1", label: "ENTRER", target: "connection" },
           { key: "2", label: "ARCHIVES", target: "archives" },
           { key: "3", label: "MESSAGES", target: "messages" },
+          { key: "4", label: "3615 GOTO10 / BBS", target: GOTO10 },
         ],
         true,
       ),
@@ -140,6 +142,12 @@ export const lemegetonPages: TerminalPage[] = [
       ),
   },
 ];
-export function createLemegetonTerminal(): Terminal {
-  return new Terminal(lemegetonPages, "home");
+/** 3615 LEMEGETON, with the 3615 GOTO10 archive (code GOTO10, or key 4 of the index). */
+export function createLemegetonTerminal(load?: Loader): Terminal {
+  const goto10 = new Goto10Service(() => terminal.refresh(), load);
+  const terminal = new Terminal(lemegetonPages, "home", {
+    resolve: goto10.resolve,
+    codes: { GOTO10: GOTO10, LEMEGETON: "home" },
+  });
+  return terminal;
 }

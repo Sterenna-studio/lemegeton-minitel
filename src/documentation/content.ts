@@ -80,5 +80,8 @@ export const sources = [
   { title: "PATSTEC : Minitel 1, Radiotechnique, 9 NFZ 300/2 (ACONIT)", url: "https://www.patstec.fr/ressources/objets/detail?id=27402" },
   { title: "Science Museum Group : Alcatel Minitel, 1983", url: "https://collection.sciencemuseum.org.uk/objects/co447955/alcatel-minitel-communication-terminal-france-1983-personal-computer" },
   { title: "Goto10 : (French) BBS and Minitel Archives (Frederic Cambus)", url: "https://www.goto10.fr/" },
+  { title: "minitel.org", url: "https://www.minitel.org/" },
+  { title: "INA, la revue des medias : du Minitel a l'internet", url: "https://larevuedesmedias.ina.fr/du-minitel-linternet" },
+  { title: "ACONIT : collection Minitel", url: "https://db.aconit.org/dbaconit/consulter.php?idcollection=9385&db=0" },
   { title: "Musee du Minitel : le Musee du Minitel a la Retro Gaming Connexion (RGC2019)", url: "https://www.museeminitel.fr/2019/12/le-musee-du-minitel-a-la-retro-gaming-connexion-rgc2019/" },
 ];

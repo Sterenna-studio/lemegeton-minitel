@@ -117,6 +117,15 @@ export function useTerminalExperience() {
     },
     [screenMode, terminal, eyes, chooseScreen],
   );
+  // A whole command from the console's field ; key by key for the eyes.
+  const submit = useCallback(
+    (value: string) => {
+      if (screenMode !== "yeux") return terminal.submit(value);
+      for (const key of value) sendKey(key);
+      sendKey("Enter");
+    },
+    [screenMode, terminal, sendKey],
+  );
   const goTo = useCallback(
     (page: string) => {
       chooseScreen("3615");
@@ -150,6 +159,7 @@ export function useTerminalExperience() {
     setEffects,
     reducedMotion,
     sendKey,
+    submit,
     goTo,
     source,
   };
@@ -169,12 +179,15 @@ export function useTerminalKeyboard(sendKey: (key: string) => void) {
       )
         return;
       if (event.ctrlKey || event.altKey || event.metaKey) return;
+      // Page keys of the Minitel : SUITE and RETOUR.
+      const minitel = { PageDown: "Suite", PageUp: "Retour" }[event.key];
       if (
+        minitel ||
         event.key.length === 1 ||
         ["Enter", "Escape", "Backspace", "Delete", "Home"].includes(event.key)
       ) {
         event.preventDefault();
-        sendKey(event.key);
+        sendKey(minitel ?? event.key);
       }
     }
     window.addEventListener("keydown", key);

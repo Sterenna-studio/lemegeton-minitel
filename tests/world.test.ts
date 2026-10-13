@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { catalog } from "../src/demo/catalog";
-import { ERAS, FUTURE_DOORS, allStations, buildWorld, chronological, findStation } from "../src/world/rooms";
+import { ERAS, FUTURE_DOORS, PORTALS, allStations, buildWorld, chronological, findStation } from "../src/world/rooms";
 import {
   MAX_TRAVEL,
   MIN_TRAVEL,
@@ -38,19 +38,28 @@ describe("monde : salles et couloir dérivés du catalogue", () => {
     // The catalogue's doors first, then the closed ones kept for rooms to come.
     const open = world.corridor.doors.filter((slot) => slot.to.kind === "salle");
     expect(open.map((slot) => slot.door.year)).toEqual(["1950", "1982", "1982", "198?"]);
-    expect(world.corridor.doors.map((slot) => slot.side)).toEqual(["gauche", "droite", "gauche", "droite", "gauche", "droite", "gauche"]);
+    expect(world.corridor.doors.map((slot) => slot.side)).toEqual(["gauche", "droite", "gauche", "droite", "gauche", "droite", "gauche", "droite", "gauche", "droite"]);
     // Two doors of the same year are told apart by their terminal.
     const labels = world.corridor.doors.map((slot) => findStation(world, slot.approach)?.label);
     expect(labels.slice(0, 4)).toEqual(["Porte 1950", "Porte 1982 — Minitel 1", "Porte 1982 — Minitel NFZ 300", "Porte 198?"]);
-    const closed = world.corridor.doors.slice(open.length);
-    expect(closed).toHaveLength(FUTURE_DOORS);
+    const closed = world.corridor.doors.slice(open.length, open.length + FUTURE_DOORS);
     for (const slot of closed) expect(slot.to.kind).toBe("fermee");
+    // Then the portals to other sites.
+    const portals = world.corridor.doors.slice(open.length + FUTURE_DOORS);
+    expect(portals.map((slot) => (slot.to.kind === "externe" ? slot.to.href : ""))).toEqual(PORTALS.map((portal) => portal.href));
   });
 
   it("une porte fermée ne s'ouvre pas : on peut seulement aller et venir", () => {
     const links = linksFrom(world, "couloir:porte-futur-1");
     expect(links.map((link) => link.kind)).toEqual(["aller", "aller"]);
     const state = initialState("couloir:porte-futur-1");
+    expect(navigate(world, state, { type: "PORTE" })).toBe(state);
+  });
+
+  it("un portail n'ouvre pas de salle : son lien mène au site", () => {
+    const links = linksFrom(world, "couloir:portail-minitel-org");
+    expect(links.map((link) => link.kind)).toEqual(["aller", "aller"]);
+    const state = initialState("couloir:portail-minitel-org");
     expect(navigate(world, state, { type: "PORTE" })).toBe(state);
   });
 
@@ -71,6 +80,9 @@ describe("monde : salles et couloir dérivés du catalogue", () => {
       "couloir:porte-futur-1",
       "couloir:porte-futur-2",
       "couloir:porte-futur-3",
+      "couloir:portail-minitel-org",
+      "couloir:portail-ina",
+      "couloir:portail-aconit",
       "couloir:fond",
     ]);
     for (const slot of world.corridor.doors) expect(findStation(world, slot.approach)).toBeDefined();

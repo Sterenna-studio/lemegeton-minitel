@@ -29,6 +29,7 @@ export function TerminalConsole({
   panels,
   onToggle,
   sendKey,
+  sendCommand,
   goTo,
   extraTools,
 }: {
@@ -36,6 +37,8 @@ export function TerminalConsole({
   panels: ConsolePanels;
   onToggle: (name: keyof ConsolePanels) => void;
   sendKey: (key: string) => void;
+  /** The whole command at once (service codes such as 3615 GOTO10). */
+  sendCommand?: (value: string) => void;
   goTo: (page: string) => void;
   /** Extra buttons after the panel toggles (inspection in dev). */
   extraTools?: ReactNode;
@@ -44,8 +47,11 @@ export function TerminalConsole({
   const [input, setInput] = useState("");
   function submit(event: FormEvent) {
     event.preventDefault();
-    if (input) for (const key of input) sendKey(key);
-    sendKey("Enter");
+    if (sendCommand) sendCommand(input);
+    else {
+      for (const key of input) sendKey(key);
+      sendKey("Enter");
+    }
     setInput("");
   }
   return (
@@ -54,7 +60,7 @@ export function TerminalConsole({
         <div className="terminal-title">
           <Cable size={18} />
           <div>
-            <strong translate="no">3615 LEMEGETON</strong>
+            <strong translate="no">{frame.service ?? "3615 LEMEGETON"}</strong>
             <span>{frame.title === "3615 LEMEGETON" ? t("console.index") : frame.title}</span>
           </div>
           <span className="online">{t("console.online")}</span>
@@ -88,6 +94,10 @@ export function TerminalConsole({
           <button onClick={() => goTo("messages")}>
             <span>3</span>
             {t("console.messages")}
+          </button>
+          <button onClick={() => goTo("goto10")} translate="no">
+            <span>4</span>
+            GOTO10
           </button>
         </nav>
         <form onSubmit={submit}>
@@ -123,7 +133,7 @@ export function VirtualKeyboard({ sendKey }: { sendKey: (key: string) => void })
       </div>
       {/* The Minitel's own key caps : their names stay as printed. */}
       <div className="function-keys" translate="no">
-        {["Sommaire", "Correction", "Annulation", "Envoi"].map((key) => (
+        {["Sommaire", "Retour", "Suite", "Correction", "Annulation", "Envoi"].map((key) => (
           <button key={key} onClick={() => sendKey(key)}>
             {key}
           </button>

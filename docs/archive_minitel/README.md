@@ -15,34 +15,40 @@ ils ne doivent pas être lancés.
 ## Ce qui est publié
 
 Seul ce `README` est versionné (`.gitignore` : `docs/archive_minitel/*`, sauf
-`README.md`). Le corpus reste sur le poste, pour trois raisons :
+`README.md`). Le corpus complet reste sur le poste, pour trois raisons :
 
 - c'est l'œuvre de tiers, sans licence de réutilisation affichée par Goto10 ;
-  le dépôt public la redistribuerait ;
+  seule la sélection ci-dessous est publiée, avec l'accord de son auteur ;
 - environ 490 Mo, qui resteraient pour toujours dans l'historique Git ;
 - des exécutables et des virus DOS, que GitHub encadre dans un dépôt public.
 
-Le site n'en sert rien : `docs/` n'entre pas dans le build Vite.
+Le site n'en sert rien directement : `docs/` n'entre pas dans le build Vite.
 
-## Demande : consulter Goto10 depuis les terminaux du musée
+## Consultation depuis les terminaux : le 3615 GOTO10
 
 Demande de l'utilisateur (13 et 14 octobre 2026) : rendre ces documents
-consultables depuis les terminaux Vidéotex du musée, de préférence en consultant
-**Goto10 lui-même** plutôt qu'une copie.
+consultables depuis les terminaux Vidéotex du musée. **Accord de Frédéric
+Cambus** pour cette sélection : déclaré par l'utilisateur le 14 octobre 2026
+(l'échange n'a pas été vu par l'agent).
 
-Constat du 14 octobre 2026 : Goto10 ne renvoie pas d'en-tête CORS, une page du
-musée ne peut donc pas lire ses fichiers directement depuis le navigateur. Pistes,
-de la plus simple à la plus complète :
+Goto10 ne renvoie pas d'en-tête CORS : une page du musée ne peut pas lire ses
+fichiers en direct. Le musée publie donc une **sélection** préparée par
+`tools/build_goto10.mjs` dans `public/goto10/` (environ 2,4 Mo) :
 
-1. **Rubrique de renvoi** dans le 3615 du musée (page ARCHIVES) : les grandes
-   sections de Goto10 (BBS, Fidonet, Minitel, fichiers texte…) avec, pour chacune,
-   un lien qui ouvre la page de Goto10. Aucun contenu copié.
-2. **Lecture à la demande par un relais** sur l'hébergement OVH du site : le relais
-   lit une page texte de Goto10, le terminal l'affiche en Vidéotex (40 colonnes,
-   pages suivantes avec SUITE). Contenu non stocké, mais trafic vers Goto10 et
-   source citée sur chaque page ; à faire avec l'accord de Frédéric Cambus.
-3. **Sélection convertie en pages Vidéotex** et publiée dans le musée : textes
-   choisis, sans exécutables, provenance sur chaque page. Redistribution : seulement
-   avec l'accord écrit de l'auteur de Goto10.
+- 28 écrans Vidéotex d'origine (`.vdt`, octet pour octet) : serveur Pinky
+  (accueil, sommaire, forums de 1988), Ellis, guide Télétel 1992, photos RTE et
+  AFP du Vidéotex photographique, flashcode et QR code ;
+- une centaine de documents texte (articles, annuaire des services Télétel,
+  Gigantex, aide sur la norme Vidéotex, ProTrans), décodés (CP437 ou Latin-1)
+  et coupés en lignes de 40 colonnes.
 
-Rien de cela n'est encore fait ; le choix reste à arrêter.
+Rien d'autre : ni exécutables, ni virus, ni archives, ni images hors Vidéotex.
+Le service `src/goto10/service.ts` les affiche sur l'écran des terminaux
+(touche 4 du sommaire de 3615 LEMEGETON, ou le code `GOTO10` puis Envoi) ;
+le décodeur `src/videotex/decoder.ts` lit les écrans comme un Minitel, photos
+JPEG du Vidéotex photographique comprises. Les caractères DRCS (redéfinis par
+un service) restent approchés : des hachures grises.
+
+Pour refaire la sélection après une mise à jour de l'archive :
+`node tools/build_goto10.mjs`, puis relancer le serveur de développement
+(empreintes des fichiers de `public/`).
