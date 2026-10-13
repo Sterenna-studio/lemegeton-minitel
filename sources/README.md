@@ -3,7 +3,7 @@
 Fichiers d'origine des terminaux et du mobilier, **locaux et hors Git** (seul ce
 README est versionné). Ils étaient dans `lemegeton/06_MODEL/` avant que le
 personnage n'ait son propre dépôt
-([Sterenna-studio/lemegeton](https://github.com/Sterenna-studio/lemegeton),
+([Sterenna-studio/lemegeton-core](https://github.com/Sterenna-studio/lemegeton-core),
 12 octobre 2026).
 
 - `06_MODEL/` : Minitel 1982-France (okotaru), 1950's Retro Television (Huuxloc),

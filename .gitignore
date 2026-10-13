@@ -7,7 +7,7 @@ playwright-report/
 *.tsbuildinfo
 
 # Le personnage Lemegéton a son propre dépôt depuis le 12 octobre 2026
-# (Sterenna-studio/lemegeton, copie de travail C:\DEV\repos\lemegeton).
+# (Sterenna-studio/lemegeton-core, copie de travail C:\DEV\repos\lemegeton-core).
 lemegeton/
 
 # Sources des terminaux et du mobilier (GLB, .blend, OBJ d'origine) : locales,

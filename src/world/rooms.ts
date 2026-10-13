@@ -57,6 +57,30 @@ export const FUTURE_DOORS = 3;
 /** Plate of a door that does not open yet. */
 export const FUTURE_PLAQUE = "Prochainement";
 
+/**
+ * Words of the world (station labels, plates) : French by default, the
+ * WorldApp gives those of the visitor's language (src/i18n).
+ */
+export interface WorldText {
+  corridorEntry: string;
+  corridorEnd: string;
+  door: (year: string) => string;
+  doorOf: (year: string, terminal: string) => string;
+  closedDoor: (n: number) => string;
+  roomEntry: (terminal: string) => string;
+  futurePlaque: string;
+}
+
+export const FRENCH_TEXT: WorldText = {
+  corridorEntry: "Entrée du couloir",
+  corridorEnd: "Fond du couloir",
+  door: (year) => `Porte ${year}`,
+  doorOf: (year, terminal) => `Porte ${year} — ${terminal}`,
+  closedDoor: (n) => `Porte fermée ${n}`,
+  roomEntry: (terminal) => `Entrée — ${terminal}`,
+  futurePlaque: FUTURE_PLAQUE,
+};
+
 export function eraOf(entry: TerminalEntry): Era {
   return ERAS[entry.id] ?? { year: "19??", ambiance: "terminatel", glow: "#ff9a4d" };
 }
@@ -70,7 +94,7 @@ export function chronological(entries: TerminalEntry[]): TerminalEntry[] {
   return [...entries].sort((a, b) => (year(a) < year(b) ? -1 : year(a) > year(b) ? 1 : 0));
 }
 
-function roomOf(entry: TerminalEntry): Room {
+function roomOf(entry: TerminalEntry, text: WorldText): Room {
   const era = eraOf(entry);
   const prefix = `salle:${entry.id}`;
   const terminal = entry.terminalView ?? { position: [0, EYE * 0.6, 12] as Vec3, lookAt: [0, EYE * 0.4, 0] as Vec3 };
@@ -78,7 +102,7 @@ function roomOf(entry: TerminalEntry): Room {
     {
       // From the doorway : the room and its terminal.
       id: `${prefix}:entree`,
-      label: `Entrée — ${entry.label}`,
+      label: text.roomEntry(entry.label),
       position: [0, EYE, 17],
       lookAt: terminal.lookAt,
       fov: 55,
@@ -104,14 +128,15 @@ function roomOf(entry: TerminalEntry): Room {
   };
 }
 
-function corridorOf(entries: TerminalEntry[]): Corridor {
+function corridorOf(entries: TerminalEntry[], text: WorldText): Corridor {
   const ordered = chronological(entries);
   const stations: Station[] = [
-    { id: "couloir:entree", label: "Entrée du couloir", position: [0, EYE, 6], lookAt: [0, DOOR_AIM + 0.5, -40], fov: CORRIDOR_FOV },
+    { id: "couloir:entree", label: text.corridorEntry, position: [0, EYE, 6], lookAt: [0, DOOR_AIM + 0.5, -40], fov: CORRIDOR_FOV },
   ];
   // Two doors of the same year are told apart by their terminal.
   const sameYear = (entry: TerminalEntry) => ordered.filter((other) => eraOf(other).year === eraOf(entry).year).length > 1;
-  const doorLabel = (entry: TerminalEntry) => `Porte ${eraOf(entry).year}${sameYear(entry) ? ` — ${entry.label}` : ""}`;
+  const doorLabel = (entry: TerminalEntry) =>
+    sameYear(entry) ? text.doorOf(eraOf(entry).year, entry.label) : text.door(eraOf(entry).year);
   const doors: DoorSlot[] = ordered.map((entry, index) => {
     const side = index % 2 === 0 ? "gauche" : "droite";
     const z = -DOOR_SPACING * (index + 1);
@@ -150,13 +175,13 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
     const approach = `couloir:porte-${id}`;
     stations.push({
       id: approach,
-      label: `Porte fermée ${n + 1}`,
+      label: text.closedDoor(n + 1),
       position: [side === "gauche" ? FACING_X : -FACING_X, EYE, z],
       lookAt: [x, DOOR_AIM, z],
       fov: CORRIDOR_FOV,
     });
     doors.push({
-      door: { id: `porte-${id}`, year: CORRIDOR_YEAR, glow: "#c9a56b", plaque: FUTURE_PLAQUE },
+      door: { id: `porte-${id}`, year: CORRIDOR_YEAR, glow: "#c9a56b", plaque: text.futurePlaque },
       to: { kind: "fermee" },
       approach,
       side,
@@ -165,7 +190,7 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
     });
   }
   const end = -DOOR_SPACING * (ordered.length + FUTURE_DOORS + 1);
-  stations.push({ id: "couloir:fond", label: "Fond du couloir", position: [0, EYE, end + 18], lookAt: [0, DOOR_AIM, end], fov: CORRIDOR_FOV });
+  stations.push({ id: "couloir:fond", label: text.corridorEnd, position: [0, EYE, end + 18], lookAt: [0, DOOR_AIM, end], fov: CORRIDOR_FOV });
   return {
     year: CORRIDOR_YEAR,
     bounds: { width: CORRIDOR_WIDTH, height: CORRIDOR_HEIGHT, start: 14, end },
@@ -174,8 +199,8 @@ function corridorOf(entries: TerminalEntry[]): Corridor {
   };
 }
 
-export function buildWorld(entries: TerminalEntry[]): World {
-  return { corridor: corridorOf(entries), rooms: chronological(entries).map(roomOf) };
+export function buildWorld(entries: TerminalEntry[], text: WorldText = FRENCH_TEXT): World {
+  return { corridor: corridorOf(entries, text), rooms: chronological(entries).map((entry) => roomOf(entry, text)) };
 }
 
 export function allStations(world: World): Station[] {

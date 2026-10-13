@@ -1,7 +1,9 @@
 import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ArrowLeft, DoorOpen, FileText, Footprints, Monitor, Volume2, VolumeX } from "lucide-react";
-import { catalog, findEntry } from "../demo/catalog";
+import { catalog, entryText, findEntry } from "../demo/catalog";
+import { t, useLang } from "../i18n";
+import { LanguageSwitch } from "../components/LanguageSwitch";
 import { ModelInventory } from "../components/ModelInventory";
 import { creditsFor } from "./credits";
 import { grainTile } from "./grain";
@@ -19,7 +21,7 @@ import { preloadModels } from "../scene/loaders";
 import { assetUrl } from "../assets";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { setUrlParams } from "../hooks/urlParams";
-import { buildWorld, findStation, roomOfStation } from "./rooms";
+import { buildWorld, findStation, roomOfStation, type WorldText } from "./rooms";
 import { areNeighbours, linksFrom, targetOf, type Link } from "./rails";
 import { initialState, navigate, type NavEvent, type NavState } from "./navigation";
 import { paramsForStation, stationFromParams } from "./url";
@@ -36,9 +38,22 @@ import "./world.css";
 // cards jump to a room with a fade, and the credits follow the place (lot F).
 
 function labelOf(world: World, link: Link): string {
-  if (link.kind === "porte") return `Ouvrir la porte ${link.door.door.year}`;
-  if (link.kind === "sortie") return "Sortir vers le couloir";
-  return `Aller : ${findStation(world, targetOf(world, link))?.label ?? ""}`;
+  if (link.kind === "porte") return t("world.link.open", { year: link.door.door.year });
+  if (link.kind === "sortie") return t("world.link.exit");
+  return t("world.link.go", { label: findStation(world, targetOf(world, link))?.label ?? "" });
+}
+
+/** Words of the world in the current language (src/i18n/locales). */
+function worldText(): WorldText {
+  return {
+    corridorEntry: t("world.station.corridorEntry"),
+    corridorEnd: t("world.station.corridorEnd"),
+    door: (year) => t("world.station.door", { year }),
+    doorOf: (year, terminal) => t("world.station.doorOf", { year, terminal }),
+    closedDoor: (n) => t("world.station.closed", { n }),
+    roomEntry: (terminal) => t("world.station.roomEntry", { terminal }),
+    futurePlaque: t("world.plaque.future"),
+  };
 }
 
 /**
@@ -96,9 +111,17 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
   const narrow = useNarrow(stage);
   // Each room places its terminal ; the terminal station is the orbit camera's
   // default view for this furniture and this screen, so the handover is seamless.
+  // Labels and plates follow the language : the world is rebuilt (same
+  // stations, so the navigation state stays valid).
+  const lang = useLang();
   const world = useMemo(
-    () => buildWorld(catalog.map((entry) => ({ ...entry, terminalView: terminalLayout(entry, piece, narrow).view }))),
-    [piece, narrow],
+    () =>
+      buildWorld(
+        catalog.map((entry) => ({ ...entry, label: entryText(entry, "label"), terminalView: terminalLayout(entry, piece, narrow).view })),
+        worldText(),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [piece, narrow, lang],
   );
   const [command] = useState<CameraCommand>({ id: 0, kind: "reset" });
   const reducedMotion = useReducedMotion();
@@ -230,9 +253,10 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
   atTerminalRef.current = atTerminal;
   // In front of a door kept for a room to come.
   const closedDoor = !!reached && world.corridor.doors.some((slot) => slot.approach === reached && slot.to.kind === "fermee");
-  const closedHint = "Cette porte ne s'ouvre pas encore : une salle viendra.";
+  const closedHint = t("world.closedHint");
   const announce = station
-    ? `${station.label}. ${closedDoor ? `${closedHint} ` : ""}${links.length} déplacement${links.length > 1 ? "s" : ""} possible${links.length > 1 ? "s" : ""}.`
+    ? (closedDoor ? `${closedHint} ` : "") +
+      t(links.length > 1 ? "world.announce.many" : "world.announce.one", { label: station.label, count: links.length })
     : "";
   const base = import.meta.env.BASE_URL;
 
@@ -242,20 +266,22 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
         <a className="world-brand" href={onSimple ? `${base}?mode=3d` : `${base}parcours/`}>
           <Monitor size={22} />
           <span>
-            Minitel<small>{onSimple ? "mode 3D+" : "parcours · aperçu"}</small>
+            <bdi translate="no">Minitel</bdi>
+            <small>{onSimple ? t("world.brand.mode") : t("world.brand.preview")}</small>
           </span>
         </a>
-        <nav aria-label="Autres pages">
+        <nav aria-label={t("site.otherPages")}>
+          <LanguageSwitch />
           {onSimple ? (
             <button type="button" className="mode-switch" onClick={() => onSimple(room?.terminal)}>
-              <Monitor size={14} /> Mode simple
+              <Monitor size={14} /> {t("site.modeSimple")}
             </button>
           ) : (
-            <a href={`${base}simple/`}>Version simple</a>
+            <a href={`${base}simple/`}>{t("site.simpleVersion")}</a>
           )}
-          <a href={`${base}atelier/`}>Atelier</a>
+          <a href={`${base}atelier/`}>{t("site.atelier")}</a>
           <a href={`${base}documentation/`}>
-            <FileText size={14} /> Documentation
+            <FileText size={14} /> {t("site.documentation")}
           </a>
           <button
             type="button"
@@ -265,7 +291,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
               setSoundOn(!soundOn);
             }}
           >
-            {soundOn ? <Volume2 size={14} /> : <VolumeX size={14} />} Son {soundOn ? "activé" : "coupé"}
+            {soundOn ? <Volume2 size={14} /> : <VolumeX size={14} />} {soundOn ? t("world.sound.on") : t("world.sound.off")}
           </button>
         </nav>
       </header>
@@ -277,7 +303,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             dpr={[1, 1.5]}
             camera={{ fov: view.fov, near: 0.1, far: 400, position: view.position }}
             gl={{ antialias: true, preserveDrawingBuffer: import.meta.env.DEV }}
-            aria-label={`Vue 3D : ${station?.label ?? "en déplacement"}`}
+            aria-label={t("world.view", { label: station?.label ?? t("world.viewMoving") })}
           >
             <color attach="background" args={["#0c0b0a"]} />
             <RenderCost />
@@ -329,7 +355,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
           />
           {ready !== view.place && (
             <p className="world-loading" aria-live="polite">
-              Chargement…
+              {t("world.loading")}
             </p>
           )}
           {atTerminal && entry && (
@@ -354,7 +380,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             <ModelInventory
               entries={catalog}
               selected={room?.terminal}
-              label="Salles"
+              label={t("world.rooms")}
               onSelect={(id) => {
                 const to = `salle:${id}:entree`;
                 if (reached !== to) dispatch({ type: "SAUT", to });
@@ -364,13 +390,13 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
         </div>
       ) : (
         <p className="world-fallback" role="status">
-          WebGL indisponible : la <a href={`${base}simple/`}>version simple</a> reste consultable.
+          {t("world.noWebgl")} <a href={`${base}simple/`}>{t("world.noWebglLink")}</a>
         </p>
       )}
-      <div className="world-actions" ref={bar} role="toolbar" aria-label="Déplacements" onKeyDown={onKeyDown}>
+      <div className="world-actions" ref={bar} role="toolbar" aria-label={t("world.actions")} onKeyDown={onKeyDown}>
         {state.history.length > 0 && (
           <button type="button" disabled={moving} onClick={() => dispatch({ type: "PRECEDENT" })}>
-            <ArrowLeft size={16} /> Revenir
+            <ArrowLeft size={16} /> {t("world.back")}
           </button>
         )}
         {links.map((link) => (
@@ -378,7 +404,7 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             {link.kind === "aller" ? <Footprints size={16} /> : <DoorOpen size={16} />} {labelOf(world, link)}
           </button>
         ))}
-        {moving && <span className="world-moving">En déplacement…</span>}
+        {moving && <span className="world-moving">{t("world.moving")}</span>}
         {closedDoor && !moving && <span className="world-moving">{closedHint}</span>}
       </div>
       <p className="world-credits">
@@ -387,14 +413,14 @@ export function WorldApp({ onSimple }: { onSimple?: (room?: string) => void } = 
             <a href={credit.source} target="_blank" rel="noreferrer">
               {credit.title}
             </a>{" "}
-            par {credit.author} /{" "}
+            {t("credits.by")} <span translate="no">{credit.author}</span> /{" "}
             <a href={credit.licenseUrl} target="_blank" rel="noreferrer">
               {credit.license}
             </a>
           </span>
         ))}
         <a href={`${base}models/ATTRIBUTION.md`} target="_blank" rel="noreferrer">
-          Crédits des modèles 3D
+          {t("credits.all")}
         </a>
       </p>
       <p className="sr-only" role="status" aria-live="polite" data-testid="annonce">

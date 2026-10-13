@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { useThree } from "@react-three/fiber";
 import {
   AdditiveBlending,
   Box3,
@@ -91,6 +92,7 @@ export function TemporalDoor({
   wall?: boolean;
 }) {
   const [model, mantel] = useModels([assetUrl("models/monde/porte.glb"), assetUrl("models/monde/pendule.glb")]);
+  const invalidate = useThree((three) => three.invalidate);
   const prepared = useMemo(() => {
     const scene = model.scene.clone(true);
     scene.traverse((object) => {
@@ -170,10 +172,12 @@ export function TemporalDoor({
       if (!ctx) return;
       drawPlaque(ctx, door.plaque);
       prepared.plaque.texture.needsUpdate = true;
+      // Rendered on demand : a new text (the language changed) needs a frame.
+      invalidate();
     };
     draw();
     document.fonts?.ready.then(draw);
-  }, [prepared, door.plaque]);
+  }, [prepared, door.plaque, invalidate]);
   // Moving parts and counter follow the state.
   useEffect(() => {
     prepared.leaf.rotation.y = prepared.base.leaf - OPEN_ANGLE * state.leaf;

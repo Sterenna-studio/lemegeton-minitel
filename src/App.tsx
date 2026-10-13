@@ -13,7 +13,9 @@ import {
 import { useProgress } from "@react-three/drei";
 import { Scene, supportsWebGL } from "./scene/Scene";
 import { genericProfile } from "./minitel/profiles";
-import { catalog, findEntry, tableCredit } from "./demo/catalog";
+import { catalog, creditChanges, entryText, findEntry, tableChanges, tableCredit } from "./demo/catalog";
+import { t, useLang } from "./i18n";
+import { LanguageSwitch } from "./components/LanguageSwitch";
 import { findFurniture, furniture } from "./scene/furniture";
 import { ModelInventory } from "./components/ModelInventory";
 import { Tool } from "./components/Tool";
@@ -42,7 +44,7 @@ function Loading() {
   const { active, progress } = useProgress();
   return active ? (
     <div className="model-loading" role="status">
-      Chargement du modele... <progress max={100} value={progress} />
+      {t("simple.loadingModel")} <progress max={100} value={progress} />
     </div>
   ) : null;
 }
@@ -70,6 +72,8 @@ function Antenna() {
 }
 /** onMode3d : switches the site to the 3D+ mode (src/SiteModes.tsx). */
 export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
+  // Re-render in the new language when the visitor switches it.
+  useLang();
   const experience = useTerminalExperience();
   const { activeFrame, sendKey, goTo } = experience;
   const [webgl] = useState(supportsWebGL);
@@ -161,24 +165,27 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         .join(" ")}
     >
       <header className="masthead">
-        <a href={import.meta.env.BASE_URL} className="brand" aria-label="Minitel, accueil">
+        <a href={import.meta.env.BASE_URL} className="brand" aria-label={t("site.home")}>
           <Monitor size={26} />
           <h1>
-            MINITEL<span>{custom ? "MODELE EXTERNE" : entry.tagline}</span>
+            {/* A brand : never translated (neutral element, the span is the tagline). */}
+            <bdi translate="no">MINITEL</bdi>
+            <span>{custom ? t("simple.externalTagline") : entryText(entry, "tagline")}</span>
           </h1>
         </a>
         <div className="service">
+          <LanguageSwitch className="doc-link mode-switch" />
           {onMode3d && (
             <button type="button" className="doc-link mode-switch" onClick={onMode3d}>
-              <Box size={14} /> Mode 3D+
+              <Box size={14} /> {t("site.mode3d")}
             </button>
           )}
           <a className="doc-link" href={`${import.meta.env.BASE_URL}documentation/`}>
-            <FileText size={14} /> Documentation
+            <FileText size={14} /> {t("site.documentation")}
           </a>
           <span className="status-dot" />
-          <span>3615 LEMEGETON</span>
-          <span className="service-state">LIAISON ETABLIE</span>
+          <span translate="no">3615 LEMEGETON</span>
+          <span className="service-state">{t("simple.linkState")}</span>
         </div>
       </header>
       <div className={focused ? "scene focused" : "scene"} data-testid="scene">
@@ -211,15 +218,13 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         {!fallback && <Loading />}
         {fallback && (
           <p className="fallback-status" role="status">
-            {error
-              ? "Mode texte / modele indisponible"
-              : "Mode texte / WebGL indisponible"}
+            {error ? t("simple.fallback.model") : t("simple.fallback.webgl")}
           </p>
         )}
         <div className="scene-caption">
-          <span>{custom ? "00 / MODELE EXTERNE" : entry.series}</span>
-          <strong>{custom ? "Modele externe" : entry.title}</strong>
-          <span>{custom ? custom : entry.subtitle}</span>
+          <span>{custom ? t("simple.externalSeries") : entryText(entry, "series")}</span>
+          <strong translate="no">{custom ? t("simple.externalModel") : entryText(entry, "title")}</strong>
+          <span>{custom ? custom : entryText(entry, "subtitle")}</span>
         </div>
         <ModelInventory
           entries={catalog}
@@ -227,24 +232,24 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
           onSelect={chooseModel}
         />
         <div className="camera-tools">
-          <Tool label="Vue de face" onClick={() => cameraCommand("front")}>
+          <Tool label={t("simple.view.front")} onClick={() => cameraCommand("front")}>
             <Crosshair size={19} />
           </Tool>
-          <Tool label="Recentrer" onClick={() => cameraCommand("reset")}>
+          <Tool label={t("simple.view.reset")} onClick={() => cameraCommand("reset")}>
             <RotateCcw size={19} />
           </Tool>
           <Tool
-            label={focused ? "Quitter la mise au point" : "Mise au point sur l'ecran"}
+            label={focused ? t("simple.focus.off") : t("simple.focus.on")}
             onClick={toggleFocus}
             active={focused}
           >
             <Focus size={19} />
           </Tool>
           <span />
-          <Tool label="Zoomer" onClick={() => cameraCommand("zoomIn")}>
+          <Tool label={t("simple.zoomIn")} onClick={() => cameraCommand("zoomIn")}>
             <ZoomIn size={19} />
           </Tool>
-          <Tool label="Dezoomer" onClick={() => cameraCommand("zoomOut")}>
+          <Tool label={t("simple.zoomOut")} onClick={() => cameraCommand("zoomOut")}>
             <ZoomOut size={19} />
           </Tool>
         </div>
@@ -255,7 +260,7 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
             <h2>{activeFrame.title}</h2>
             {!fallback && (
               <Tool
-                label="Fermer la lecture"
+                label={t("terminal.closeReader")}
                 onClick={() => setPanels((current) => ({ ...current, reader: false }))}
               >
                 <X size={18} />
@@ -299,7 +304,7 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         extraTools={
           import.meta.env.DEV && (
             <Tool
-              label="Inspecter le modele"
+              label={t("simple.inspect")}
               onClick={() => setDebug(!debug)}
               active={debug}
             >
@@ -309,25 +314,26 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         }
       />
       <div className="credits">
-        <span>1200 BAUDS / TELETEL</span>
+        <span translate="no">1200 BAUDS / TELETEL</span>
         {!custom && (
           <span>
-            Modele :{" "}
-            <a href={entry.credit.source} target="_blank" rel="noreferrer">
+            {t("credits.model")}{" "}
+            <a href={entry.credit.source} target="_blank" rel="noreferrer" translate="no">
               {entry.credit.title}
             </a>{" "}
-            par {entry.credit.author} /{" "}
+            {t("credits.by")} <span translate="no">{entry.credit.author}</span> /{" "}
             <a href={entry.credit.licenseUrl} target="_blank" rel="noreferrer">
               {entry.credit.license}
             </a>{" "}
-            · {entry.credit.changes}
+            · {creditChanges(entry)}
             {onTable && piece.file && (
               <>
-                {" "}· Table :{" "}
-                <a href={tableCredit.source} target="_blank" rel="noreferrer">
+                {" "}· {t("credits.table")}{" "}
+                <a href={tableCredit.source} target="_blank" rel="noreferrer" translate="no">
                   {tableCredit.title}
                 </a>{" "}
-                par {tableCredit.author} / {tableCredit.license}
+                {t("credits.by")} <span translate="no">{tableCredit.author}</span> / {tableCredit.license}{" "}
+                · {tableChanges()}
               </>
             )}
           </span>

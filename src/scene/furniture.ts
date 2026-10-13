@@ -1,3 +1,5 @@
+import { tFor } from "../i18n";
+
 // Mobilier sous les terminaux de bureau : les quatre pieces de « Wood Drawer &
 // Tables Set » (brandon_grey, CC BY 4.0), preparees par tools/prepare_table.py
 // (mesures dans docs/asset-audit/mobilier.json). Le terminal reste a l'origine :
@@ -27,4 +29,9 @@ export const defaultFurniture = furniture[0];
 
 export function findFurniture(id: string | null): Furniture {
   return furniture.find((item) => item.id === id) ?? defaultFurniture;
+}
+
+/** Name of a piece in the current language (src/i18n/locales). */
+export function furnitureLabel(piece: Furniture): string {
+  return tFor(`furniture.${piece.id}`, piece.label);
 }

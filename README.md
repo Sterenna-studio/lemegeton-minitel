@@ -1,9 +1,15 @@
-# Lemegéton Minitel
+# minitel-musee
 
-Un Minitel 3D pour le Web : terminal manipulable, simulation Vidéotex, yeux du
-robot Lemegéton, et un monde à explorer où chaque terminal a sa salle d'époque.
+Un petit musée interactif du Minitel et d'autres machines rétro, sur le Web :
+terminaux 3D à manipuler, simulation Vidéotex, yeux du robot Lemegéton, et un
+couloir hors du temps où chaque terminal a sa salle d'époque. En français et en
+anglais.
 
-En ligne : https://sterenna.fr/minitel/
+En ligne : https://sterenna.fr/minitel/ (anglais : https://sterenna.fr/minitel/?lang=en)
+
+Le projet est né de l'envie d'un Minitel 3D fonctionnel sur le Web, notamment
+pour le corps du personnage Lemegéton ; il s'est étendu en musée. Il s'appelait
+`lemegeton-minitel` jusqu'au 12 octobre 2026.
 
 ## Vision
 
@@ -12,10 +18,9 @@ indépendant capable d'afficher une expérience Vidéotex dynamique, et autour d
 lui un univers à parcourir.
 
 Ce n'est pas un projet d'électronique : le Minitel physique, l'ESP32 et le
-serveur de visage restent dans
-[minitel-face](https://github.com/Sterenna-studio/minitel-face). Le personnage
-Lemegéton (modélisation, rigs, animation) a son propre dépôt :
-[Sterenna-studio/lemegeton](https://github.com/Sterenna-studio/lemegeton).
+serveur de visage restent dans `minitel-face` (dépôt privé). Le personnage
+Lemegéton (modélisation, rigs, animation) a son propre dépôt, son cœur créatif :
+[Sterenna-studio/lemegeton-core](https://github.com/Sterenna-studio/lemegeton-core).
 
 ## Deux modes
 
@@ -40,6 +45,16 @@ Autres pages : `/minitel/documentation/` (fiche de chaque terminal et du mode
 3D+), `/minitel/atelier/` (chaque brique du monde vue seule),
 `/minitel/parcours/` (le monde seul, aperçu de développement).
 
+## Langues
+
+Français (référence) et anglais. La langue vient de `?lang=fr|en`, sinon du dernier
+choix du visiteur, sinon du navigateur ; le bouton **EN** / **FR** des en-têtes la
+change. Les textes sont dans des catalogues JSON (`src/i18n/locales/`) et la page
+Documentation a un fichier de contenu par langue : ajouter une langue, c'est
+traduire ces fichiers. Les pages 3615 de l'écran Vidéotex restent en français
+(objet d'époque) ; leur lecture accessible est traduisible par le navigateur.
+Détails : [docs/TRADUCTION.md](docs/TRADUCTION.md).
+
 ## Démarrer
 
 Node 22.12+ ou 24.
@@ -55,8 +70,8 @@ npm run build        # contrôle des types puis bundle dans dist/
 ```bash
 npm run typecheck
 npm run lint
-npm test               # Vitest : 63 tests unitaires
-npm run test:browser   # Playwright : 32 tests sur ordinateur et mobile (Edge headless)
+npm test               # Vitest : 68 tests unitaires
+npm run test:browser   # Playwright : 35 tests sur ordinateur et mobile (Edge headless, locale fr-FR)
 ```
 
 ## En ligne
@@ -105,6 +120,7 @@ src/
   scene/         scène de la version simple : caméra orbitale, éclairages, table, chargeurs KTX2/meshopt
   components/    lecture accessible, cartes d'inventaire, bouton
   hooks/         paramètres d'URL, mouvement réduit, abonnement au terminal
+  i18n/          langues : catalogues fr.json et en.json, choix de la langue, t() (docs/TRADUCTION.md)
   world/         mode 3D+ : salles et portes dérivées du catalogue, rails, navigation,
                  séquence des portes, adresse (logique pure et testée), crédits, grain
     three/       rendu : couloir, porte temporelle, horloges, caméras, salles
@@ -126,7 +142,7 @@ monde/           sources du monde explorable (local, hors Git ; provenance dans 
 
 Documentation :
 - [Guide d'utilisation et d'intégration](docs/USAGE.md) : réutiliser `<Minitel>`, sources d'écran, pages Vidéotex, yeux, accessoires.
-- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/lemegeton-minitel/issues/8)) : décisions, architecture, rails, portes, salles, budgets (iPhone 11), lots A à F faits ; le lot G (objets interactifs) reste à cadrer. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
+- [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/minitel-musee/issues/8)) : décisions, architecture, rails, portes, salles, budgets (iPhone 11), lots A à F faits ; le lot G (objets interactifs) reste à cadrer. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
 - [Assets et licences](docs/ASSETS.md), [préparation des modèles](docs/MODEL_PREPARATION.md).
 - [Vérification](docs/VERIFICATION.md), [notes d'implémentation](docs/IMPLEMENTATION.md), [cadrage](docs/3D_WEB_PROJECT.md), [audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md).
 
@@ -140,10 +156,20 @@ aucune, et le workflow le vérifie.
 
 Le pipeline 3D du robot (références, sources, rigs, scènes Blender, exports,
 audits) a quitté ce dépôt le 12 octobre 2026 pour
-[Sterenna-studio/lemegeton](https://github.com/Sterenna-studio/lemegeton), avec
-son historique. Copie de travail locale : `C:\DEV\repos\lemegeton`. Quand le
+[Sterenna-studio/lemegeton-core](https://github.com/Sterenna-studio/lemegeton-core), avec
+son historique. Copie de travail locale : `C:\DEV\repos\lemegeton-core`. Quand le
 personnage aura un export Web, il viendra ici comme les autres modèles :
 préparé dans `public/models/` par un script `tools/prepare_*`.
+
+## Projets liés
+
+- [lemegeton-core](https://github.com/Sterenna-studio/lemegeton-core) : le cœur
+  créatif de Lemegéton (références, modélisation, rigs, animation).
+- [3615-gateways](https://github.com/Sterenna-studio/3615-gateways) : passerelle
+  Minitel sur ESP32, hub Telnet et WebSocket, intégration au portail Nitro.
+
+La page Documentation les liste aussi (« Projets liés »). Les dépôts privés liés au
+Minitel physique n'y figurent pas.
 
 ## État
 

@@ -84,3 +84,20 @@ export const televisionProfile: ModelProfile = {
     rear: { position: [0, 1.2, -0.5] },
   },
 };
+// Web copy of the Velta-3D scan of the Radiotechnique Minitel 1 NFZ 300
+// (tools/prepare_nfz300.py) : 3.02 units high, 2.34 wide, keyboard open in
+// front ; screen and keys added on the scan, keys named Key_* with a `key` extra.
+export const nfz300Profile: ModelProfile = {
+  ...genericProfile,
+  normalize: false,
+  screenFallback: { position: [0, 1.369, -0.564], size: [1.81, 1.47] },
+  // Bounds centre of Minitel_Screen in public/models/minitel-nfz-300.glb.
+  screenCenter: [0, 1.369, -0.564],
+  screenBulge: 0.12,
+  anchors: {
+    top: { position: [0, 3.02, -0.6] },
+    left: { position: [-1.17, 1.5, -0.6] },
+    right: { position: [1.17, 1.5, -0.6] },
+    rear: { position: [0, 1.4, -1.63] },
+  },
+};

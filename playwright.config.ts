@@ -5,6 +5,9 @@ export default defineConfig({
   workers: 1,
   use: {
     baseURL: "http://127.0.0.1:5174",
+    // The site follows the browser's language (src/i18n) : the tests read the
+    // French texts, the reference ; tests/browser/langues.spec.ts covers English.
+    locale: "fr-FR",
     channel: "msedge",
     headless: true,
     launchOptions: { args: ["--enable-webgl", "--ignore-gpu-blocklist"] },

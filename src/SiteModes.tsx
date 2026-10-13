@@ -1,6 +1,7 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import App from "./App";
 import { modeOf, switchedUrl, type SiteMode } from "./siteMode";
+import { t, useLang } from "./i18n";
 
 // Two modes of the site (decision of 2026-10-08) : the simple version (a
 // terminal on its table, the catalogue) by default, and « 3D+ », the
@@ -11,6 +12,7 @@ import { modeOf, switchedUrl, type SiteMode } from "./siteMode";
 const WorldApp = lazy(() => import("./world/WorldApp").then((module) => ({ default: module.WorldApp })));
 
 export function SiteModes() {
+  useLang();
   const [mode, setMode] = useState<SiteMode>(() => modeOf(window.location.search));
   // The browser's Back button may cross from one mode to the other.
   useEffect(() => {
@@ -25,7 +27,7 @@ export function SiteModes() {
   }, []);
   if (mode === "simple") return <App onMode3d={() => choose("3d")} />;
   return (
-    <Suspense fallback={<p className="mode-loading" role="status">Chargement du mode 3D+…</p>}>
+    <Suspense fallback={<p className="mode-loading" role="status">{t("site.loading3d")}</p>}>
       <WorldApp onSimple={(room) => choose("simple", room)} />
     </Suspense>
   );
