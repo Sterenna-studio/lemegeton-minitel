@@ -65,14 +65,17 @@ const terminatelFinish: MaterialFinish = (_mesh, material, role) => {
 // Interpretation of the Radiotechnique Minitel 1 « 9 NFZ 300/2 » (PATSTEC record
 // 27402, ACONIT) : « un appareil en plastique absolument monobloc de couleur
 // beige ». No 3D model of it can be used (the one found on Cults is for private
-// use, without AI) : the Minitel 1 geometry gets a beige tint, keys untouched.
-const beige = new Color("#d8bf94");
+// use, without AI) : the Minitel 1 geometry gets a beige plastic, keys untouched.
+const beige = new Color("#d6bf95");
 const nfz300Finish: MaterialFinish = (_mesh, material, role) => {
   if (!(material instanceof MeshStandardMaterial) || role === "key") return;
-  // The tint multiplies the original maps : light plastic turns beige, the
-  // dark bezel stays dark.
+  // A tint over the original colour map read as the grey, mottled Minitel 1
+  // (seen in its room, 13 October 2026) : the colour map goes, the plastic is
+  // beige and one-piece ; the relief and roughness maps keep the details.
+  material.map = null;
   material.color.copy(beige);
-  material.roughness = Math.max(material.roughness, 0.6);
+  material.roughness = 0.55;
+  material.metalness = 0;
   material.needsUpdate = true;
 };
 

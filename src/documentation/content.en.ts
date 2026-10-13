@@ -85,7 +85,7 @@ export const contentEn: DocContent = {
       kicker: "Radiotechnique · beige one-piece",
       intro: [
         "A Minitel 1 by La Radiotechnique, reference 9 NFZ 300/2, kept by the ACONIT association in Grenoble. Its PATSTEC record presents it as one of the very first Minitel models, already fitted with an AZERTY keyboard: the very first one, with an alphabetical keyboard, had been rejected by its users.",
-        "It is a one-piece unit in beige plastic, developed within the Philips France group: the 1200/75 baud modem comes from the TRT subsidiary, the tube and assembly from Radiotechnique. In the 3D terminal, it is interpreted on the Minitel 1 geometry, tinted beige.",
+        "It is a one-piece unit in beige plastic, developed within the Philips France group: the 1200/75 baud modem comes from the TRT subsidiary, the tube and assembly from Radiotechnique. In the 3D terminal, it is interpreted on the Minitel 1 geometry, in beige plastic.",
       ],
       facts: [
         { label: "Reference", value: "Minitel 9 NFZ 300/2 (PATSTEC record, ACONIT)" },
@@ -96,7 +96,7 @@ export const contentEn: DocContent = {
       ],
       asset: [
         ...minitelAsset.slice(0, 3),
-        { label: "3D finish", value: "beige tint over the original Minitel 1 textures (interpretation)" },
+        { label: "3D finish", value: "plain beige plastic, original Minitel 1 relief and roughness (interpretation)" },
         minitelAsset[5],
         minitelAsset[3],
       ],

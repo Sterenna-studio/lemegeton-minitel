@@ -219,7 +219,7 @@ fondu de 0,4 s mène à la salle.
 | --- | --- | --- | --- | --- |
 | `televiseur-1950` | Téléviseur 1950 (Huuxloc, CC BY 4.0) | 1950 | salon des années 50 | meuble télé en teck construit en code (`STAND_TOP`, 60 cm) |
 | `minitel-1` | Minitel 1 (okotaru, CC BY 4.0) | 1982 | bureau des années 80 | tables actuelles (brandon_grey, CC BY 4.0) |
-| `minitel-nfz-300` | Minitel 1 NFZ 300 (géométrie du Minitel 1, teinte beige) | 1982 | salon familial du début des années 80 | tables actuelles |
+| `minitel-nfz-300` | Minitel 1 NFZ 300 (géométrie du Minitel 1, plastique beige) | 1982 | salon familial du début des années 80 | tables actuelles |
 | `terminatel-255` | Terminatel 255 (finition marbre procédurale) | 198? | DA actuelle : marbre noir, laiton, lumière ambrée | tables actuelles |
 
 - La salle `terminatel-255` reprend la scène actuelle **sans régression** : même terminal, mêmes réglages et même mobilier. Elle gagne des murs de marbre (`src/demo/marble.ts`) et une porte de sortie.
@@ -517,7 +517,7 @@ Reste ouvert : l'essai sur un vrai iPhone 11, et des modèles CC0 pour remplacer
 - Donner une salle à une porte : ajouter le terminal au catalogue, comme les trois premiers. La salle prend la première place, et une porte fermée reste au bout.
 
 **Salle du Minitel NFZ 300 (12 octobre 2026)**, à la demande de l'utilisateur : une quatrième salle, comme les autres.
-- **Terminal** : la géométrie du Minitel 1 (okotaru), teintée de beige (`nfz300Finish`, `src/demo/catalog.ts`), comme le Terminatel est une finition. La fiche PATSTEC 27402 (ACONIT) le décrit comme « un des tout premiers modèles de Minitel », un « plastique absolument monobloc de couleur beige ». Le modèle trouvé sur Cults n'est pas utilisé : sa licence réserve un usage privé et interdit les outils d'IA (voir [ASSETS.md](ASSETS.md)).
+- **Terminal** : la géométrie du Minitel 1 (okotaru), en plastique beige uni (`nfz300Finish`, `src/demo/catalog.ts`) : la carte de couleur d'origine est retirée, le relief et la rugosité restent. Une simple teinte sur cette carte grise et tachée se lisait comme le Minitel 1 (corrigé le 13 octobre 2026). C'est une finition, comme pour le Terminatel. La fiche PATSTEC 27402 (ACONIT) le décrit comme « un des tout premiers modèles de Minitel », un « plastique absolument monobloc de couleur beige ». Le modèle trouvé sur Cults n'est pas utilisé : sa licence réserve un usage privé et interdit les outils d'IA (voir [ASSETS.md](ASSETS.md)).
 - **Porte** : 1982, comme le Minitel 1, et placée juste après lui. Deux portes de la même année se distinguent par leur terminal : « Porte 1982 — Minitel 1 », « Porte 1982 — Minitel NFZ 300 ».
 - **Salle** (`Salon1982`, ambiance `salon-1982`) : le salon familial des années où le Minitel arrive à la maison (l'annuaire électronique).
   - Papier peint à bandes brunes et ocre, moquette brune, globe opalin au plafond.

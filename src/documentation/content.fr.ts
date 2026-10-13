@@ -84,7 +84,7 @@ export const contentFr: DocContent = {
       kicker: "Radiotechnique · monobloc beige",
       intro: [
         "Minitel 1 de La Radiotechnique, reference 9 NFZ 300/2, conserve par l'association ACONIT a Grenoble. Sa fiche PATSTEC le presente comme un des tout premiers modeles de Minitel, deja dote d'un clavier AZERTY : le tout premier, a clavier alphabetique, avait ete rejete par les usagers.",
-        "C'est un appareil monobloc en plastique beige, developpe au sein du groupe Philips France : le modem 1200/75 bauds vient de la filiale TRT, le tube et l'assemblage de Radiotechnique. Dans le terminal 3D, il est interprete sur la geometrie du Minitel 1, teintee de beige.",
+        "C'est un appareil monobloc en plastique beige, developpe au sein du groupe Philips France : le modem 1200/75 bauds vient de la filiale TRT, le tube et l'assemblage de Radiotechnique. Dans le terminal 3D, il est interprete sur la geometrie du Minitel 1, en plastique beige.",
       ],
       facts: [
         { label: "Reference", value: "Minitel 9 NFZ 300/2 (fiche PATSTEC, ACONIT)" },
@@ -95,7 +95,7 @@ export const contentFr: DocContent = {
       ],
       asset: [
         ...minitelAsset.slice(0, 3),
-        { label: "Finition 3D", value: "teinte beige sur les textures d'origine du Minitel 1 (interpretation)" },
+        { label: "Finition 3D", value: "plastique beige uni, relief et rugosite d'origine du Minitel 1 (interpretation)" },
         minitelAsset[5],
         minitelAsset[3],
       ],
