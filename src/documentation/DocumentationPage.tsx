@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowUpRight, Monitor } from "lucide-react";
 import { catalog, creditChanges } from "../demo/catalog";
 import { t, useLang } from "../i18n";
 import { LanguageSwitch } from "../components/LanguageSwitch";
-import { docContent, sources, type DocContent, type Fact, type ModelDoc, type WorldDoc } from "./content";
+import { docContent, sources, type DocContent, type Fact, type InfoDoc, type ModelDoc, type RelatedProject, type WorldDoc } from "./content";
 import { referencePhotos, referenceFolder } from "./references";
 
 const base = import.meta.env.BASE_URL;
@@ -130,6 +130,52 @@ function World({ worldDoc }: { worldDoc: WorldDoc }) {
   );
 }
 
+/** Using the terminal, 3615 GOTO10 : text and facts, the terminal one click away. */
+function Info({ doc }: { doc: InfoDoc }) {
+  return (
+    <section className="model-doc world-doc" id={doc.id} aria-labelledby={`${doc.id}-title`}>
+      <header>
+        <span className="kicker">{doc.kicker}</span>
+        <h2 id={`${doc.id}-title`}>{doc.title}</h2>
+      </header>
+      <div className="model-text">
+        {doc.intro.map((paragraph) => (
+          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+        ))}
+        <Facts items={doc.facts} />
+        <div className="open-links">
+          <a className="open-3d" href={base}>
+            {t("doc.info.open")} <ArrowUpRight size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** A list of links : other public repositories, or other places of the Minitel's memory. */
+function Links({ id, kicker, title, items }: { id: string; kicker: string; title: string; items: RelatedProject[] }) {
+  return (
+    <section className="project-docs" id={id} aria-labelledby={`${id}-title`}>
+      <header>
+        <span className="kicker">{kicker}</span>
+        <h2 id={`${id}-title`}>{title}</h2>
+      </header>
+      <ul>
+        {items.map((item) => (
+          <li key={item.url}>
+            <a href={item.url} target="_blank" rel="noreferrer">
+              <strong translate="no">{item.name}</strong>
+              <span>{item.description}</span>
+              <code translate="no">{item.url.replace(/^https:\/\/(github\.com\/)?/, "").replace(/\/$/, "")}</code>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function References() {
   // Les photos (annonce eBay, droits du vendeur) ne sont pas publiees : elles
   // ne s'affichent qu'en developpement, depuis le dossier local.
@@ -164,7 +210,7 @@ function References() {
 
 export function DocumentationPage() {
   const lang = useLang();
-  const { views, modelDocs, worldDoc, projectDocs, related } = docContent(lang);
+  const { views, modelDocs, worldDoc, infoDocs, projectDocs, related, elsewhere } = docContent(lang);
   return (
     <div className="doc-page">
       <header className="doc-masthead">
@@ -193,9 +239,15 @@ export function DocumentationPage() {
               </a>
             ))}
             <a href="#monde">{t("doc.nav.world")}</a>
+            {infoDocs.map((doc) => (
+              <a key={doc.id} href={`#${doc.id}`}>
+                {doc.title}
+              </a>
+            ))}
             <a href="#references">{t("doc.nav.references")}</a>
             <a href="#projet">{t("doc.nav.project")}</a>
             <a href="#lies">{t("doc.nav.related")}</a>
+            <a href="#ailleurs">{t("doc.nav.elsewhere")}</a>
             <a href="#sources">{t("doc.nav.sources")}</a>
           </nav>
         </section>
@@ -203,6 +255,9 @@ export function DocumentationPage() {
           <ModelSection key={`${lang}-${doc.id}`} doc={doc} index={index} views={views} />
         ))}
         <World worldDoc={worldDoc} />
+        {infoDocs.map((doc) => (
+          <Info key={`${lang}-${doc.id}`} doc={doc} />
+        ))}
         <References />
         <section className="project-docs" id="projet" aria-labelledby="projet-title">
           <header>
@@ -221,23 +276,8 @@ export function DocumentationPage() {
             ))}
           </ul>
         </section>
-        <section className="project-docs" id="lies" aria-labelledby="lies-title">
-          <header>
-            <span className="kicker">{t("doc.related.kicker")}</span>
-            <h2 id="lies-title">{t("doc.related.title")}</h2>
-          </header>
-          <ul>
-            {related.map((project) => (
-              <li key={project.name}>
-                <a href={project.url} target="_blank" rel="noreferrer">
-                  <strong translate="no">{project.name}</strong>
-                  <span>{project.description}</span>
-                  <code translate="no">{project.url.replace("https://github.com/", "")}</code>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <Links id="lies" kicker={t("doc.related.kicker")} title={t("doc.related.title")} items={related} />
+        <Links id="ailleurs" kicker={t("doc.elsewhere.kicker")} title={t("doc.elsewhere.title")} items={elsewhere} />
         <section className="sources" id="sources" aria-labelledby="sources-title">
           <h2 id="sources-title">{t("doc.sources.title")}</h2>
           <ul>

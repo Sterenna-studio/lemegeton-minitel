@@ -198,5 +198,9 @@
   "note.key.escape": "Esc",
   "note.key.backspace": "Backspace",
   "note.key.delete": "Del",
-  "note.key.f1": "F1"
+  "note.key.f1": "F1",
+  "doc.nav.elsewhere": "Elsewhere on the Minitel",
+  "doc.elsewhere.kicker": "Archives, museums, articles",
+  "doc.elsewhere.title": "Elsewhere on the Minitel",
+  "doc.info.open": "Open the terminal"
 }
