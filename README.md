@@ -1,9 +1,10 @@
 # minitel-musee
 
 Un petit musée interactif du Minitel et d'autres machines rétro, sur le Web :
-terminaux 3D à manipuler, simulation Vidéotex, yeux du robot Lemegéton, et un
-couloir hors du temps où chaque terminal a sa salle d'époque. En français et en
-anglais.
+terminaux 3D à manipuler, simulation Vidéotex, yeux du robot Lemegéton, un
+couloir hors du temps où chaque terminal a sa salle d'époque, et le 3615 GOTO10,
+de vrais écrans Minitel d'archives lus sur l'écran des terminaux. En français et
+en anglais.
 
 En ligne : https://sterenna.fr/minitel/ (anglais : https://sterenna.fr/minitel/?lang=en)
 
@@ -22,7 +23,7 @@ serveur de visage restent dans `minitel-face` (dépôt privé). Le personnage
 Lemegéton (modélisation, rigs, animation) a son propre dépôt, son cœur créatif :
 [Sterenna-studio/lemegeton-core](https://github.com/Sterenna-studio/lemegeton-core).
 
-## Deux modes
+## Ce qu'on y trouve
 
 - **Version simple** (par défaut, `/minitel/`) : un terminal sur sa table, à
   faire tourner, zoomer et inspecter ; l'inventaire pour changer de terminal
@@ -88,8 +89,8 @@ npm run build        # contrôle des types puis bundle dans dist/
 ```bash
 npm run typecheck
 npm run lint
-npm test               # Vitest : 68 tests unitaires
-npm run test:browser   # Playwright : 35 tests sur ordinateur et mobile (Edge headless, locale fr-FR)
+npm test               # Vitest : 80 tests unitaires
+npm run test:browser   # Playwright : 35 tests, sur ordinateur et sur mobile (Edge headless, locale fr-FR)
 ```
 
 ## En ligne
@@ -132,9 +133,11 @@ src/
   assets.ts      adresses versionnées des fichiers de public/
   minitel/       composant Minitel : modèle, écran dynamique, bombé du tube, profils, anchors (index.ts)
   videotex/      grille 40 × 25, palette, mosaïques G1, rendu Canvas, contrôleur Terminal
+                 (saisie puis Envoi, codes de service), décodeur des écrans .vdt (decoder.ts)
+  goto10/        service 3615 GOTO10 : écrans d'époque et documents de Goto10
   demo/          pages 3615 Lemegéton, catalogue des terminaux, marbre procédural
   eyes/          yeux de Lemegéton : Zyra, LibEyes, Lemegeton (firmware), rendu lisse, contrôleur
-  terminal/      expérience du terminal (3615, yeux, effets) et ses panneaux
+  terminal/      expérience du terminal (3615, yeux, effets), ses panneaux et l'aide-mémoire
   scene/         scène de la version simple : caméra orbitale, éclairages, table, chargeurs KTX2/meshopt
   components/    lecture accessible, cartes d'inventaire, bouton
   hooks/         paramètres d'URL, mouvement réduit, abonnement au terminal
@@ -142,18 +145,22 @@ src/
   world/         mode 3D+ : salles et portes dérivées du catalogue, rails, navigation,
                  séquence des portes, adresse (logique pure et testée), crédits, grain
     three/       rendu : couloir, porte temporelle, horloges, caméras, salles
-      rooms/     salles construites en code : RoomShell, Salon1950, Bureau1982, TerminatelHall
+      rooms/     salles construites en code : RoomShell, Salon1950, Bureau1982, Salon1982, TerminatelHall
   atelier/, documentation/   pages atelier et documentation
 
 public/
   models/        modèles compressés (KTX2 + meshopt) : terminaux, mobilier, monde/ (porte,
                  horloges, textures) ; ATTRIBUTION.md
+  goto10/        sélection publiée de Goto10 : écrans .vdt d'origine, documents en 40 colonnes
   inventaire/, documentation/, licenses/, .htaccess
 
 tests/           Vitest (tests/*.test.ts) et Playwright (tests/browser/)
-tools/           préparation des modèles (prepare_*), compression (optimize_glb, encode_textures),
-                 budget, captures, vérification de production, règle de cache Cloudflare
-docs/            guide, assets et licences, monde explorable, direction artistique, vérification
+tools/           préparation des modèles (prepare_*, dont prepare_nfz300.py), compression
+                 (optimize_glb, encode_textures), sélection Goto10 (build_goto10.mjs), budget,
+                 captures, vérification de production, règle de cache Cloudflare
+docs/            guide, assets et licences, monde explorable, direction artistique, traduction,
+                 vérification ; archive_minitel/ (archive Goto10 locale, seul son README est suivi)
+documentation/   entrée Vite de la page Documentation (références locales non suivies à côté)
 sources/         sources des modèles (local, hors Git ; voir sources/README.md)
 monde/           sources du monde explorable (local, hors Git ; provenance dans SOURCES.csv)
 ```
@@ -161,7 +168,9 @@ monde/           sources du monde explorable (local, hors Git ; provenance dans 
 Documentation :
 - [Guide d'utilisation et d'intégration](docs/USAGE.md) : réutiliser `<Minitel>`, sources d'écran, pages Vidéotex, yeux, accessoires.
 - [Monde explorable](docs/MONDE_EXPLORABLE.md) ([issue #8](https://github.com/Sterenna-studio/minitel-musee/issues/8)) : décisions, architecture, rails, portes, salles, budgets (iPhone 11), lots A à F faits ; le lot G (objets interactifs) reste à cadrer. [Direction artistique](docs/DIRECTION_ARTISTIQUE.md).
-- [Assets et licences](docs/ASSETS.md), [préparation des modèles](docs/MODEL_PREPARATION.md).
+- [Assets et licences](docs/ASSETS.md), [préparation des modèles](docs/MODEL_PREPARATION.md), [traduction](docs/TRADUCTION.md).
+- [Archive Goto10](docs/archive_minitel/README.md) : ce qui reste local, ce qui est publié, le 3615 GOTO10.
+- [Travaux futurs (issue #30)](https://github.com/Sterenna-studio/minitel-musee/issues/30) : refonte, éléments 3D à fournir (et qui les a trouvés), suites.
 - [Vérification](docs/VERIFICATION.md), [notes d'implémentation](docs/IMPLEMENTATION.md), [cadrage](docs/3D_WEB_PROJECT.md), [audit du 6 octobre 2026](docs/AUDIT_2026-10-06.md).
 
 La page `/documentation/` reprend les fiches des terminaux. Ses vues sont des
@@ -210,22 +219,28 @@ Tous figurent dans les sources de la page Documentation.
 - **Version simple** : les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont
   atteints (terminal manipulable, écran dynamique indépendant, 3615 Lemegéton,
   page responsive, modèle remplaçable par profil, touches 3D cliquables,
-  accessoires par anchors), avec quatre terminaux et quatre meubles.
-- **Mode 3D+** : couloir, portes temporelles, quatre salles d'époque, portes
-  fermées pour la suite, cartes d'inventaire vers les salles, crédits à l'écran ;
-  cadrage adapté aux téléphones tenus droit.
+  accessoires par anchors), avec trois terminaux en ligne (le NFZ 300, en cours de
+  correction, ne s'affiche qu'en développement) et quatre meubles.
+- **Mode 3D+** : couloir, portes temporelles, trois salles d'époque en ligne (la
+  quatrième, celle du NFZ 300, en développement), trois portes fermées pour la
+  suite, trois portails vers d'autres sites, cartes d'inventaire vers les salles,
+  crédits à l'écran ; cadrage adapté aux téléphones tenus droit.
+- **3615 GOTO10** : 28 écrans Vidéotex d'origine et 106 documents de Goto10, avec
+  un décodeur Vidéotex qui lit aussi les photos du Vidéotex photographique ;
+  saisie à la manière du Minitel et aide-mémoire des commandes.
 - **Yeux de Lemegéton** (Réglages CRT > Écran, ou `?ecran=yeux`) : en mosaïque
   Vidéotex ou en rendu lisse, repris de l'overlay OBS de nitro-clicker, des
   librairies de minitel-face et du firmware `Minitel_Sigil`. Ils clignent,
   regardent, réagissent, suivent légèrement la souris, et les touches Minitel
   changent leur humeur. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
 
-Restent ouverts :
+Restent ouverts (détail et suivi dans [l'issue #30](https://github.com/Sterenna-studio/minitel-musee/issues/30)) :
+- la correction du NFZ 300 (orientation des coques, choix du modèle à reproduire) ;
 - l'essai sur un vrai iPhone 11 ;
 - les tests du lot F ;
 - le lot G (objets interactifs), à cadrer ;
 - la validation artistique, l'optimisation du chargement (bundle d'environ 1,2 Mo)
-  et l'émulation protocolaire Vidéotex (décodeur VDT) ;
+  et les caractères DRCS du décodeur Vidéotex (approchés aujourd'hui) ;
 - **une icône pour le site** : les cinq pages déclarent aujourd'hui une icône vide,
   `<link rel="icon" href="data:," />`, pour éviter une requête `favicon.ico` en
   erreur. Il faudra une vraie icône (SVG, et PNG 32 et 180 px pour iOS) dans
@@ -240,8 +255,13 @@ adaptés :
 - « Wood Drawer & Tables Set » par brandon_grey ;
 - « Door_Wooden_Old » par Mehdi Shahsavan (porte temporelle provisoire).
 
-Horloges et matières du monde : Poly Haven (CC0). Le décor des salles est
-construit en code. Détail des sources et des modifications :
+Scan du Minitel 1 NFZ 300 par Velta-3D (publié par Arcade Makers, CC0), servi
+seulement en développement pour l'instant. Horloges et matières du monde : Poly
+Haven (CC0). Le décor des salles est construit en code.
+
+Écrans et documents du 3615 GOTO10 : [Goto10](https://www.goto10.fr/), archives
+de Frédéric Cambus, avec son accord ; écrans RTE (Ressources Télématiques
+Européennes) et AFP crédités par l'archive ([public/goto10/LISEZMOI.md](public/goto10/LISEZMOI.md)). Détail des sources et des modifications :
 [ATTRIBUTION.md](public/models/ATTRIBUTION.md).
 
 Polices IBM Plex sous licence SIL OFL 1.1 ([public/licenses/](public/licenses/)).

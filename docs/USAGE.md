@@ -136,9 +136,32 @@ const pages = [
 const terminal = new Terminal(pages, "home");
 ```
 
-Une cellule peut recevoir `mosaic: 0..63` ou `blink: true`. Les actions par chiffre
-naviguent directement ; `Envoi` est traduit en `Enter`, Sommaire/Echap reviennent
-a l'accueil. Le champ de commande n'exerce pas un shell ni un eval JavaScript.
+Une cellule peut recevoir `mosaic: 0..63`, `blink: true`, `underline`, ou une
+double taille (`w: 2`, `h: 2`). La saisie se fait comme sur un Minitel : un chiffre
+ou une lettre s'affiche sur la ligne de commande (rangee 22) et n'agit qu'a
+`Envoi` (`Enter`), qui choisit l'action dont la touche vaut la saisie. Les touches
+de fonction agissent tout de suite : `Suite`, `Retour`, `Sommaire` (ou Echap),
+`Guide`, `Repetition`, `Correction` (Retour arriere), `Annulation` (Suppr).
+`terminal.submit("3615 GOTO10")` envoie une commande entiere d'un coup (le champ de
+la console). Le champ de commande n'exerce pas un shell ni un eval JavaScript.
+
+Options d'une page (`TerminalPage`) : `prompt: false` pour une page qui occupe
+tout l'ecran (la saisie s'affiche alors sur la rangee 0), et `keys` pour donner
+aux touches de fonction une destination propre a la page
+(`{ Suite: "page-2", Retour: "liste" }`). Options du terminal :
+`new Terminal(pages, "home", { resolve, codes })`, ou `resolve(id)` construit a la
+demande les pages absentes de la liste (le 3615 GOTO10 s'en sert), et `codes`
+associe des codes de service a des pages (`{ GOTO10: "goto10" }` : on tape `GOTO10`
+ou `3615 GOTO10`, puis Envoi). `terminal.refresh()` redessine la page courante
+quand ses donnees arrivent.
+
+### Ecrans Videotex d'origine (.vdt)
+
+`src/videotex/decoder.ts` lit un flux Videotex de Minitel :
+`videotexPages(bytes)` donne le debut de chaque ecran (coupe aux FF), et
+`decodeVideotexScreen(bytes, debut, fin)` la grille et les photos du Videotex
+photographique (JPEG a dessiner, voir `src/goto10/service.ts`) ; `decodeVideotex`
+ne rend que la grille. Les caracteres DRCS sont approches (hachures).
 
 ## Catalogue de modeles et finitions
 
