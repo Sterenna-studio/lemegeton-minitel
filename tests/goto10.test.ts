@@ -87,13 +87,15 @@ describe("decodeur Videotex", () => {
 describe("3615 GOTO10", () => {
   it("s'ouvre par la touche 4 du sommaire ou par son code", async () => {
     const terminal = createLemegetonTerminal(loader);
-    terminal.sendKey("4");
+    const choose = (...keys: string[]) => keys.forEach((key) => terminal.sendKey(key));
+    choose("4", "Envoi");
     expect(terminal.getSnapshot().page).toBe("goto10");
     expect(terminal.getSnapshot().frame.service).toBe("3615 GOTO10");
-    terminal.sendKey("0");
+    choose("0", "Envoi");
     expect(terminal.getSnapshot().page).toBe("home");
     // From a page with its own Envoi, the typed code still wins.
-    terminal.sendKey("1");
+    choose("1", "Envoi");
+    expect(terminal.getSnapshot().page).toBe("connection");
     for (const key of "GOTO10") terminal.sendKey(key);
     terminal.sendKey("Envoi");
     expect(terminal.getSnapshot().page).toBe("goto10");
@@ -103,15 +105,21 @@ describe("3615 GOTO10", () => {
     const terminal = createLemegetonTerminal(loader);
     terminal.go("goto10");
     terminal.sendKey("1");
+    terminal.sendKey("Envoi");
     expect(screen(terminal)).toContain("CONNEXION A GOTO10");
     await settle();
     expect(screen(terminal)).toContain("Deux pages");
     terminal.sendKey("1");
+    terminal.sendKey("Envoi");
     await settle();
     expect(screen(terminal)).toBe("PAGE UN");
     terminal.sendKey("Suite");
     expect(screen(terminal)).toBe("PAGE DEUX");
     expect(terminal.getSnapshot().frame.title).toBe("Deux pages · 2/2");
+    // On a full-screen page, what is typed shows on the status row.
+    terminal.sendKey("7");
+    expect(screen(terminal).split("\n")[0]).toBe("> 7");
+    terminal.sendKey("Annulation");
     terminal.sendKey("Retour");
     expect(screen(terminal)).toBe("PAGE UN");
     terminal.sendKey("Retour");
@@ -122,8 +130,7 @@ describe("3615 GOTO10", () => {
     const terminal = createLemegetonTerminal(loader);
     terminal.go("goto10/docs");
     await settle();
-    terminal.sendKey("1");
-    terminal.sendKey("1");
+    for (const key of ["1", "Envoi", "1", "Envoi"]) terminal.sendKey(key);
     await settle();
     expect(screen(terminal)).toContain("ligne 19");
     expect(screen(terminal)).not.toContain("ligne 20");

@@ -37,6 +37,12 @@ Lemegéton (modélisation, rigs, animation) a son propre dépôt, son cœur cré
   Vidéotex photographique), lus par un décodeur Vidéotex
   (`src/videotex/decoder.ts`), et documents en pages de 40 colonnes. SUITE et
   RETOUR feuillettent (touches Page suivante et Page précédente du clavier).
+- **Saisie comme sur un Minitel** : un numéro ou un code tapé s'affiche sur la
+  ligne de commande de l'écran et n'agit qu'à l'appui sur Envoi (Entrée) ; les
+  touches de fonction (SUITE, RETOUR, SOMMAIRE, GUIDE, CORRECTION, ANNULATION)
+  agissent tout de suite. Un **aide-mémoire** en post-it, près de l'écran, donne
+  ces touches et leurs équivalents au clavier (Page ↓/↑, Échap, Retour arrière,
+  Suppr, F1) ; ses boutons les envoient aussi, et il se replie.
 - **Mode 3D+** (bouton de l'en-tête, `/minitel/?mode=3d`) : un couloir hors du
   temps, parcouru sur rails. Une porte temporelle par terminal, dans l'ordre
   chronologique, ouvre sur une salle d'époque (salon 1950, bureau 1982, salon

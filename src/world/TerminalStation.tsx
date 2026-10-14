@@ -1,3 +1,4 @@
+import { CommandNote } from "../terminal/CommandNote";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Tool } from "../components/Tool";
@@ -46,6 +47,7 @@ export function TerminalStation({
         />
       )}
       {panels.keyboard && <VirtualKeyboard sendKey={sendKey} />}
+      {!panels.settings && <CommandNote sendKey={sendKey} />}
       <TerminalConsole
         frame={activeFrame}
         panels={panels}

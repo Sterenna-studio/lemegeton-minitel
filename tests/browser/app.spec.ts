@@ -98,10 +98,11 @@ test("asset, ecran dynamique, navigation, camera et responsive", async ({
     .locator(".virtual-keyboard")
     .getByRole("button", { name: "1", exact: true })
     .click();
-  await page
-    .locator(".virtual-keyboard")
-    .getByRole("button", { name: "Envoi", exact: true })
-    .click();
+  // 1 then ENVOI : the connection page ; ENVOI again identifies the terminal.
+  const envoi = page.locator(".virtual-keyboard").getByRole("button", { name: "Envoi", exact: true });
+  await envoi.click();
+  await expect(page.locator(".terminal-title")).toContainText("CONNEXION");
+  await envoi.click();
   await expect(page.locator(".terminal-title")).toContainText("IDENTIFICATION");
   await page.getByRole("button", { name: "Reglages CRT", exact: true }).click();
   await page.getByLabel("Antenne experimentale").check();
@@ -176,6 +177,9 @@ test("touche 3D, clavier physique, zoom et inspection", async ({
     box.x + ((projected.x + 1) * box.width) / 2,
     box.y + ((1 - projected.y) * box.height) / 2,
   );
+  // The key types its digit on the command line ; ENVOI sends it.
+  await expect(page.locator(".terminal-title")).not.toContainText("CONNEXION");
+  await page.keyboard.press("Enter");
   await expect(page.locator(".terminal-title")).toContainText("CONNEXION");
   await page.keyboard.press("Enter");
   await expect(
