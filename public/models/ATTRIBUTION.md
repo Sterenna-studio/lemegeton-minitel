@@ -38,12 +38,14 @@ given gladly: thank you, Velta-3D.
 License URL: https://creativecommons.org/publicdomain/zero/1.0/
 
 Derived web asset: minitel-nfz-300.glb, made by tools/prepare_nfz300.py from the
-two Artec scans (0_S_Fusion.obj, casing; 0_SFusion.obj, keyboard). Changes:
-casing straightened and turned upright, keyboard aligned and laid open in front,
-both meshes decimated to 45 %, rear top of the tube housing closed (convex hull
-faces over the open part), screen plane, dark tube backing, keyboard plate and
-48 keys added, plain materials, scaled to the museum tables.
-Web compression (tools/optimize_glb.mjs): geometry compressed with meshopt.
+two Artec scans (0_SFusion.obj, the wedge base; 0_S_Fusion.obj, the cover with the
+keyboard deck and the tube pyramid). Changes: assembled as the one-piece terminal
+of the ACONIT photos (cover laid on the base), both meshes decimated to 45 %,
+screen plane, dark tube backing, keyboard panel and 58 keys added (layout taken
+from ACONIT's front photo, tools/nfz300_keyboard.json; labels drawn by
+tools/nfz300_atlas.py), plain materials, real size.
+Web compression (tools/optimize_glb.mjs): label texture re-encoded as KTX2,
+geometry compressed with meshopt.
 
 ---
 
