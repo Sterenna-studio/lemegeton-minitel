@@ -38,7 +38,15 @@ export class Terminal {
   private frame(id: string, input: string): TerminalFrame {
     const page = this.page(id);
     const frame = page.render();
-    if (page.prompt === false) return frame;
+    if (page.prompt === false) {
+      // A page that uses the whole screen : what is typed shows on the status row.
+      if (input) {
+        for (let x = 0; x < 40; x++) frame.cells[x] = { char: " ", fg: 2, bg: 0 };
+        text(frame, 1, 0, `> ${input}`, 2);
+        frame.cursor = { x: 3 + input.length, y: 0 };
+      }
+      return frame;
+    }
     text(frame, 3, 22, `> ${input}`, 2);
     frame.cursor = { x: 5 + input.length, y: 22 };
     return frame;
@@ -75,18 +83,38 @@ export class Terminal {
     const typed = input.replace(/\s+/g, "").replace(/^3615/, "");
     return this.options.codes?.[typed];
   }
+  /**
+   * A key of the Minitel. Letters and digits are typed on the command line and
+   * wait for ENVOI, as on the Minitel ; the function keys act at once
+   * (SUITE, RETOUR, SOMMAIRE, GUIDE, REPETITION, CORRECTION, ANNULATION).
+   */
   sendKey = (key: string): void => {
     if (key === "Envoi") key = "Enter";
+    if (key === "Backspace") key = "Correction";
+    if (key === "Delete") key = "Annulation";
+    if (key === "Home" || key === "Escape") key = "Sommaire";
+    const input = this.snapshot.input;
     const own = this.page(this.snapshot.page).keys;
-    const mapped = own?.[key] ?? (key === "Enter" && !this.snapshot.input ? own?.Envoi : undefined);
-    if (mapped) {
-      this.go(mapped);
+    if (key === "Enter") {
+      // A service code, then a choice of the page, then the page's own ENVOI.
+      const target =
+        this.code(input) ??
+        this.snapshot.frame.actions.find((action) => action.key.toLowerCase() === (input || "enter").toLowerCase())?.target ??
+        (input ? undefined : own?.Envoi);
+      if (target) this.go(target);
       return;
     }
-    // A service code typed then sent wins over the page's own Envoi.
-    const code = key === "Enter" ? this.code(this.snapshot.input) : undefined;
-    if (code) {
-      this.go(code);
+    if (key === "Correction" || key === "Annulation") {
+      this.type(key === "Correction" ? input.slice(0, -1) : "");
+      return;
+    }
+    if (key.length === 1) {
+      if (input.length < 28) this.type(input + key.toUpperCase());
+      return;
+    }
+    const mapped = own?.[key];
+    if (mapped) {
+      this.go(mapped);
       return;
     }
     if (key === "Repetition") {
@@ -100,43 +128,10 @@ export class Terminal {
       if (next) this.go(next.target);
       return;
     }
-    if (
-      [
-        "Home",
-        "Escape",
-        "Sommaire",
-        "ConnexionFin",
-        "Retour",
-        "Guide",
-      ].includes(key)
-    ) {
-      this.go(this.home);
-      return;
-    }
-    // While a code is being typed ("GOTO10"), digits go to the command line too.
-    const typing = this.snapshot.input.length > 0 && key.length === 1;
-    const action = typing
-      ? undefined
-      : this.snapshot.frame.actions.find((action) => action.key.toLowerCase() === key.toLowerCase());
-    if (action) {
-      this.go(action.target);
-      return;
-    }
-    if (key === "Enter") {
-      const target = this.snapshot.frame.actions.find((action) => action.key === this.snapshot.input)?.target;
-      if (target) this.go(target);
-      return;
-    }
-    let input = this.snapshot.input;
-    if (key === "Backspace" || key === "Correction") input = input.slice(0, -1);
-    else if (key === "Annulation") input = "";
-    else if (key.length === 1 && input.length < 28) input += key.toUpperCase();
-    else return;
-    this.snapshot = {
-      ...this.snapshot,
-      input,
-      frame: this.frame(this.snapshot.page, input),
-    };
-    this.notify();
+    if (["Sommaire", "ConnexionFin", "Retour", "Guide"].includes(key)) this.go(this.home);
   };
+  private type(input: string): void {
+    this.snapshot = { ...this.snapshot, input, frame: this.frame(this.snapshot.page, input) };
+    this.notify();
+  }
 }

@@ -1,3 +1,4 @@
+import { CommandNote } from "./terminal/CommandNote";
 import { useCallback, useEffect, useState } from "react";
 import {
   Box,
@@ -284,6 +285,7 @@ export default function App({ onMode3d }: { onMode3d?: () => void } = {}) {
         />
       )}
       {panels.keyboard && <VirtualKeyboard sendKey={sendKey} />}
+      {!panels.settings && <CommandNote sendKey={sendKey} />}
       {inspecting && (
         <DebugPanel
           inspection={inspection}

@@ -1071,3 +1071,105 @@ html:has(.experience.transparent) body,
     opacity 0.3s ease,
     visibility 0s linear 0.3s;
 }
+
+/* Aide-memoire du terminal : un post-it jaune pres de l'ecran. */
+.command-note,
+.note-tab {
+  position: absolute;
+  z-index: 5;
+  top: 118px;
+  right: 36px;
+  color: #2a2214;
+  background: #f0dc8c;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+  font: 12px "IBM Plex Mono", monospace;
+}
+.command-note {
+  width: 292px;
+  padding: 12px 14px 10px;
+  transform: rotate(1.2deg);
+  border-radius: 2px 2px 14px 2px;
+}
+.command-note header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.command-note header strong {
+  font: 600 13px "IBM Plex Sans", sans-serif;
+}
+.command-note header button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.command-note p {
+  margin: 6px 0 8px;
+  line-height: 1.35;
+}
+.command-note ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.command-note li {
+  display: grid;
+  grid-template-columns: 90px 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+}
+.command-note li button {
+  padding: 3px 4px;
+  border: 1px solid rgba(42, 34, 20, 0.45);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  color: inherit;
+  font: 600 10px "IBM Plex Mono", monospace;
+  cursor: pointer;
+}
+.command-note li button:hover,
+.command-note li button:focus-visible,
+.note-tab:hover,
+.note-tab:focus-visible {
+  background: rgba(255, 255, 255, 0.6);
+  outline: 1px solid #2a2214;
+}
+.command-note kbd {
+  font: 10px "IBM Plex Mono", monospace;
+  opacity: 0.8;
+}
+.command-note li span {
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.command-note .note-code {
+  margin: 8px 0 0;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(42, 34, 20, 0.4);
+}
+.note-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  /* Sous l'en-tete : en bas, il couvrirait les commandes de la camera. */
+  .command-note,
+  .note-tab {
+    top: 140px;
+    right: 20px;
+  }
+  .command-note {
+    width: min(292px, calc(100vw - 40px));
+  }
+}

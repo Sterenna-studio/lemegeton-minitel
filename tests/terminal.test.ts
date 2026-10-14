@@ -10,7 +10,11 @@ import {
 describe("terminal reutilisable", () => {
   it("navigue et revient au sommaire", () => {
     const terminal = createLemegetonTerminal();
+    // The choice shows on the command line and waits for ENVOI.
     terminal.sendKey("1");
+    expect(terminal.getSnapshot().page).toBe("home");
+    expect(plainText(terminal.getSnapshot().frame)).toContain("> 1");
+    terminal.sendKey("Envoi");
     expect(terminal.getSnapshot().page).toBe("connection");
     terminal.sendKey("Envoi");
     expect(terminal.getSnapshot().page).toBe("identity");
@@ -20,11 +24,15 @@ describe("terminal reutilisable", () => {
   });
   it("affiche les archives et les messages", () => {
     const terminal = createLemegetonTerminal();
-    terminal.sendKey("2");
+    for (const key of ["2", "Envoi"]) terminal.sendKey(key);
     expect(terminal.getSnapshot().page).toBe("archives");
-    terminal.sendKey("0");
-    terminal.sendKey("3");
+    for (const key of ["0", "Envoi", "3", "Envoi"]) terminal.sendKey(key);
     expect(terminal.getSnapshot().page).toBe("messages");
+    // A wrong choice stays typed, to be corrected.
+    for (const key of ["9", "Envoi"]) terminal.sendKey(key);
+    expect(terminal.getSnapshot()).toMatchObject({ page: "messages", input: "9" });
+    terminal.sendKey("Correction");
+    expect(terminal.getSnapshot().input).toBe("");
   });
   it("edite une commande bornee et notifie les abonnes", () => {
     const terminal = createLemegetonTerminal();

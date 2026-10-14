@@ -37,11 +37,19 @@ export function AccessibleTerminal({
       <pre className="sr-only">{plainText(frame)}</pre>
       <nav aria-label={t("terminal.sections")}>
         {frame.actions.map((action) => (
-          <button key={action.key} onClick={() => onKey(action.key)}>
+          <button key={action.key} onClick={() => choose(onKey, action.key)}>
             {action.label}
           </button>
         ))}
       </nav>
     </section>
   );
+}
+
+/** A choice of the page in one press : its number typed alone, then ENVOI. */
+function choose(onKey: (key: string) => void, key: string): void {
+  if (key.length !== 1) return onKey(key);
+  onKey("Annulation");
+  onKey(key);
+  onKey("Envoi");
 }

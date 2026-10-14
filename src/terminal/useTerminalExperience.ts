@@ -179,8 +179,9 @@ export function useTerminalKeyboard(sendKey: (key: string) => void) {
       )
         return;
       if (event.ctrlKey || event.altKey || event.metaKey) return;
-      // Page keys of the Minitel : SUITE and RETOUR.
-      const minitel = { PageDown: "Suite", PageUp: "Retour" }[event.key];
+      // Keys of the Minitel without a key of their own : SUITE, RETOUR, GUIDE
+      // (Entrée = ENVOI, Retour arrière = CORRECTION, Suppr = ANNULATION, Échap = SOMMAIRE).
+      const minitel = ({ PageDown: "Suite", PageUp: "Retour", F1: "Guide" } as Record<string, string>)[event.key];
       if (
         minitel ||
         event.key.length === 1 ||
