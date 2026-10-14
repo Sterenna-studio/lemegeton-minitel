@@ -216,3 +216,13 @@
     display: none;
   }
 }
+
+/* Au poste du terminal, l'aide-memoire reste au-dessus de la console. */
+.world-terminal .command-note,
+.world-terminal .note-tab {
+  top: 84px;
+}
+.world-terminal .command-note {
+  max-height: calc(100% - 300px);
+  overflow: auto;
+}

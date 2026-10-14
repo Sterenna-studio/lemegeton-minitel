@@ -788,7 +788,9 @@ svg {
 .experience.capture .camera-tools,
 .experience.capture .console,
 .experience.capture .credits,
-.experience.capture .model-loading {
+.experience.capture .model-loading,
+.experience.capture .command-note,
+.experience.capture .note-tab {
   display: none;
 }
 .experience.capture .scene {

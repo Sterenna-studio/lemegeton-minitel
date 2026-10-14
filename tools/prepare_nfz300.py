@@ -1,15 +1,20 @@
 # Prépare le Minitel 1 NFZ 300 (La Radiotechnique) pour le Web, à partir des
-# deux scans Artec de Velta-3D publiés sur Cults sous licence CC0 (passée en
-# CC0 le 13 octobre 2026) : 0_S_Fusion.obj (boîtier) et 0_SFusion.obj
-# (clavier rabattable). Les scans sont des coques en millimètres, sans UV, ni
-# couleur, ni écran, ni touches, et le dessus arrière du logement du tube manque.
-# Ce script les redresse et les assemble, allège le maillage, referme le
-# logement, pose un écran Vidéotex dans la fenêtre et une plaque de touches
-# cliquables dans le bac du clavier, puis exporte un GLB.
+# deux scans Artec de Velta-3D publiés sur Cults (CC0 depuis le 13 octobre 2026) :
+#   0_SFusion.obj  : le socle, un biseau ouvert en dessus, épais à l'arrière ;
+#   0_S_Fusion.obj : le capot, plateau du clavier et pyramide du tube.
+# Le NFZ 300 est un monobloc (photos ACONIT 20199, vues de face et de profil) :
+# le capot se pose sur le socle, l'écran est dans la face avant de la pyramide,
+# presque verticale, le clavier sur le plateau devant elle. Les scans sont des
+# coques sans écran, ni touches, ni couleurs : ce script les assemble, pose
+# l'écran Vidéotex dans la fenêtre et le clavier relevé sur la photo
+# (tools/nfz300_keyboard.json, inscriptions de tools/nfz300_atlas.py), puis
+# exporte un GLB.
 #
 # Usage (Blender 5) :
+#   python tools/nfz300_atlas.py
 #   blender -b -P tools/prepare_nfz300.py -- [dossier des scans] [sortie.glb]
-# puis : node tools/optimize_glb.mjs <sortie.glb> public/models/minitel-nfz-300.glb
+#   node tools/optimize_glb.mjs <sortie.glb> public/models/minitel-nfz-300.glb
+import json
 import math
 import sys
 from collections import deque
@@ -25,20 +30,18 @@ ROOT = Path(__file__).resolve().parents[1]
 args = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
 SOURCE = Path(args[0]) if args else ROOT / "sources/02_SOURCES_3D/minitel-1-nfz-300-la-radiotechnique20200302-6124-q4n48m/Velta-3D/minitel-1-nfz-300-la-radiotechnique"
 OUTPUT = Path(args[1]) if len(args) > 1 else ROOT / "sources/build/nfz300-prepare.glb"
+ATLAS = ROOT / "sources/build/nfz300-atlas.png"
+LAYOUT = json.loads((ROOT / "tools/nfz300_keyboard.json").read_text(encoding="utf-8"))
 
-# Artec exporte en millimètres ; le site compte 8 unités par mètre. Un peu
-# moins (0,94) pour que boîtier et clavier tiennent sur les tables du lot.
-SCALE = 0.008 * 0.94
+# Artec exporte en millimètres ; le site compte 8 unités par mètre : taille réelle.
+SCALE = 0.008
 DECIMATE = 0.45
-# Redressement du boîtier : sa face avant penche de 12,8° dans le scan, et il
-# y est la tête en bas (les bosses de charnière du clavier vont en bas).
-BODY_PITCH = -12.8
-# Retournement du clavier après l'alignement sur ses axes principaux : face des
-# touches vers le haut, charnière côté boîtier.
-KEYBOARD_FLIPS = (-1.0, 1.0, -1.0)
-# Arrière du boîtier, en unités (repère three.js : z vers le visiteur), pour
-# que l'ensemble se pose sur les tables comme le Minitel 1 (src/scene/furniture.ts).
-BACK_Z = -1.63
+# Centre de l'emprise des tables du musée, en z three.js (src/scene/furniture.ts).
+TABLE_CENTER_Z = 0.75
+# Profondeur (mm) au-delà de laquelle un rayon passe par la fenêtre de l'écran.
+WINDOW_DEPTH = 120
+# Atlas des inscriptions (tools/nfz300_atlas.py) : cases de 128 x 64, panneau à y = 600.
+ATLAS_SIZE, CELL_W, CELL_H, CELL_COLS, PANEL_TOP = 1024, 128, 64, 8, 600
 
 
 def log(*items):
@@ -57,13 +60,67 @@ def load(name):
     return obj
 
 
-def transform(obj, matrix):
+def co(obj):
+    return np.array([v.co[:] for v in obj.data.vertices])
+
+
+def apply(obj, matrix):
     obj.data.transform(matrix)
     obj.data.update()
 
 
-def vertices(obj):
-    return np.array([v.co[:] for v in obj.data.vertices])
+def pca_frame(obj):
+    """Axes principaux : longueur sur Y, largeur sur X, épaisseur sur Z."""
+    p = co(obj)
+    c = p.mean(axis=0)
+    vals, vecs = np.linalg.eigh(np.cov((p - c).T))
+    order = vals.argsort()[::-1]
+    length, width, normal = (vecs[:, i] for i in order)
+    width = np.cross(length, normal)
+    m = Matrix.Identity(4)
+    for j in range(3):
+        m[0][j], m[1][j], m[2][j] = width[j], length[j], normal[j]
+    apply(obj, Matrix.Translation(-Vector(c)))
+    apply(obj, m)
+
+
+def level_face(obj, towards):
+    """La grande face plane tournée vers `towards` (dessous du socle, plateau) y pointe exactement."""
+    want = Vector(towards)
+    total = Vector((0, 0, 0))
+    for poly in obj.data.polygons:
+        if poly.normal.dot(want) > 0.95:
+            total += poly.normal * poly.area
+    apply(obj, total.normalized().rotation_difference(want).to_matrix().to_4x4())
+
+
+def level(obj, points):
+    """Le plan des points (moindres carrés) horizontal, normale vers +Z."""
+    c = points.mean(axis=0)
+    _, _, vt = np.linalg.svd(points - c)
+    n = vt[2] if vt[2][2] > 0 else -vt[2]
+    apply(obj, Vector(n).rotation_difference(Vector((0, 0, 1))).to_matrix().to_4x4())
+
+
+def side_angle(points):
+    """Angle des bords latéraux vus de dessus (x = a y + b de chaque côté, moyenne)."""
+    angles = []
+    for sign in (1, -1):
+        ys, xs = [], []
+        lo, hi = np.percentile(points[:, 1], [10, 90])
+        edges = np.linspace(lo, hi, 13)
+        for a, e in zip(edges[:-1], edges[1:]):
+            sl = points[(points[:, 1] >= a) & (points[:, 1] < e)]
+            if len(sl):
+                ys.append((a + e) / 2)
+                xs.append((sl[:, 0] * sign).max() * sign)
+        angles.append(math.atan(np.polyfit(ys, xs, 1)[0]))
+    return sum(angles) / 2
+
+
+def center_x(obj):
+    p = co(obj)
+    apply(obj, Matrix.Translation(Vector((-(p[:, 0].min() + p[:, 0].max()) / 2, 0, 0))))
 
 
 def decimate(obj, ratio):
@@ -73,93 +130,145 @@ def decimate(obj, ratio):
     bpy.ops.object.modifier_apply(modifier=modifier.name)
 
 
-body = load("0_S_Fusion")
-keyboard = load("0_SFusion")
-log("triangles d'origine", len(body.data.polygons), len(keyboard.data.polygons))
+def pyramid_front(points):
+    """Avant de la pyramide : le point le plus en avant (-Y) à plus de 100 mm du plateau."""
+    return points[points[:, 2] > points[:, 2].min() + 100][:, 1].min()
 
-# --- Redressement -------------------------------------------------------------
-transform(body, Matrix.Rotation(math.pi, 4, "Y") @ Matrix.Rotation(math.radians(BODY_PITCH), 4, "X"))
-points = vertices(keyboard)
-centre = points.mean(axis=0)
-values, vectors = np.linalg.eigh(np.cov((points - centre).T))
-order = values.argsort()[::-1]
-length, width, normal = (vectors[:, i] for i in order)
-rows = np.array([width * KEYBOARD_FLIPS[0], length * KEYBOARD_FLIPS[1], normal * KEYBOARD_FLIPS[2]])
-if np.linalg.det(rows) < 0:
-    rows[0] *= -1
-align = Matrix.Identity(4)
-for i in range(3):
-    for j in range(3):
-        align[i][j] = rows[i][j]
-transform(keyboard, Matrix.Translation(-Vector(centre)))
-transform(keyboard, align)
 
-for obj in (body, keyboard):
+base = load("0_SFusion")
+cover = load("0_S_Fusion")
+log("triangles d'origine", len(base.data.polygons), len(cover.data.polygons))
+
+# --- Socle : dessous plat au sol, côtés parallèles à Y, bout épais à l'arrière (+Y) ---
+pca_frame(base)
+apply(base, Matrix.Rotation(math.pi, 4, "Y"))
+for _ in range(3):
+    level_face(base, (0, 0, -1))
+apply(base, Matrix.Rotation(side_angle(co(base)), 4, "Z"))
+center_x(base)
+b = co(base)
+apply(base, Matrix.Translation(Vector((0, 0, -b[:, 2].min()))))
+b = co(base)
+if b[b[:, 1] > np.percentile(b[:, 1], 90)][:, 2].max() < b[b[:, 1] < np.percentile(b[:, 1], 10)][:, 2].max():
+    apply(base, Matrix.Rotation(math.pi, 4, "Z"))
+    b = co(base)
+# Rebord : le haut des parois latérales, tranche par tranche.
+side = b[np.abs(b[:, 0]) > np.abs(b[:, 0]).max() - 12]
+edges = np.linspace(side[:, 1].min() + 15, side[:, 1].max() - 15, 16)
+ys, zs = [], []
+for a, e in zip(edges[:-1], edges[1:]):
+    sl = side[(side[:, 1] >= a) & (side[:, 1] < e)]
+    if len(sl):
+        ys.append((a + e) / 2)
+        zs.append(np.percentile(sl[:, 2], 95))
+slope, intercept = np.polyfit(ys, zs, 1)
+log("socle", np.round(b.min(axis=0), 1), np.round(b.max(axis=0), 1), "rebord", round(math.degrees(math.atan(slope)), 1), "degres")
+
+# --- Capot : pyramide en haut, calé sur le plateau du clavier, devant à -Y ---
+pca_frame(cover)
+apply(cover, Matrix.Rotation(math.pi, 4, "X"))
+for _ in range(3):
+    level_face(cover, (0, 0, 1))
+for _ in range(3):
+    c = co(cover)
+    deck = c[(c[:, 1] < pyramid_front(c) - 15) & (c[:, 2] < c[:, 2].min() + 40)]
+    level(cover, deck)
+c = co(cover)
+tall = c[c[:, 2] > c[:, 2].min() + 100]
+if tall[:, 1].mean() < c[:, 1].mean():
+    # Le plateau doit dépasser davantage devant la pyramide que derrière.
+    apply(cover, Matrix.Rotation(math.pi, 4, "Z"))
+apply(cover, Matrix.Rotation(side_angle(co(cover)), 4, "Z"))
+center_x(cover)
+# Posé sur le rebord : même pente, centré sur le socle, plateau sur le rebord.
+apply(cover, Matrix.Rotation(math.atan(slope), 4, "X"))
+c = co(cover)
+apply(cover, Matrix.Translation(Vector((0, (b[:, 1].min() + b[:, 1].max()) / 2 - (c[:, 1].min() + c[:, 1].max()) / 2, 0))))
+c = co(cover)
+low = c[c[:, 2] < np.percentile(c[:, 2], 5)]
+gap = min(z - (slope * y + intercept) for y, z in low[:, 1:3])
+apply(cover, Matrix.Translation(Vector((0, 0, -gap))))
+c = co(cover)
+log("capot", np.round(c.min(axis=0), 1), np.round(c.max(axis=0), 1))
+
+for obj in (base, cover):
     decimate(obj, DECIMATE)
-log("triangles allégés", len(body.data.polygons), len(keyboard.data.polygons))
+log("triangles alleges", len(base.data.polygons), len(cover.data.polygons))
 
-# --- Fenêtre de l'écran : carte de profondeur de la face avant ------------------
-co = vertices(body)
-low, high = co.min(axis=0), co.max(axis=0)
-tree = BVHTree.FromPolygons([v.co.copy() for v in body.data.vertices], [p.vertices[:] for p in body.data.polygons])
+# --- Fenêtre de l'écran : dans la face avant de la pyramide -----------------------
+c = co(cover)
+front_y = pyramid_front(c)
+
+
+def deck_z(y):
+    return slope * y + intercept
+
+
+total, centre, area = Vector((0, 0, 0)), Vector((0, 0, 0)), 0.0
+for poly in cover.data.polygons:
+    if poly.normal.y < -0.5 and poly.normal.z > 0.05 and poly.center.z > deck_z(poly.center.y) + 40:
+        total += poly.normal * poly.area
+        centre += poly.center * poly.area
+        area += poly.area
+face_n = total.normalized()
+face_c = centre / area
+v = face_n.cross(Vector((1, 0, 0))).normalized()
+if v.z < 0:
+    v = -v
+u = v.cross(face_n).normalized()
+log("face avant : penchee de", round(math.degrees(math.asin(max(-1, min(1, face_n.z)))), 1), "degres vers le haut")
+tree = BVHTree.FromPolygons([vert.co.copy() for vert in cover.data.vertices], [p.vertices[:] for p in cover.data.polygons])
 step = 3.0
-xs = np.arange(low[0] + 2, high[0] - 2, step)
-zs = np.arange(low[2] + 2, high[2] - 2, step)
-depth = np.full((len(zs), len(xs)), np.inf)
-for i, z in enumerate(zs):
-    for j, x in enumerate(xs):
-        hit = tree.ray_cast(Vector((x, low[1] - 20, z)), Vector((0, 1, 0)))
+grid_a = np.arange(-230, 230, step)
+grid_b = np.arange(-230, 260, step)
+depth = np.full((len(grid_b), len(grid_a)), np.inf)
+for i, gb in enumerate(grid_b):
+    for j, ga in enumerate(grid_a):
+        hit = tree.ray_cast(face_c + u * float(ga) + v * float(gb) + face_n * 200, -face_n, 900)
         if hit[0] is not None:
-            depth[i, j] = hit[0].y - low[1]
-deep = ~np.isfinite(depth) | (depth > 120)
+            depth[i, j] = hit[3] - 200
+deep = ~np.isfinite(depth) | (depth > WINDOW_DEPTH)
 seen = np.zeros_like(deep)
 window = []
-for i in range(len(zs)):
-    for j in range(len(xs)):
-        if deep[i, j] and not seen[i, j]:
-            region, queue = [], deque([(i, j)])
-            seen[i, j] = True
-            while queue:
-                a, b = queue.popleft()
-                region.append((a, b))
-                for da, db in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    na, nb = a + da, b + db
-                    if 0 <= na < len(zs) and 0 <= nb < len(xs) and deep[na, nb] and not seen[na, nb]:
-                        seen[na, nb] = True
-                        queue.append((na, nb))
-            if len(region) > len(window):
-                window = region
-wr = [a for a, _ in window]
-wc = [b for _, b in window]
-win_x = (xs[min(wc)], xs[max(wc)])
-win_z = (zs[min(wr)], zs[max(wr)])
+for i in range(len(grid_b)):
+    for j in range(len(grid_a)):
+        if not deep[i, j] or seen[i, j]:
+            continue
+        region, queue, border = [], deque([(i, j)]), False
+        seen[i, j] = True
+        while queue:
+            p, q = queue.popleft()
+            region.append((p, q))
+            if p in (0, len(grid_b) - 1) or q in (0, len(grid_a) - 1):
+                border = True
+            for dp, dq in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                np_, nq = p + dp, q + dq
+                if 0 <= np_ < len(grid_b) and 0 <= nq < len(grid_a) and deep[np_, nq] and not seen[np_, nq]:
+                    seen[np_, nq] = True
+                    queue.append((np_, nq))
+        # A deep region that touches the grid's edge is outside the terminal.
+        if not border and len(region) > len(window):
+            window = region
+assert window, "fenetre de l'ecran introuvable"
+rows = [p for p, _ in window]
+cols = [q for _, q in window]
+a0, a1 = grid_a[min(cols)], grid_a[max(cols)]
+b0, b1 = grid_b[min(rows)], grid_b[max(rows)]
 ring = [
-    depth[a, b]
-    for a in range(max(0, min(wr) - 3), min(len(zs), max(wr) + 4))
-    for b in range(max(0, min(wc) - 3), min(len(xs), max(wc) + 4))
-    if np.isfinite(depth[a, b]) and depth[a, b] <= 120
+    depth[p, q]
+    for p in range(max(0, min(rows) - 3), min(len(grid_b), max(rows) + 4))
+    for q in range(max(0, min(cols) - 3), min(len(grid_a), max(cols) + 4))
+    if np.isfinite(depth[p, q]) and depth[p, q] <= WINDOW_DEPTH
 ]
 bezel = float(np.median(ring))
-log("fenêtre (mm)", np.round(win_x, 1), np.round(win_z, 1), "biseau", round(bezel, 1))
-
-# --- Placement (mm) : écran centré en x, boîtier posé au sol, clavier devant ----
-shift = Vector((-(win_x[0] + win_x[1]) / 2, -low[1], -low[2]))
-transform(body, Matrix.Translation(shift))
-co = vertices(body)
-body_low, body_high = co.min(axis=0), co.max(axis=0)
-k = vertices(keyboard)
-transform(keyboard, Matrix.Translation(Vector((-(k[:, 0].min() + k[:, 0].max()) / 2, body_low[1] - k[:, 1].max(), -k[:, 2].min()))))
-k = vertices(keyboard)
-win_cx = 0.0
-win_cz = (win_z[0] + win_z[1]) / 2 + shift.z
-win_w = win_x[1] - win_x[0] + 10
-win_h = win_z[1] - win_z[0] + 10
-screen_y = body_low[1] + bezel + 4
+win_w, win_h = float(a1 - a0 + 10), float(b1 - b0 + 10)
+screen_c = face_c + u * float((a0 + a1) / 2) + v * float((b0 + b1) / 2) - face_n * (bezel + 4)
+log("fenetre (mm)", round(win_w, 1), "x", round(win_h, 1), "biseau", round(bezel, 1))
 
 
-def add_mesh(name, verts, faces, uvs=None, props=None):
+def add_mesh(name, verts, faces, uvs=None):
     mesh = bpy.data.meshes.new(name)
-    mesh.from_pydata([tuple(v) for v in verts], [], faces)
+    mesh.from_pydata([tuple(p) for p in verts], [], faces)
     if uvs:
         layer = mesh.uv_layers.new(name="UVMap")
         for poly in mesh.polygons:
@@ -168,189 +277,169 @@ def add_mesh(name, verts, faces, uvs=None, props=None):
     mesh.update()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.scene.collection.objects.link(obj)
-    for key, value in (props or {}).items():
-        obj[key] = value
     return obj
 
 
-# Écran : un plan tourné vers -Y (le visiteur), UV de 0 à 1 (bas gauche -> haut droit).
+# Écran : un plan tourné vers le visiteur, UV de 0 à 1 (bas gauche -> haut droit).
 hw, hh = win_w / 2, win_h / 2
 screen = add_mesh(
     "Minitel_Screen",
-    [(win_cx - hw, screen_y, win_cz - hh), (win_cx + hw, screen_y, win_cz - hh), (win_cx + hw, screen_y, win_cz + hh), (win_cx - hw, screen_y, win_cz + hh)],
+    [screen_c - u * hw - v * hh, screen_c + u * hw - v * hh, screen_c + u * hw + v * hh, screen_c - u * hw + v * hh],
     [(0, 1, 2, 3)],
     uvs=[(0, 0), (1, 0), (1, 1), (0, 1)],
 )
 
-# Fond du tube : une boîte sombre derrière l'écran, qui cache l'intérieur de la coque.
-def box(name, centre, size, rotation=None, props=None):
+
+def box(name, centre_, size, basis, uv_top=None, uv_other=None):
+    """Boîte de taille `size` dans le repère `basis` (axes x, y, z), UV du dessus et des côtés."""
     bm = bmesh.new()
     bmesh.ops.create_cube(bm, size=1.0)
+    bm.normal_update()
+    uv_layer = bm.loops.layers.uv.new("UVMap")
+    for face in bm.faces:
+        for loop in face.loops:
+            if face.normal.z > 0.9 and uv_top:
+                loop[uv_layer].uv = uv_top(loop.vert.co.x, loop.vert.co.y)
+            elif uv_other:
+                loop[uv_layer].uv = uv_other
     bmesh.ops.scale(bm, vec=Vector(size), verts=bm.verts)
-    if rotation is not None:
-        bmesh.ops.rotate(bm, cent=Vector((0, 0, 0)), matrix=rotation, verts=bm.verts)
-    bmesh.ops.translate(bm, vec=Vector(centre), verts=bm.verts)
+    m = Matrix((basis[0], basis[1], basis[2])).transposed().to_4x4()
+    bmesh.ops.transform(bm, matrix=m, verts=bm.verts)
+    bmesh.ops.translate(bm, vec=Vector(centre_), verts=bm.verts)
     mesh = bpy.data.meshes.new(name)
     bm.to_mesh(mesh)
     bm.free()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.scene.collection.objects.link(obj)
-    for key, value in (props or {}).items():
-        obj[key] = value
     return obj
 
 
-tube = box("Fond_Tube", (win_cx, screen_y + 14, win_cz), (win_w + 4, 20, win_h + 4))
+# Fond du tube, derrière l'écran (la coque est vide).
+tube = box("Fond_Tube", screen_c - face_n * 62, (win_w + 4, win_h + 4, 120), (u, v, face_n))
 
-# Capot arrière : le scan s'arrête au dessus du logement du tube, qui reste
-# ouvert vu de dos. On le referme par l'enveloppe convexe du boîtier, en ne
-# gardant que ses faces loin de la surface scannée (les ouvertures), sauf
-# celles de la façade.
-body_tree = BVHTree.FromPolygons([v.co.copy() for v in body.data.vertices], [p.vertices[:] for p in body.data.polygons])
-hull = bmesh.new()
-for v in body.data.vertices:
-    hull.verts.new(v.co)
-bmesh.ops.convex_hull(hull, input=hull.verts[:], use_existing_faces=False)
-hull.normal_update()
-drop = []
-for face in hull.faces:
-    centre_ = face.calc_center_median()
-    nearest = body_tree.find_nearest(centre_)
-    if face.normal.y < -0.3 or (nearest[0] is not None and nearest[3] < 3):
-        drop.append(face)
-bmesh.ops.delete(hull, geom=drop, context="FACES")
-bmesh.ops.delete(hull, geom=[v for v in hull.verts if not v.link_faces], context="VERTS")
-cap_mesh = bpy.data.meshes.new("Capot_Arriere")
-hull.to_mesh(cap_mesh)
-hull.free()
-cap = bpy.data.objects.new("Capot_Arriere", cap_mesh)
-bpy.context.scene.collection.objects.link(cap)
-log("capot arrière, faces", len(cap_mesh.polygons))
-
-# --- Plaque de touches : plan du rebord supérieur du bac du clavier --------------
-k = vertices(keyboard)
-kx = (k[:, 0].min(), k[:, 0].max())
-ky = (k[:, 1].min(), k[:, 1].max())
-bins = np.linspace(ky[0] + 10, ky[1] - 10, 24)
-samples = []
-for y0, y1 in zip(bins[:-1], bins[1:]):
-    band = k[(k[:, 1] >= y0) & (k[:, 1] < y1)]
-    if len(band):
-        samples.append(((y0 + y1) / 2, np.percentile(band[:, 2], 98)))
-sy, sz = np.array(samples).T
-slope, intercept = np.polyfit(sy, sz, 1)
-log("rebord du clavier : z =", round(slope, 4), "* y +", round(intercept, 1))
-tilt = math.atan(slope)
-plate_rot = Matrix.Rotation(tilt, 4, "X").to_3x3()
-margin = 16
+# --- Clavier : panneau et touches relevés sur la photo, sur le plateau ---------------
+c = co(cover)
+deck_pts = c[(c[:, 1] < front_y - 12) & (np.abs(c[:, 0]) < np.abs(c[:, 0]).max() - 20)]
+edges = np.linspace(deck_pts[:, 1].min() + 4, deck_pts[:, 1].max() - 4, 10)
+dys, dzs = [], []
+for a, e in zip(edges[:-1], edges[1:]):
+    sl = deck_pts[(deck_pts[:, 1] >= a) & (deck_pts[:, 1] < e)]
+    if len(sl):
+        dys.append((a + e) / 2)
+        dzs.append(np.percentile(sl[:, 2], 97))
+ka, kb = np.polyfit(dys, dzs, 1)
+tilt = math.atan(ka)
+deck_n = Vector((0, -math.sin(tilt), math.cos(tilt)))
+deck_y = Vector((0, math.cos(tilt), math.sin(tilt)))
+deck_x = Vector((1, 0, 0))
+panel_w_px, panel_h_px = LAYOUT["panel"]["width"], LAYOUT["panel"]["height"]
+avail_w = (c[:, 0].max() - c[:, 0].min()) - 28
+avail_d = (front_y - 10) - (deck_pts[:, 1].min() + 8)
+# Le clavier occupe le plateau d'un bord à l'autre, comme sur la photo : la
+# disposition relevée s'étire un peu en profondeur si le plateau le permet.
+panel_w = avail_w
+panel_d = min(avail_d, panel_w * panel_h_px / panel_w_px * 1.2)
+panel_back = front_y - 10
+log("panneau du clavier (mm)", round(panel_w, 1), "x", round(panel_d, 1), "place", round(avail_w, 1), "x", round(avail_d, 1), "pente", round(math.degrees(tilt), 1))
 
 
-def on_plate(x, y, lift):
-    """Point du plan des touches (mm), relevé de `lift` le long de sa normale."""
-    normal = Vector((0, -math.sin(tilt), math.cos(tilt)))
-    return Vector((x, y, slope * y + intercept)) + normal * lift
+def on_deck(x, y, lift):
+    """Point du plateau (y horizontal), relevé de `lift` le long de sa normale."""
+    return Vector((x, y, ka * y + kb)) + deck_n * lift
 
 
-plate_y = (ky[0] + margin, ky[1] - 46)
-plate_x = (kx[0] + margin, kx[1] - margin)
-plate_len = (plate_y[1] - plate_y[0]) / math.cos(tilt)
-plate_centre = on_plate((plate_x[0] + plate_x[1]) / 2, (plate_y[0] + plate_y[1]) / 2, -4)
-plate = box("Plaque_Clavier", plate_centre, (plate_x[1] - plate_x[0], plate_len, 3), plate_rot)
+def atlas_uv(px, py):
+    return (px / ATLAS_SIZE, 1 - py / ATLAS_SIZE)
 
-# Disposition AZERTY du Minitel 1 (vue de l'utilisateur, du fond vers l'avant) :
-# touches de fonction, chiffres du pavé, lettres, barre d'espace.
-PITCH = 18.0
-KEY = 15.0
+
+def key_rect(index, w, h):
+    col, row = index % CELL_COLS, index // CELL_COLS
+    x0, y0 = col * CELL_W, row * CELL_H
+    s = min((CELL_W - 8) / w, (CELL_H - 8) / h)
+    return x0 + (CELL_W - w * s) / 2, y0 + (CELL_H - h * s) / 2, x0 + (CELL_W + w * s) / 2, y0 + (CELL_H + h * s) / 2
+
+
+blank = CELL_COLS * (PANEL_TOP // CELL_H) - 1
+blank_uv = atlas_uv((blank % CELL_COLS + 0.5) * CELL_W, (blank // CELL_COLS + 0.5) * CELL_H)
+panel_px_h = round(ATLAS_SIZE * panel_h_px / panel_w_px)
+along = 1 / math.cos(tilt)
+panel = box(
+    "Panneau_Clavier",
+    on_deck(0, panel_back - panel_d / 2, 0.5),
+    (panel_w, panel_d * along, 2),
+    (deck_x, deck_y, deck_n),
+    uv_top=lambda lx, ly: atlas_uv((lx + 0.5) * ATLAS_SIZE, PANEL_TOP + (0.5 - ly) * panel_px_h),
+    uv_other=blank_uv,
+)
 keys = []
+for index, key in enumerate(LAYOUT["keys"]):
+    cx = (key["x"] + key["w"] / 2) / panel_w_px * panel_w - panel_w / 2
+    cy = panel_back - (key["y"] + key["h"] / 2) / panel_h_px * panel_d
+    size = (key["w"] / panel_w_px * panel_w * 0.94, key["h"] / panel_h_px * panel_d * 0.94 * along, 6)
+    rect = key_rect(index, key["w"], key["h"])
+    name = f"Key_{key['name']}" if key["key"] else f"Touche_{key['name']}"
+    obj = box(
+        name,
+        on_deck(cx, cy, 1.5 + 3),
+        size,
+        (deck_x, deck_y, deck_n),
+        uv_top=lambda lx, ly, r=rect: atlas_uv(r[0] + (lx + 0.5) * (r[2] - r[0]), r[1] + (0.5 - ly) * (r[3] - r[1])),
+        uv_other=blank_uv,
+    )
+    if key["key"]:
+        obj["key"] = key["key"]
+    keys.append(obj)
+log("touches", len(keys))
 
 
-def key(name, value, x, y, w=KEY, d=KEY, kind="touche"):
-    keys.append((name, value, x, y, w, d, kind))
+# --- Matières -------------------------------------------------------------------
+def linear(r, g, b_):
+    return tuple(((x / 255) / 12.92 if x / 255 <= 0.04045 else ((x / 255 + 0.055) / 1.055) ** 2.4) for x in (r, g, b_)) + (1.0,)
 
 
-# Bloc des touches vers l'avant du bac, côté utilisateur.
-back = plate_y[0] + 40 + 5.6 * PITCH
-front = plate_y[0] + 14
-left = plate_x[0] + 14
-functions = [
-    ("Sommaire", "Sommaire"),
-    ("Annulation", "Annulation"),
-    ("Retour", "Retour"),
-    ("Repetition", "Repetition"),
-    ("Guide", "Guide"),
-    ("Correction", "Correction"),
-    ("Suite", "Suite"),
-    ("ConnexionFin", "ConnexionFin"),
-]
-for i, (name, value) in enumerate(functions):
-    key(f"Key_{name}", value, left + 10 + i * (PITCH + 7), back, w=KEY + 7, kind="fonction")
-key("Key_Envoi", "Envoi", left + 10 + len(functions) * (PITCH + 7) + 6, back, w=KEY + 12, kind="envoi")
-rows = ["AZERTYUIOP", "QSDFGHJKLM", "WXCVBN"]
-for r, letters in enumerate(rows):
-    y = back - (r + 1.4) * PITCH
-    for c, letter in enumerate(letters):
-        key(f"Key_{letter}", letter, left + r * 6 + c * PITCH, y)
-key("Key_Espace", " ", left + 70, back - 4.6 * PITCH, w=7 * PITCH, kind="touche")
-pad = [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["*", "0", "#"]]
-pad_left = plate_x[1] - 14 - 2 * PITCH
-for r, line in enumerate(pad):
-    for c, value in enumerate(line):
-        name = {"*": "Etoile", "#": "Diese"}.get(value, value)
-        key(f"Key_{name}", value, pad_left + c * PITCH, back - (r + 1.4) * PITCH)
-
-key_objects = []
-for name, value, x, y, w, d, kind in keys:
-    centre_ = on_plate(x, y, 2.5)
-    obj = box(name, centre_, (w, d, 6), plate_rot, props={"key": value, "kind": kind})
-    key_objects.append(obj)
-log("touches", len(key_objects))
-
-# --- Matières -----------------------------------------------------------------
-def material(name, color, roughness, metallic=0.0):
+def material(name, colour, roughness, image=None):
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
     bsdf = mat.node_tree.nodes.get("Principled BSDF")
-    bsdf.inputs["Base Color"].default_value = color
+    bsdf.inputs["Base Color"].default_value = colour
     bsdf.inputs["Roughness"].default_value = roughness
-    bsdf.inputs["Metallic"].default_value = metallic
+    bsdf.inputs["Metallic"].default_value = 0.0
+    if image:
+        tex = mat.node_tree.nodes.new("ShaderNodeTexImage")
+        tex.image = bpy.data.images.load(str(image))
+        mat.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     return mat
 
 
-beige = material("Plastique_Beige", (0.69, 0.55, 0.36, 1), 0.55)
-dark = material("Fond_Tube", (0.01, 0.01, 0.01, 1), 0.9)
-plate_mat = material("Plaque", (0.42, 0.34, 0.24, 1), 0.7)
-key_mat = material("Touches", (0.09, 0.08, 0.07, 1), 0.5)
-function_mat = material("Touches_Fonction", (0.35, 0.28, 0.21, 1), 0.5)
-send_mat = material("Touche_Envoi", (0.18, 0.33, 0.2, 1), 0.5)
-screen_mat = material("Ecran", (0.02, 0.03, 0.03, 1), 0.2)
-for obj, mat in ((body, beige), (keyboard, beige), (cap, beige), (tube, dark), (plate, plate_mat), (screen, screen_mat)):
+# Couleurs relevées sur les photos ACONIT : capot crème, socle grège plus sombre.
+cover_mat = material("Plastique_Capot", linear(222, 215, 197), 0.5)
+base_mat = material("Plastique_Socle", linear(170, 158, 136), 0.6)
+keyboard_mat = material("Clavier", linear(238, 234, 222), 0.45, ATLAS)
+screen_mat = material("Ecran", linear(20, 26, 24), 0.2)
+tube_mat = material("Fond_Tube", linear(4, 4, 4), 0.9)
+for obj, mat in ((cover, cover_mat), (base, base_mat), (screen, screen_mat), (tube, tube_mat), (panel, keyboard_mat), *((k, keyboard_mat) for k in keys)):
     obj.data.materials.clear()
     obj.data.materials.append(mat)
-for obj in key_objects:
-    kind = obj["kind"]
-    obj.data.materials.append(send_mat if kind == "envoi" else function_mat if kind == "fonction" else key_mat)
-    del obj["kind"]
-for obj in (body, keyboard):
-    obj.name = "Boitier" if obj is body else "Clavier"
+cover.name, base.name = "Capot", "Socle"
+for obj in (cover, base):
     for poly in obj.data.polygons:
         poly.use_smooth = True
 
-# --- Échelle, origine et export ------------------------------------------------
-everything = [o for o in bpy.context.scene.objects if o.type == "MESH"]
-for obj in everything:
-    transform(obj, Matrix.Scale(SCALE, 4))
-back_y = max(vertices(o)[:, 1].max() for o in (body,))
-for obj in everything:
-    # Repère three.js : z = -y Blender ; l'arrière du boîtier va à z = BACK_Z.
-    transform(obj, Matrix.Translation(Vector((0, -BACK_Z - back_y, 0))))
-co = np.vstack([vertices(o) for o in everything])
-low, high = co.min(axis=0), co.max(axis=0)
-s = vertices(screen)
-screen_centre = s.mean(axis=0)
-log("emprise (unités, Blender)", np.round(low, 3), np.round(high, 3))
-log("centre de l'écran, three.js", [round(screen_centre[0], 3), round(screen_centre[2], 3), round(-screen_centre[1], 3)])
-log("taille de l'écran (unités)", round(win_w * SCALE, 3), round(win_h * SCALE, 3))
-log("haut", round(high[2], 3), "gauche", round(low[0], 3), "droite", round(high[0], 3), "arrière (z three)", round(-high[1], 3), "avant", round(-low[1], 3))
+# --- Échelle, position et export -----------------------------------------------------
+meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+for obj in meshes:
+    apply(obj, Matrix.Scale(SCALE, 4))
+allp = np.vstack([co(o) for o in meshes])
+y_mid = (allp[:, 1].min() + allp[:, 1].max()) / 2
+floor = allp[:, 2].min()
+for obj in meshes:
+    # Repère three.js : z = -y ; le milieu de l'emprise au centre de la table.
+    apply(obj, Matrix.Translation(Vector((0, -TABLE_CENTER_Z - y_mid, -floor))))
+allp = np.vstack([co(o) for o in meshes])
+s = co(screen).mean(axis=0)
+log("emprise three.js : x", round(allp[:, 0].min(), 3), round(allp[:, 0].max(), 3), "y 0 ->", round(allp[:, 2].max(), 3), "z", round(-allp[:, 1].max(), 3), "->", round(-allp[:, 1].min(), 3))
+log("centre de l'ecran, three.js", [round(float(s[0]), 3), round(float(s[2]), 3), round(float(-s[1]), 3)], "normale", [round(face_n.x, 3), round(face_n.z, 3), round(-face_n.y, 3)])
+log("taille de l'ecran (unites)", round(win_w * SCALE, 3), round(win_h * SCALE, 3))
 
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.export_scene.gltf(
@@ -363,4 +452,4 @@ bpy.ops.export_scene.gltf(
     export_cameras=False,
     export_lights=False,
 )
-log("écrit", OUTPUT)
+log("ecrit", OUTPUT)

@@ -27,10 +27,9 @@ Lemegéton (modélisation, rigs, animation) a son propre dépôt, son cœur cré
 
 - **Version simple** (par défaut, `/minitel/`) : un terminal sur sa table, à
   faire tourner, zoomer et inspecter ; l'inventaire pour changer de terminal
-  (Terminatel 255, Minitel 1, téléviseur 1950) et de mobilier ; le 3615
-  Lemegéton, les yeux, les effets CRT. Un double-clic sur l'écran fait la mise
-  au point, un second revient. Le Minitel NFZ 300 n'apparaît qu'en développement,
-  le temps de corriger son modèle.
+  (Terminatel 255, Minitel 1, téléviseur 1950, Minitel NFZ 300) et de mobilier ;
+  le 3615 Lemegéton, les yeux, les effets CRT. Un double-clic sur l'écran fait la
+  mise au point, un second revient.
 - **3615 GOTO10**, sur l'écran de chaque terminal (touche 4 du sommaire, ou le
   code `GOTO10` puis Envoi) : l'archive des BBS et du Minitel de
   [Goto10](https://www.goto10.fr/), avec l'accord de Frédéric Cambus. Écrans
@@ -219,11 +218,10 @@ Tous figurent dans les sources de la page Documentation.
 - **Version simple** : les critères du [cadrage](docs/3D_WEB_PROJECT.md) sont
   atteints (terminal manipulable, écran dynamique indépendant, 3615 Lemegéton,
   page responsive, modèle remplaçable par profil, touches 3D cliquables,
-  accessoires par anchors), avec trois terminaux en ligne (le NFZ 300, en cours de
-  correction, ne s'affiche qu'en développement) et quatre meubles.
-- **Mode 3D+** : couloir, portes temporelles, trois salles d'époque en ligne (la
-  quatrième, celle du NFZ 300, en développement), trois portes fermées pour la
-  suite, trois portails vers d'autres sites, cartes d'inventaire vers les salles,
+  accessoires par anchors), avec quatre terminaux (dont le NFZ 300, monobloc
+  refait d'après les photos ACONIT) et quatre meubles.
+- **Mode 3D+** : couloir, portes temporelles, quatre salles d'époque, trois
+  portes fermées pour la suite, trois portails vers d'autres sites, cartes d'inventaire vers les salles,
   crédits à l'écran ; cadrage adapté aux téléphones tenus droit.
 - **3615 GOTO10** : 28 écrans Vidéotex d'origine et 106 documents de Goto10, avec
   un décodeur Vidéotex qui lit aussi les photos du Vidéotex photographique ;
@@ -235,7 +233,6 @@ Tous figurent dans les sources de la page Documentation.
   changent leur humeur. Voir le [guide](docs/USAGE.md#yeux-de-lemegeton-ecran-videotex).
 
 Restent ouverts (détail et suivi dans [l'issue #30](https://github.com/Sterenna-studio/minitel-musee/issues/30)) :
-- la correction du NFZ 300 (orientation des coques, choix du modèle à reproduire) ;
 - l'essai sur un vrai iPhone 11 ;
 - les tests du lot F ;
 - le lot G (objets interactifs), à cadrer ;
@@ -255,8 +252,8 @@ adaptés :
 - « Wood Drawer & Tables Set » par brandon_grey ;
 - « Door_Wooden_Old » par Mehdi Shahsavan (porte temporelle provisoire).
 
-Scan du Minitel 1 NFZ 300 par Velta-3D (publié par Arcade Makers, CC0), servi
-seulement en développement pour l'instant. Horloges et matières du monde : Poly
+Scan du Minitel 1 NFZ 300 par Velta-3D (publié par Arcade Makers, CC0), assemblé
+d'après les photos de l'ACONIT. Horloges et matières du monde : Poly
 Haven (CC0). Le décor des salles est construit en code.
 
 Écrans et documents du 3615 GOTO10 : [Goto10](https://www.goto10.fr/), archives

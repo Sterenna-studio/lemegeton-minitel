@@ -95,10 +95,18 @@ describe("travelling d'un côté à l'autre du couloir", () => {
 });
 
 describe("terminaux en chantier", () => {
-  it("le NFZ 300 reste hors du site publié, visible en développement", () => {
-    const published = visibleEntries(catalog, false).map((entry) => entry.id);
-    expect(published).not.toContain("minitel-nfz-300");
-    expect(published).toEqual(["terminatel-255", "minitel-1", "televiseur-1950"]);
-    expect(visibleEntries(catalog, true).map((entry) => entry.id)).toContain("minitel-nfz-300");
+  it("un brouillon reste hors du site publié, visible en développement", () => {
+    const draft = { ...catalog[0], id: "brouillon", draft: true };
+    expect(visibleEntries([...catalog, draft], false).map((entry) => entry.id)).not.toContain("brouillon");
+    expect(visibleEntries([...catalog, draft], true).map((entry) => entry.id)).toContain("brouillon");
+  });
+
+  it("les quatre terminaux sont publiés, le NFZ 300 compris (14 octobre 2026)", () => {
+    expect(visibleEntries(catalog, false).map((entry) => entry.id)).toEqual([
+      "terminatel-255",
+      "minitel-1",
+      "televiseur-1950",
+      "minitel-nfz-300",
+    ]);
   });
 });

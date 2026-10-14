@@ -120,8 +120,6 @@ const allEntries: ModelEntry[] = [
     file: assetUrl("models/minitel-nfz-300.glb"),
     profile: nfz300Profile,
     onTable: true,
-    // Hidden online until the scan is corrected (decision of 13 October 2026).
-    draft: true,
     // Licence CC0 since 13 October 2026, as reported by the user (Cults page
     // behind a Cloudflare check, not read by the agent).
     credit: {
@@ -130,7 +128,7 @@ const allEntries: ModelEntry[] = [
       source: "https://cults3d.com/en/3d-model/art/minitel-1-nfz-300-la-radiotechnique",
       license: "CC0 1.0",
       licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
-      changes: "boitier et clavier assembles, maillage allege, capot arriere referme, ecran et touches ajoutes",
+      changes: "socle et capot assembles en monobloc, maillage allege, ecran et clavier (releve sur une photo ACONIT) ajoutes",
     },
   },
 ];

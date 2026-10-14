@@ -12,8 +12,8 @@ personnage n'ait son propre dépôt
 - `02_SOURCES_3D/` : Minitel 1 NFZ 300 (Cults, Velta-3D, publié par Arcade
   Makers). D'abord écarté (licence « Cults PU » et « No IA »), il est passé en
   **CC0** le 13 octobre 2026 à notre demande, d'après l'utilisateur : préparé par
-  `tools/prepare_nfz300.py` (qui lit ce dossier), masqué en ligne le temps des
-  corrections.
+  `tools/prepare_nfz300.py` (qui lit ce dossier), assemblé en monobloc d'après
+  les photos de l'ACONIT.
 
 Les scripts `tools/prepare_*.py` lisent `06_MODEL/` par défaut et écrivent les
 modèles préparés dans `public/models/`. Licences et raisons des exclusions :
