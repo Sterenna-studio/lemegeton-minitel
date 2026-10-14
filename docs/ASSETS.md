@@ -79,7 +79,7 @@ n'entre dans le rendu.
 | Cyber Djinn, dark_igorek (CC BY 4.0) | 104 Mo et 200 000 triangles ; style cyberpunk contraire au cadrage |
 | `white_mesh.glb` | ni auteur, ni licence, ni provenance |
 | Robot Lemegeton (Meshy, `Rusty Retrobot.glb`) | 30 Mo et 1,35 million de triangles ; rig non validé ; conditions Meshy à confirmer |
-| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, publié par Arcade Makers, `sources/02_SOURCES_3D/minitel-1-nfz-300-…` | **Utilisé** depuis le 13 octobre 2026 : `public/models/minitel-nfz-300.glb` (`tools/prepare_nfz300.py`). D'abord exclu (licence « Cults PU » et « No IA »), puis passé en **CC0** par Velta-3D le 13 octobre 2026 à notre demande, d'après l'utilisateur (la page Cults, derrière une vérification Cloudflare, n'a pas pu être relue par l'agent). Crédit affiché quand même. Le contenu est un scan brut, en deux coques sans couleurs ni textures : écran, touches et dessus arrière du capot reconstitués. |
+| Cults : Minitel 1 NFZ 300 (La Radiotechnique), Velta-3D, publié par Arcade Makers, `sources/02_SOURCES_3D/minitel-1-nfz-300-…` | **Utilisé** depuis le 13 octobre 2026, **masqué en ligne** depuis le même jour (corrections à faire, l'entrée du catalogue porte `draft: true`) : `public/models/minitel-nfz-300.glb` (`tools/prepare_nfz300.py`). D'abord exclu (licence « Cults PU » et « No IA »), puis passé en **CC0** par Velta-3D le 13 octobre 2026 à notre demande, d'après l'utilisateur (la page Cults, derrière une vérification Cloudflare, n'a pas pu être relue par l'agent). Crédit affiché quand même. Le contenu est un scan brut, en deux coques sans couleurs ni textures : écran, touches et dessus arrière du capot reconstitués. |
 
 ## Organisation
 
@@ -248,3 +248,15 @@ monde/
   07_AUDIO/       portes, horloges, ambiances, machines, pas
   SOURCES.csv     fichier, source, auteur, licence, URL, date (versionné)
 ```
+
+## Sélection Goto10 (3615 GOTO10)
+
+| Champ | Valeur |
+| --- | --- |
+| Source | [Goto10](https://www.goto10.fr/), archives des BBS et du Minitel, Frédéric Cambus ; copie locale du 13 octobre 2026 dans `docs/archive_minitel/` (non suivie) |
+| Droits | accord de l'auteur pour cette sélection, déclaré par l'utilisateur le 14 octobre 2026 ; aucune licence affichée par l'archive |
+| Fichiers | `public/goto10/` : 28 écrans `.vdt` d'origine (octet pour octet, marqués binaires dans `.gitattributes`), 106 documents texte en lignes de 40 colonnes, `index.json`, `LISEZMOI.md` ; 2,47 Mo |
+| Exclus | exécutables, virus, archives, images hors Vidéotex : tout le reste du corpus |
+| Outil | `tools/build_goto10.mjs` (encodage CP437 ou Latin-1 détecté, tableaux simplifiés) |
+| Crédits indiqués par l'archive | écrans `RTE_*` : RTE, Ressources Télématiques Européennes ; écrans `AFP*` : AFP |
+
