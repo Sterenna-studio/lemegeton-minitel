@@ -33,6 +33,15 @@ export interface WorldDoc {
   assets: Fact[];
 }
 
+/** A section of text and facts : using the terminal, 3615 GOTO10. */
+export interface InfoDoc {
+  id: string;
+  kicker: string;
+  title: string;
+  intro: string[];
+  facts: Fact[];
+}
+
 export interface ProjectDoc {
   title: string;
   /** Chemin dans le depot, ou nom d'un autre depot quand `url` est donnee. */
@@ -52,8 +61,12 @@ export interface DocContent {
   views: { id: "trois-quarts" | "face" | "profil" | "dos"; label: string }[];
   modelDocs: ModelDoc[];
   worldDoc: WorldDoc;
+  /** Using the terminal, then 3615 GOTO10. */
+  infoDocs: InfoDoc[];
   projectDocs: ProjectDoc[];
   related: RelatedProject[];
+  /** Other places of the Minitel's memory : archives, museums, articles. */
+  elsewhere: RelatedProject[];
 }
 
 const repo = "https://github.com/Sterenna-studio/minitel-musee/blob/main/";

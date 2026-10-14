@@ -118,6 +118,7 @@ export const contentEn: DocContent = {
       { label: "Address", value: "?mode=3d, then &salle= and &poste=: every station has its address, the Back button retraces the way" },
       { label: "Reduced motion", value: "short fades instead of travels, no parallax" },
       { label: "Sound", value: "off by default; synthesised ticking and breath, no sound file" },
+      { label: "Portals", value: "at the end of the corridor, after the three closed doors: minitel.org, INA and ACONIT, opened in a new tab" },
     ],
     rooms: [
       { id: "televiseur-1950", label: "1950 living room", description: "teak TV cabinet, cocktail armchairs, boomerang rug, sideboard, sunburst clock, floor lamp" },
@@ -132,6 +133,43 @@ export const contentEn: DocContent = {
       { label: "Room decor", value: "built in code and drawn on canvas, no other asset" },
     ],
   },
+  infoDocs: [
+    {
+      id: "terminal",
+      kicker: "3615 · how to use it",
+      title: "Using the terminal",
+      intro: [
+        "As on a Minitel, a number or a service code shows on the screen's command line as you type it, and only acts when you press ENVOI (send). The function keys act at once.",
+        "You can type on the computer's keyboard, on the 3D Minitel's keyboard (click its keys), on the virtual keyboard or in the console's field. A cheat sheet on a sticky note, next to the screen, lists the commands; its buttons send them.",
+      ],
+      facts: [
+        { label: "ENVOI", value: "Enter: sends the number or code typed" },
+        { label: "SUITE", value: "Next page (Page Down)" },
+        { label: "RETOUR", value: "Previous page (Page Up)" },
+        { label: "SOMMAIRE", value: "Esc: the service's index" },
+        { label: "CORRECTION", value: "Backspace: erases one character" },
+        { label: "ANNULATION", value: "Del: erases the line" },
+        { label: "GUIDE", value: "F1: the service's help" },
+        { label: "Codes", value: "3615 GOTO10 (BBS and Minitel archives), 3615 LEMEGETON (the index), then ENVOI" },
+      ],
+    },
+    {
+      id: "goto10",
+      kicker: "3615 GOTO10 · archives",
+      title: "The Goto10 archives on the screen",
+      intro: [
+        "Goto10 is the archive of French BBS and Minitel services kept by Frederic Cambus (www.goto10.fr). The museum shows a selection of it, with his agreement, right on the terminals' screen: key 4 of the index, or the code 3615 GOTO10 then ENVOI.",
+        "The period screens are the original Videotex files, read byte by byte by the museum's decoder as a Minitel would, photographic Videotex pictures included. The documents are cut into 40-column pages.",
+      ],
+      facts: [
+        { label: "Period screens", value: "28: the Pinky server (1988, welcome and forums), Ellis, the 1992 Teletel guide, RTE pictures (Eiffel Tower, Louvre, Van Gogh) and AFP" },
+        { label: "Documents", value: "106: articles, the Teletel service directory, the Gigantex newsletter, help on the Videotex standard, the ProTrans protocol (in French)" },
+        { label: "Navigation", value: "a number then ENVOI to choose; SUITE and RETOUR to turn pages; SOMMAIRE to go up" },
+        { label: "Limit", value: "characters redefined by a service (DRCS) are approximated: grey hatching" },
+        { label: "Source", value: "Goto10, Frederic Cambus; RTE screens: Ressources Telematiques Europeennes; AFP screens: AFP" },
+      ],
+    },
+  ],
   projectDocs: [
     { title: "README", path: "README.md", description: "Vision, setup, deployment and status of the project (in French)" },
     { title: "User guide", path: "docs/USAGE.md", description: "Minitel component, screen sources, catalogue, accessories (in French)" },
@@ -142,6 +180,7 @@ export const contentEn: DocContent = {
     { title: "Art direction", path: "docs/DIRECTION_ARTISTIQUE.md", description: "Moods of the corridor and rooms, palettes, light (in French)" },
     { title: "Translation", path: "docs/TRADUCTION.md", description: "Languages of the site, text catalogues, adding a language (in French)" },
     { title: "Verification", path: "docs/VERIFICATION.md", description: "Test report and screenshots (in French)" },
+    { title: "Goto10 archive", path: "docs/archive_minitel/README.md", description: "What stays local, what is published, 3615 GOTO10" },
   ],
   related: [
     {
@@ -154,5 +193,12 @@ export const contentEn: DocContent = {
       url: "https://github.com/Sterenna-studio/3615-gateways",
       description: "Minitel gateway on ESP32: Telnet and WebSocket hub, and integration with the Nitro portal.",
     },
+  ],
+  elsewhere: [
+    { name: "Goto10", url: "https://www.goto10.fr/", description: "Archives of French BBS and Minitel services, by Frederic Cambus: the source of 3615 GOTO10." },
+    { name: "minitel.org", url: "https://www.minitel.org/", description: "A site devoted to the Minitel: one of the portals at the end of the corridor, in 3D+ mode." },
+    { name: "INA, la revue des medias", url: "https://larevuedesmedias.ina.fr/du-minitel-linternet", description: "From the Minitel to the internet (in French): one of the corridor's portals." },
+    { name: "ACONIT", url: "https://db.aconit.org/dbaconit/consulter.php?idcollection=9385&db=0", description: "Minitel collection of the Grenoble computing heritage association, with La Radiotechnique's Minitel 1: one of the corridor's portals." },
+    { name: "Musee du Minitel", url: "https://www.museeminitel.fr/2019/12/le-musee-du-minitel-a-la-retro-gaming-connexion-rgc2019/", description: "A Minitel heritage preservation project, here at the 2019 Retro Gaming Connexion." },
   ],
 };
