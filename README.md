@@ -159,7 +159,7 @@ tools/           préparation des modèles (prepare_*, dont prepare_nfz300.py), 
                  captures, vérification de production, règle de cache Cloudflare
 docs/            guide, assets et licences, monde explorable, direction artistique, traduction,
                  vérification ; archive_minitel/ (archive Goto10 locale, seul son README est suivi)
-documentation/   entrée Vite de la page Documentation (références locales non suivies à côté)
+documentation/   entrée Vite de la page Documentation, et références du NFZ 300 (REFERENCES.md)
 sources/         sources des modèles (local, hors Git ; voir sources/README.md)
 monde/           sources du monde explorable (local, hors Git ; provenance dans SOURCES.csv)
 ```
