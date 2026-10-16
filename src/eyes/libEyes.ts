@@ -3,6 +3,11 @@
 // Web-Eye-Animation (CyberAgentAILab, MIT), l'animation des yeux de l'overlay
 // OBS de Lemegeton (nitro-clicker), transposee en mosaique Videotex 40 x 24.
 // Memes formes, memes sequences ; seule la couleur devient un parametre.
+// Correction par rapport a l'original : minitel-face ne peignait que les
+// lignes 9, 11 et 13 (EYE_TOP, EYE_MID, EYE_BOT) et laissait 10 et 12 vides,
+// d'ou des yeux en trois barres. Le regard haut/bas (eyeOpenGazeY) remplissait
+// deja 9 a 13 : les yeux sont des blocs pleins, les lignes intermediaires
+// sont donc peintes partout.
 import type { RowPatch, VideotexColor } from "../videotex/mosaic";
 
 const L = { COL: 7, W: 7, PUP: 10 };
@@ -53,34 +58,25 @@ function pupilRow(row: number, pupCol: number, eyeCol: number, eyeW: number, col
   return [row, eyeCol, color, bytes];
 }
 
-function eyeOpen(pupX: number, c: VideotexColor): RowPatch[] {
-  return [
-    eyeRow(EYE_TOP, L.COL, L.W, c),
-    pupilRow(EYE_MID, L.PUP + pupX, L.COL, L.W, c),
-    eyeRow(EYE_BOT, L.COL, L.W, c),
-    eyeRow(EYE_TOP, R.COL, R.W, c),
-    pupilRow(EYE_MID, R.PUP + pupX, R.COL, R.W, c),
-    eyeRow(EYE_BOT, R.COL, R.W, c),
-  ];
+/** Lignes pleines d'un oeil, de `from` a `to` ; la pupille sur la ligne `pRow`. */
+function eyeBlock(eye: typeof L, from: number, to: number, pRow: number, pupX: number, c: VideotexColor): RowPatch[] {
+  const rows: RowPatch[] = [];
+  for (let r = from; r <= to; r++)
+    rows.push(r === pRow ? pupilRow(r, eye.PUP + pupX, eye.COL, eye.W, c) : eyeRow(r, eye.COL, eye.W, c));
+  return rows;
 }
+const eyeOpen = (pupX: number, c: VideotexColor): RowPatch[] => eyeOpenGazeY(pupX, 0, c);
 function eyeOpenGazeY(pupX: number, pupY: number, c: VideotexColor): RowPatch[] {
   const pRow = EYE_MID + pupY;
-  const rows: RowPatch[] = [];
-  for (let r = EYE_TOP; r <= EYE_BOT; r++)
-    if (r === pRow)
-      rows.push(pupilRow(r, L.PUP + pupX, L.COL, L.W, c), pupilRow(r, R.PUP + pupX, R.COL, R.W, c));
-    else rows.push(eyeRow(r, L.COL, L.W, c), eyeRow(r, R.COL, R.W, c));
-  return rows;
+  return [...eyeBlock(L, EYE_TOP, EYE_BOT, pRow, pupX, c), ...eyeBlock(R, EYE_TOP, EYE_BOT, pRow, pupX, c)];
 }
 const eyeClosed = (c: VideotexColor): RowPatch[] => [
   [EYE_MID, L.COL, c, Array(L.W).fill(HALF_TOP)],
   [EYE_MID, R.COL, c, Array(R.W).fill(HALF_TOP)],
 ];
 const eyeHalf = (pupX: number, c: VideotexColor): RowPatch[] => [
-  pupilRow(EYE_MID, L.PUP + pupX, L.COL, L.W, c),
-  eyeRow(EYE_BOT, L.COL, L.W, c),
-  pupilRow(EYE_MID, R.PUP + pupX, R.COL, R.W, c),
-  eyeRow(EYE_BOT, R.COL, R.W, c),
+  ...eyeBlock(L, EYE_MID, EYE_BOT, EYE_MID, pupX, c),
+  ...eyeBlock(R, EYE_MID, EYE_BOT, EYE_MID, pupX, c),
 ];
 const eyeHappy = (c: VideotexColor): RowPatch[] => [
   [EYE_BOT, L.COL, c, Array(L.W).fill(FULL)],
@@ -93,46 +89,38 @@ function eyeAngry(pupX: number, c: VideotexColor): RowPatch[] {
   right[Math.max(0, Math.min(R.W - 1, R.PUP + pupX - 1 - R.COL))] = EMPTY;
   return [
     [EYE_MID, L.COL, c, left],
+    eyeRow(EYE_MID + 1, L.COL, L.W, c),
     eyeRow(EYE_BOT, L.COL, L.W, c),
     [EYE_MID, R.COL, c, right],
+    eyeRow(EYE_MID + 1, R.COL, R.W, c),
     eyeRow(EYE_BOT, R.COL, R.W, c),
   ];
 }
 const eyeSurprised = (c: VideotexColor): RowPatch[] => [
   eyeRow(EYE_TOP - 1, L.COL - 1, L.W + 2, c),
-  eyeRow(EYE_TOP, L.COL, L.W, c),
-  [EYE_MID, L.COL, c, Array(L.W).fill(FULL)],
-  eyeRow(EYE_BOT, L.COL, L.W, c),
+  ...eyeBlock(L, EYE_TOP, EYE_BOT, 0, 0, c),
   eyeRow(EYE_TOP - 1, R.COL - 1, R.W + 2, c),
-  eyeRow(EYE_TOP, R.COL, R.W, c),
-  [EYE_MID, R.COL, c, Array(R.W).fill(FULL)],
-  eyeRow(EYE_BOT, R.COL, R.W, c),
+  ...eyeBlock(R, EYE_TOP, EYE_BOT, 0, 0, c),
 ];
 const eyeDisgust = (c: VideotexColor): RowPatch[] => [
   [EYE_MID, L.COL, c, Array(L.W).fill(HALF_TOP)],
-  [EYE_BOT, L.COL, c, Array(L.W).fill(FULL)],
+  ...eyeBlock(L, EYE_MID + 1, EYE_BOT, 0, 0, c),
   [EYE_MID, R.COL, c, Array(R.W).fill(HALF_TOP)],
-  [EYE_BOT, R.COL, c, Array(R.W).fill(FULL)],
+  ...eyeBlock(R, EYE_MID + 1, EYE_BOT, 0, 0, c),
 ];
 const heartBottom = [FULL, FULL, EMPTY, EMPTY, EMPTY, FULL, FULL];
 const eyeLove = (c: VideotexColor): RowPatch[] => [
-  eyeRow(EYE_TOP, L.COL, L.W, c),
-  eyeRow(EYE_MID, L.COL, L.W, c),
+  ...eyeBlock(L, EYE_TOP, EYE_BOT - 1, 0, 0, c),
   [EYE_BOT, L.COL, c, [...heartBottom]],
-  eyeRow(EYE_TOP, R.COL, R.W, c),
-  eyeRow(EYE_MID, R.COL, R.W, c),
+  ...eyeBlock(R, EYE_TOP, EYE_BOT - 1, 0, 0, c),
   [EYE_BOT, R.COL, c, [...heartBottom]],
 ];
 const eyeWinkLeft = (pupX: number, c: VideotexColor): RowPatch[] => [
   [EYE_MID, L.COL, c, Array(L.W).fill(HALF_TOP)],
-  eyeRow(EYE_TOP, R.COL, R.W, c),
-  pupilRow(EYE_MID, R.PUP + pupX, R.COL, R.W, c),
-  eyeRow(EYE_BOT, R.COL, R.W, c),
+  ...eyeBlock(R, EYE_TOP, EYE_BOT, EYE_MID, pupX, c),
 ];
 const eyeWinkRight = (pupX: number, c: VideotexColor): RowPatch[] => [
-  eyeRow(EYE_TOP, L.COL, L.W, c),
-  pupilRow(EYE_MID, L.PUP + pupX, L.COL, L.W, c),
-  eyeRow(EYE_BOT, L.COL, L.W, c),
+  ...eyeBlock(L, EYE_TOP, EYE_BOT, EYE_MID, pupX, c),
   [EYE_MID, R.COL, c, Array(R.W).fill(HALF_TOP)],
 ];
 

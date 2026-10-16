@@ -29,7 +29,7 @@ describe("mosaique Videotex G1", () => {
 describe("yeux LibEyes", () => {
   it("dessine deux yeux ouverts avec pupille au centre", () => {
     const rows = buildEyes(initialEyeState, "BLANC");
-    expect(rows).toHaveLength(6);
+    expect(rows).toHaveLength(10); // lignes 9 a 13 pour chaque oeil
     const left = rows.find(([row, col]) => row === 11 && col === 7)!;
     expect(left[3][3]).toBe(0x20); // pupille colonne 10
     const right = rows.find(([row, col]) => row === 11 && col === 24)!;
@@ -41,6 +41,27 @@ describe("yeux LibEyes", () => {
     expect(buildEyes({ ...initialEyeState, eyeOpen: false })).toHaveLength(2);
     expect(buildEyes({ ...initialEyeState, mood: "happy" }).every(([row]) => row === 13)).toBe(true);
     expect(buildEyes({ ...initialEyeState, mood: "surprised" }).some(([row]) => row === 8)).toBe(true);
+  });
+  it("peint des yeux pleins, sans ligne vide entre le haut et le bas", () => {
+    // minitel-face ne peignait que les lignes 9, 11 et 13 : trois barres au lieu d'un bloc.
+    const moods = ["default", "happy", "angry", "surprised", "tired", "fear", "disgust", "love"] as const;
+    const states = [
+      ...moods.map((mood) => ({ ...initialEyeState, mood })),
+      { ...initialEyeState, eyeState: "half" as const },
+      { ...initialEyeState, eyeState: "wink_left" as const },
+      { ...initialEyeState, eyeState: "wink_right" as const },
+      { ...initialEyeState, gazeY: 1 },
+    ];
+    for (const state of states)
+      for (const col of [7, 24]) {
+        const rows = buildEyes(state)
+          .filter(([, c, , bytes]) => c <= col && col < c + bytes.length)
+          .map(([row]) => row);
+        if (rows.length === 0) continue; // oeil ferme par le clin d'oeil
+        const top = Math.min(...rows);
+        const bottom = Math.max(...rows);
+        for (let row = top; row <= bottom; row++) expect(rows, `${JSON.stringify(state)} col ${col}`).toContain(row);
+      }
   });
 });
 
