@@ -238,7 +238,7 @@ Rendu mosaique, a partir du travail deja fait dans **minitel-face** :
 
 - `src/eyes/libZyraEyes.ts`, style par defaut : portage des yeux de `LibZyra`/`LibZyraEyes`.
   Ce sont des capsules continues de 7 x 3 cellules, aux coins arrondis, avec une pupille creusee.
-- `src/eyes/libEyes.ts`, style *Barres* : portage de `LibEyes`, qui transpose deja
+- `src/eyes/libEyes.ts`, style *Blocs* : portage de `LibEyes`, qui transpose deja
   Web-Eye-Animation (CyberAgentAILab, MIT), la librairie des yeux de l'overlay.
   On y trouve les formes par humeur et les sequences (`blink`, `joy`, `look_around`, `fall_asleep`...).
 - `src/eyes/lemegetonEyes.ts`, styles *Lemegeton (yeux)* et *Lemegeton (visage)* :
