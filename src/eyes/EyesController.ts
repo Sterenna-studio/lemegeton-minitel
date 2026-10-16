@@ -43,7 +43,7 @@ export type EyePaletteId = (typeof EYE_PALETTES)[number]["id"];
  */
 export const EYE_STYLES = [
   { id: "zyra", label: "Zyra (capsule)" },
-  { id: "libeyes", label: "Barres (LibEyes)" },
+  { id: "libeyes", label: "Blocs (LibEyes)" },
   { id: "lemegeton", label: "Lemegeton (yeux)" },
   { id: "lemegeton-visage", label: "Lemegeton (visage)" },
 ] as const;
