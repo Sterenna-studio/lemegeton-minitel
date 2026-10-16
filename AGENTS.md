@@ -30,6 +30,16 @@ Le modèle 3D doit être interchangeable.
 
 Ne pas coupler la logique Vidéotex à un maillage spécifique.
 
+### Formes Vidéotex
+
+Toute forme en mosaïque G1 (yeux, visages, icônes) suit
+[canon/VIDEOTEX.md](https://github.com/Sterenna-studio/lemegeton-core/blob/main/canon/VIDEOTEX.md) :
+peindre chaque ligne d'un élément (pas seulement les lignes nommées par une
+constante), embouts symétriques, octets 0x20-0x3F / 0x60-0x7F, un test par
+forme, et reporter le correctif dans toutes les copies (minitel-face, Korigan,
+firmwares). Deux défauts ont déjà été hérités de minitel-face ainsi :
+barres cisaillées (2026-10-06) et LibEyes en trois barres (2026-10-16).
+
 ### Pas de cyberpunk générique
 
 Privilégier une esthétique Minitel authentique et maîtrisée.
